@@ -66,11 +66,12 @@ Notes       :
   - Brightness follows signal strength: the wire texture ramps from dim copper
     (strength 1) to bright orange (strength 15) and also glows by its own
     strength (model light_emission), so it stays readable in the dark.
-  - Lock mode: right-click toggles. A locked wire shows blue corner brackets,
-    keeps the strength it had when locked, no longer connects to or exchanges
-    signal with other copper wires (neighbours treat it as absent), and keeps
-    outputting its held strength to non-wire blocks (ALU blocks, repeaters...).
-    Right-click again to unlock; it reconnects and is recalculated.
+  - Lock mode: right-click toggles. A locked wire shows blue corner brackets and
+    freezes its state: the north/east/south/west connection values and its
+    power stay exactly as they were, even if blocks are placed or removed next
+    to it. It does not exchange signal with other copper wires, and keeps
+    outputting its held strength through its frozen connections.
+    Right-click again to unlock; its shape and power are recalculated.
 Crafting    : 8 redstone + 1 copper nugget -> 8 copper wire
 
 --------------------------------------------------------------------------------

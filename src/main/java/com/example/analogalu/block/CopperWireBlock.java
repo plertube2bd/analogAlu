@@ -43,8 +43,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * 외부 신호원(레버, 중계기, 연장기 등)에서 BFS로 (강도, 경로 거리)를 다시 계산한다.
  * 네트워크 전체를 재계산하므로 신호원이 사라질 때 잔류 신호(ghost)가 생기지 않는다.
  *
- * 잠금 모드(우클릭): 잠긴 구리선은 다른 구리선과 연결/신호 교환을 하지 않고, 잠근 순간의 세기를 그대로 유지한다.
- * 이웃한 구리선이 아닌 블록(연산 블록, 레드스톤 부품 등)에는 유지 중인 세기를 계속 출력한다.
+ * 잠금 모드(우클릭): 잠근 순간의 연결 모양(north/east/south/west)과 세기(power)를 그대로 고정한다.
+ * 옆에 어떤 블록이 놓이거나 사라져도 값이 바뀌지 않고, 다른 구리선과는 신호를 주고받지 않는다.
+ * 고정된 연결 방향으로는 유지 중인 세기를 계속 출력한다.
  */
 public class CopperWireBlock extends Block {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -158,6 +159,8 @@ public class CopperWireBlock extends Block {
     }
 
     private BlockState computeState(BlockGetter level, BlockPos pos, BlockState state) {
+        // 잠긴 구리선은 north/east/south/west 값을 고정한다. 옆에 블록이 생기거나 없어져도 바뀌지 않는다.
+        if (state.getValue(LOCKED)) return state;
         Map<Direction, RedstoneSide> sides = new HashMap<>();
         int count = 0;
         Direction last = null;
@@ -212,7 +215,7 @@ public class CopperWireBlock extends Block {
         if (!player.getAbilities().mayBuild) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         boolean lock = !state.getValue(LOCKED);
-        // 먼저 잠금 값을 반영해야 연결 판정(neighborWire)이 새 상태를 보고 모양을 계산한다
+        // 잠글 때는 모양을 그대로 두고, 해제할 때만 주변에 맞춰 모양을 다시 계산한다
         level.setBlock(pos, state.setValue(LOCKED, lock), Block.UPDATE_CLIENTS);
         BlockState shaped = computeState(level, pos, level.getBlockState(pos));
         if (shaped != level.getBlockState(pos)) level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
