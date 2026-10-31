@@ -69,8 +69,10 @@ Notes       :
   - Lock mode: right-click toggles. A locked wire shows blue corner brackets and
     freezes its state: the north/east/south/west connection values and its
     power stay exactly as they were, even if blocks are placed or removed next
-    to it. It does not exchange signal with other copper wires, and keeps
-    outputting its held strength through its frozen connections.
+    to it. It stops receiving signal (it is detached from the wire network) but
+    acts as a fixed power source: through its frozen connections it keeps
+    feeding its held strength to the next copper wire, redstone dust, and
+    other components.
     Right-click again to unlock; its shape and power are recalculated.
 Crafting    : 8 redstone + 1 copper nugget -> 8 copper wire
 

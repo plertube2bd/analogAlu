@@ -44,8 +44,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * 네트워크 전체를 재계산하므로 신호원이 사라질 때 잔류 신호(ghost)가 생기지 않는다.
  *
  * 잠금 모드(우클릭): 잠근 순간의 연결 모양(north/east/south/west)과 세기(power)를 그대로 고정한다.
- * 옆에 어떤 블록이 놓이거나 사라져도 값이 바뀌지 않고, 다른 구리선과는 신호를 주고받지 않는다.
- * 고정된 연결 방향으로는 유지 중인 세기를 계속 출력한다.
+ * 옆에 어떤 블록이 놓이거나 사라져도 값이 바뀌지 않는다. 신호는 받지 않고(네트워크에서 분리),
+ * 고정된 연결 방향의 다음 구리선/레드스톤/부품에는 유지 중인 세기를 고정 신호원처럼 계속 출력한다.
  */
 public class CopperWireBlock extends Block {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -142,7 +142,8 @@ public class CopperWireBlock extends Block {
     }
 
     private static boolean canConnectOther(BlockState ns, Direction d) {
-        if (ns.getBlock() instanceof CopperWireBlock) return false; // 구리선끼리의 연결은 neighborWire가 담당
+        // 열린 구리선끼리의 연결은 neighborWire가 담당. 잠긴 구리선은 고정 신호원으로 취급해 연결 모양을 만든다.
+        if (ns.getBlock() instanceof CopperWireBlock) return ns.getValue(LOCKED);
         if (ns.is(Blocks.REDSTONE_WIRE)) return true;
         if (ns.is(Blocks.REPEATER)) {
             Direction f = ns.getValue(DiodeBlock.FACING);
@@ -195,14 +196,16 @@ public class CopperWireBlock extends Block {
 
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        if (calculating || direction == Direction.DOWN) return 0;
+        if (direction == Direction.DOWN) return 0;
+        // 재계산 중에는 열린 구리선의 출력을 숨겨 자기 자신을 읽는 루프를 막는다.
+        // 잠긴 구리선은 아무것도 읽지 않는 고정 신호원이라 루프가 없으므로 계속 출력한다.
+        if (calculating && !state.getValue(LOCKED)) return 0;
         int p = state.getValue(POWER);
         if (p == 0) return 0;
         if (direction == Direction.UP) return p;
         Direction toward = direction.getOpposite(); // 신호를 받는 쪽
-        if (state.getValue(LOCKED) && level.getBlockState(pos.relative(toward)).is(this)) return 0;
         // 바닐라 가루로는 출력하지 않음 (가루 <-> 구리선 사이 잔류 신호 루프 방지). 바닐라 -> 구리선은 가능.
-        if (level.getBlockState(pos.relative(toward)).is(Blocks.REDSTONE_WIRE)) return 0;
+        if (!state.getValue(LOCKED) && level.getBlockState(pos.relative(toward)).is(Blocks.REDSTONE_WIRE)) return 0;
         return state.getValue(SIDES.get(toward)) != RedstoneSide.NONE ? p : 0;
     }
 
