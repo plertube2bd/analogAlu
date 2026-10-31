@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
@@ -43,13 +42,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * 외부 신호원(레버, 중계기, 연장기 등)에서 BFS로 (강도, 경로 거리)를 다시 계산한다.
  * 네트워크 전체를 재계산하므로 신호원이 사라질 때 잔류 신호(ghost)가 생기지 않는다.
  *
- * 잠금 모드(우클릭): 잠근 순간의 연결 모양(north/east/south/west)과 세기(power)를 그대로 고정한다.
- * 옆에 어떤 블록이 놓이거나 사라져도 값이 바뀌지 않는다. 신호는 받지 않고(네트워크에서 분리),
- * 고정된 연결 방향의 다음 구리선/레드스톤/부품에는 유지 중인 세기를 고정 신호원처럼 계속 출력한다.
+ * 잠금 모드(우클릭): "배선 연결"만 고정한다. 신호는 잠그지 않는다.
+ *  - 잠그는 순간 이미 연결되어 있던 구리선들과의 연결만 유지한다 (LOCK 값의 비트로 방향을 기록).
+ *  - 그 뒤에 새로 설치되는 구리선은 잠긴 구리선과 연결되지 않고, 연결된 것처럼 보이지도 않는다.
+ *  - north/east/south/west 연결 모양도 잠근 시점 그대로 고정한다.
+ *  - 레드스톤 신호는 평소처럼 받고 전달한다 (기존 연결을 통해서).
  */
 public class CopperWireBlock extends Block {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
-    public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
+    /** 0 = 잠기지 않음, 1~16 = 잠김 (값 - 1 의 비트 = 잠글 때 구리선과 연결되어 있던 수평 방향, get2DDataValue 기준) */
+    public static final IntegerProperty LOCK = IntegerProperty.create("lock", 0, 16);
     public static final int MAX_DISTANCE = 32;
     private static final int MAX_NETWORK = 4096;
 
@@ -79,14 +81,14 @@ public class CopperWireBlock extends Block {
 
     public CopperWireBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        BlockState s = stateDefinition.any().setValue(POWER, 0).setValue(LOCKED, false);
+        BlockState s = stateDefinition.any().setValue(POWER, 0).setValue(LOCK, 0);
         for (EnumProperty<RedstoneSide> p : SIDES.values()) s = s.setValue(p, RedstoneSide.NONE);
         registerDefaultState(s);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(POWER, LOCKED);
+        builder.add(POWER, LOCK);
         SIDES.values().forEach(builder::add);
     }
 
@@ -117,33 +119,42 @@ public class CopperWireBlock extends Block {
 
     // ---------------------------------------------------------------- 연결 판정
 
-    /** 연결 가능한(= 잠기지 않은) 구리선인가 */
-    private boolean isOpenWire(BlockGetter level, BlockPos pos) {
-        BlockState s = level.getBlockState(pos);
-        return s.is(this) && !s.getValue(LOCKED);
+    private static boolean isLocked(BlockState state) {
+        return state.getValue(LOCK) != 0;
+    }
+
+    /** 이 구리선이 toward 방향의 구리선과 연결을 허용하는가. 잠기지 않았으면 항상, 잠겼으면 잠글 때 기록한 방향만. */
+    private static boolean mayLink(BlockState wire, Direction toward) {
+        int lock = wire.getValue(LOCK);
+        return lock == 0 || (((lock - 1) >> toward.get2DDataValue()) & 1) != 0;
     }
 
     private BlockPos neighborWire(BlockGetter level, BlockPos pos, Direction d) {
         BlockState self = level.getBlockState(pos);
-        if (self.is(this) && self.getValue(LOCKED)) return null; // 잠긴 구리선은 아무와도 연결되지 않는다
+        if (self.is(this) && !mayLink(self, d)) return null;
         BlockPos np = pos.relative(d);
         BlockState ns = level.getBlockState(np);
-        if (ns.is(this)) return ns.getValue(LOCKED) ? null : np;
-        BlockPos above = pos.above();
-        if (!level.getBlockState(above).isRedstoneConductor(level, above)
-                && ns.isFaceSturdy(level, np, Direction.UP)
-                && isOpenWire(level, np.above())) {
-            return np.above();
+        BlockPos found = null;
+        if (ns.is(this)) {
+            found = np;
+        } else {
+            BlockPos above = pos.above();
+            if (!level.getBlockState(above).isRedstoneConductor(level, above)
+                    && ns.isFaceSturdy(level, np, Direction.UP)
+                    && level.getBlockState(np.above()).is(this)) {
+                found = np.above();
+            } else if (!ns.isRedstoneConductor(level, np) && level.getBlockState(np.below()).is(this)) {
+                found = np.below();
+            }
         }
-        if (!ns.isRedstoneConductor(level, np) && isOpenWire(level, np.below())) {
-            return np.below();
-        }
-        return null;
+        if (found == null) return null;
+        // 상대가 잠겨 있다면 상대도 이쪽과의 연결을 허용해야 한다 (양쪽 모두 동의해야 연결)
+        return mayLink(level.getBlockState(found), d.getOpposite()) ? found : null;
     }
 
     private static boolean canConnectOther(BlockState ns, Direction d) {
-        // 열린 구리선끼리의 연결은 neighborWire가 담당. 잠긴 구리선은 고정 신호원으로 취급해 연결 모양을 만든다.
-        if (ns.getBlock() instanceof CopperWireBlock) return ns.getValue(LOCKED);
+        // 구리선끼리의 연결은 neighborWire가 전담한다. 거기서 거절된 구리선(잠금)은 모양도 연결하지 않는다.
+        if (ns.getBlock() instanceof CopperWireBlock) return false;
         if (ns.is(Blocks.REDSTONE_WIRE)) return true;
         if (ns.is(Blocks.REPEATER)) {
             Direction f = ns.getValue(DiodeBlock.FACING);
@@ -161,7 +172,7 @@ public class CopperWireBlock extends Block {
 
     private BlockState computeState(BlockGetter level, BlockPos pos, BlockState state) {
         // 잠긴 구리선은 north/east/south/west 값을 고정한다. 옆에 블록이 생기거나 없어져도 바뀌지 않는다.
-        if (state.getValue(LOCKED)) return state;
+        if (isLocked(state)) return state;
         Map<Direction, RedstoneSide> sides = new HashMap<>();
         int count = 0;
         Direction last = null;
@@ -196,36 +207,45 @@ public class CopperWireBlock extends Block {
 
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        if (direction == Direction.DOWN) return 0;
-        // 재계산 중에는 열린 구리선의 출력을 숨겨 자기 자신을 읽는 루프를 막는다.
-        // 잠긴 구리선은 아무것도 읽지 않는 고정 신호원이라 루프가 없으므로 계속 출력한다.
-        if (calculating && !state.getValue(LOCKED)) return 0;
+        if (calculating || direction == Direction.DOWN) return 0;
         int p = state.getValue(POWER);
         if (p == 0) return 0;
         if (direction == Direction.UP) return p;
         Direction toward = direction.getOpposite(); // 신호를 받는 쪽
         // 바닐라 가루로는 출력하지 않음 (가루 <-> 구리선 사이 잔류 신호 루프 방지). 바닐라 -> 구리선은 가능.
-        if (!state.getValue(LOCKED) && level.getBlockState(pos.relative(toward)).is(Blocks.REDSTONE_WIRE)) return 0;
+        if (level.getBlockState(pos.relative(toward)).is(Blocks.REDSTONE_WIRE)) return 0;
+        // 잠글 때 연결되어 있지 않던 구리선(새로 설치된 구리선)에게는 신호도 내보내지 않는다
+        if (level.getBlockState(pos.relative(toward)).is(this) && !mayLink(state, toward)) return 0;
         return state.getValue(SIDES.get(toward)) != RedstoneSide.NONE ? p : 0;
     }
 
     // ---------------------------------------------------------------- 잠금 모드
 
-    /** 우클릭으로 잠금/해제. 잠그면 현재 세기를 유지한 채 다른 구리선과 분리되고, 해제하면 다시 연결되어 재계산된다. */
+    /**
+     * 우클릭으로 잠금/해제. 잠글 때는 지금 구리선과 연결되어 있는 방향을 기록하고 연결 모양을 고정한다.
+     * 해제하면 모양과 연결을 주변에 맞춰 다시 계산한다. 신호(power)는 어느 쪽이든 평소처럼 동작한다.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
                                                BlockHitResult hit) {
         if (!player.getAbilities().mayBuild) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
-        boolean lock = !state.getValue(LOCKED);
-        // 잠글 때는 모양을 그대로 두고, 해제할 때만 주변에 맞춰 모양을 다시 계산한다
-        level.setBlock(pos, state.setValue(LOCKED, lock), Block.UPDATE_CLIENTS);
-        BlockState shaped = computeState(level, pos, level.getBlockState(pos));
-        if (shaped != level.getBlockState(pos)) level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
+        boolean lock = !isLocked(state);
+        if (lock) {
+            int mask = 0;
+            for (Direction d : Direction.Plane.HORIZONTAL) {
+                if (neighborWire(level, pos, d) != null) mask |= 1 << d.get2DDataValue();
+            }
+            level.setBlock(pos, state.setValue(LOCK, 1 + mask), Block.UPDATE_CLIENTS); // 모양은 그대로
+        } else {
+            level.setBlock(pos, state.setValue(LOCK, 0), Block.UPDATE_CLIENTS);
+            BlockState shaped = computeState(level, pos, level.getBlockState(pos));
+            if (shaped != level.getBlockState(pos)) level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
+        }
         level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS, 0.3F, lock ? 0.55F : 0.6F);
         for (Direction d : Direction.values()) level.updateNeighborsAt(pos.relative(d), this);
         refreshAround(level, pos);
-        if (!lock) recompute(level, pos);
+        recompute(level, pos);
         return InteractionResult.SUCCESS;
     }
 
@@ -274,7 +294,7 @@ public class CopperWireBlock extends Block {
     }
 
     private void recompute(Level level, BlockPos start) {
-        if (level.isClientSide() || ACTIVE.contains(start) || !isOpenWire(level, start)) return;
+        if (level.isClientSide() || ACTIVE.contains(start) || !level.getBlockState(start).is(this)) return;
 
         // 1) 연결된 네트워크 수집
         Map<BlockPos, List<BlockPos>> adj = new HashMap<>();
@@ -338,7 +358,7 @@ public class CopperWireBlock extends Block {
             for (BlockPos p : adj.keySet()) {
                 BlockState s = level.getBlockState(p);
                 int np = power.getOrDefault(p, 0);
-                if (s.is(this) && !s.getValue(LOCKED) && s.getValue(POWER) != np) {
+                if (s.is(this) && s.getValue(POWER) != np) {
                     level.setBlock(p, s.setValue(POWER, np), Block.UPDATE_CLIENTS);
                     changed.add(p);
                 }

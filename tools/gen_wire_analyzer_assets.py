@@ -7,7 +7,7 @@
                copper_wire_dot_on.png, copper_wire_line_on.png  (세기 15: 가장 밝은 색 - 이 스크립트의 입력이므로 지우지 말 것)
   세기 1~14는 두 색 사이를 보간한 텍스처로 만들고, 모델에는 light_emission = 세기를 넣어
   어두운 곳에서도 세기에 비례해 스스로 빛나게 한다. (세기 0은 기존 모델 그대로, 발광 없음)
-  잠금(locked) 상태에는 중앙 점 주위에 파란 모서리 괄호 표시를 덧그린다.
+  잠금(lock 1~16) 상태에는 중앙 점 주위에 파란 모서리 괄호 표시를 덧그린다.
 
 질량 분석기
   stage 0 = 투입물 없음, 1~8 = 진행도 1/8 ~ 8/8. stage 1~8일 때 네 옆면에 진행 막대를 덧그린다.
@@ -142,7 +142,7 @@ def gen_wire():
                           "apply": {"model": names(p, "side"), "y": rot}})
             parts.append({"when": {"AND": [{facing: "up"}, {"power": str(p)}]},
                           "apply": {"model": names(p, "up"), "y": rot}})
-    parts.append({"when": {"locked": "true"}, "apply": {"model": f"{NS}:block/copper_wire_lock"}})
+    parts.append({"when": {"lock": "|".join(str(i) for i in range(1, 17))}, "apply": {"model": f"{NS}:block/copper_wire_lock"}})
     w(f"{R}/assets/{NS}/blockstates/copper_wire.json", {"multipart": parts})
 
 
