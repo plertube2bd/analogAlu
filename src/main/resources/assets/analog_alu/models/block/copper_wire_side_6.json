@@ -1,6 +1,6 @@
 {
   "textures": {
-    "t": "analog_alu:block/copper_wire_line_on",
+    "t": "analog_alu:block/copper_wire_line_6",
     "particle": "analog_alu:item/copper_wire"
   },
   "elements": [
@@ -25,7 +25,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 6
     }
   ]
 }

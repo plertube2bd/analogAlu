@@ -54,6 +54,9 @@ public final class ModBlocks {
     public static final Block OR_GATE = alu("or_gate", AluBlocks.OrGate::new);
     public static final Block AND_GATE = alu("and_gate", AluBlocks.AndGate::new);
     public static final Block XOR_GATE = alu("xor_gate", AluBlocks.XorGate::new);
+    public static final Block LOGICAL_OR = alu("logical_or", AluBlocks.LogicalOr::new);
+    public static final Block LOGICAL_AND = alu("logical_and", AluBlocks.LogicalAnd::new);
+    public static final Block LOGICAL_XOR = alu("logical_xor", AluBlocks.LogicalXor::new);
     public static final Block ADDER = alu("adder", AluBlocks.Adder::new);
 
         public static final Block SEMICONDUCTOR_BLOCK = registerBlock("semiconductor_block",

@@ -33,6 +33,9 @@ SYMS = {
     "or_gate": ["#...#", "#...#", ".#.#.", ".#.#.", "..#.."],
     "and_gate": ["..#..", ".#.#.", ".#.#.", "#...#", "#...#"],
     "xor_gate": [".###.", "#.#.#", "#####", "#.#.#", ".###."],
+    "logical_or": ["#...#", "#...#", ".#.#.", ".#.#.", "..#..", ".....", "#####"],
+    "logical_and": ["..#..", ".#.#.", ".#.#.", "#...#", "#...#", ".....", "#####"],
+    "logical_xor": [".###.", "#.#.#", "#####", "#.#.#", ".###.", ".....", "#####"],
     "bitwise_not": [".#...", "#.#.#", "...#.", ".....", "....."],
     "logical_not": ["..#..", "..#..", "..#..", ".....", "..#.."],
 }
@@ -41,9 +44,10 @@ COLORS = {
     "shift_right": (175, 90, 205), "shift_left": (60, 190, 205),
     "or_gate": (225, 80, 80), "and_gate": (225, 200, 70), "xor_gate": (90, 210, 150),
     "bitwise_not": (230, 100, 165), "logical_not": (200, 130, 90),
+    "logical_or": (250, 150, 150), "logical_and": (255, 235, 140), "logical_xor": (150, 235, 190),
 }
 ARITH = ("adder", "subtractor")
-GATES = ("or_gate", "and_gate", "xor_gate")
+GATES = ("or_gate", "and_gate", "xor_gate", "logical_or", "logical_and", "logical_xor")
 NAMES = {
     "adder": ("Adder", "가산기"), "subtractor": ("Subtractor", "감산기"),
     "extender": ("Redstone Extender", "레드스톤 연장기"),
@@ -52,9 +56,12 @@ NAMES = {
     "cram": ("CRAM (4-bit Memory)", "CRAM (4비트 메모리)"),
     "bitwise_not": ("Bitwise NOT", "비트 NOT"),
     "logical_not": ("Logical NOT", "논리 NOT"),
-    "or_gate": ("OR Gate (right-click: NOR)", "OR 게이트 (우클릭: NOR)"),
-    "and_gate": ("AND Gate (right-click: NAND)", "AND 게이트 (우클릭: NAND)"),
-    "xor_gate": ("XOR Gate (right-click: XNOR)", "XOR 게이트 (우클릭: XNOR)"),
+    "or_gate": ("Bitwise OR Gate (right-click: NOR)", "비트 OR 게이트 (우클릭: NOR)"),
+    "and_gate": ("Bitwise AND Gate (right-click: NAND)", "비트 AND 게이트 (우클릭: NAND)"),
+    "xor_gate": ("Bitwise XOR Gate (right-click: XNOR)", "비트 XOR 게이트 (우클릭: XNOR)"),
+    "logical_or": ("Logical OR Gate (right-click: NOR)", "논리 OR 게이트 (우클릭: NOR)"),
+    "logical_and": ("Logical AND Gate (right-click: NAND)", "논리 AND 게이트 (우클릭: NAND)"),
+    "logical_xor": ("Logical XOR Gate (right-click: XNOR)", "논리 XOR 게이트 (우클릭: XNOR)"),
 }
 
 def top_texture(name, lit, carry_on):
@@ -152,6 +159,9 @@ shaped("or_gate", [" R ", "CSC"], {k: K[k] for k in "RCS"})
 shaped("and_gate", [" T ", "CSC"], {k: K[k] for k in "TCS"})
 shaped("xor_gate", [" R ", "CTC"], {k: K[k] for k in "RCT"})
 shaped("logical_not", ["T", "S"], {k: K[k] for k in "TS"})
+shapeless("logical_or", [f"{NS}:or_gate", "minecraft:repeater"])
+shapeless("logical_and", [f"{NS}:and_gate", "minecraft:repeater"])
+shapeless("logical_xor", [f"{NS}:xor_gate", "minecraft:repeater"])
 shapeless("bitwise_not", [f"{NS}:logical_not", "minecraft:copper_ingot"])
 shapeless("shift_right", ["minecraft:copper_ingot", "minecraft:redstone_torch", STONES])
 shapeless("shift_left", ["minecraft:copper_ingot", "minecraft:redstone", STONES])

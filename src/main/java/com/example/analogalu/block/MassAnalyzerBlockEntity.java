@@ -20,7 +20,7 @@ import net.minecraft.world.phys.AABB;
 
 public class MassAnalyzerBlockEntity extends BlockEntity {
     public static final int REQUIRED_SIGNAL = 8;
-    public static final int PROCESSING_TICKS = 6000;
+    public static final int PROCESSING_TICKS = 3000;
     private static final String HAS_INPUT_KEY = "HasInput";
     private static final String PROGRESS_KEY = "Progress";
     private boolean hasInput;
@@ -75,8 +75,9 @@ public class MassAnalyzerBlockEntity extends BlockEntity {
         }
 
         boolean active = machine.hasInput && level.getBestNeighborSignal(pos) >= REQUIRED_SIGNAL;
-        if (state.getValue(MassAnalyzerBlock.ACTIVE) != active) {
-            level.setBlock(pos, state.setValue(MassAnalyzerBlock.ACTIVE, active), 3);
+        int stage = machine.hasInput ? 1 + Math.min(7, machine.progress * 8 / PROCESSING_TICKS) : 0;
+        if (state.getValue(MassAnalyzerBlock.ACTIVE) != active || state.getValue(MassAnalyzerBlock.STAGE) != stage) {
+            level.setBlock(pos, state.setValue(MassAnalyzerBlock.ACTIVE, active).setValue(MassAnalyzerBlock.STAGE, stage), 3);
         }
         if (!active) return;
 
@@ -111,9 +112,7 @@ public class MassAnalyzerBlockEntity extends BlockEntity {
         progress = 0;
         setChanged();
         BlockState state = getBlockState();
-        if (state.getValue(MassAnalyzerBlock.ACTIVE)) {
-            level.setBlock(worldPosition, state.setValue(MassAnalyzerBlock.ACTIVE, false), 3);
-        }
+        level.setBlock(worldPosition, state.setValue(MassAnalyzerBlock.ACTIVE, false).setValue(MassAnalyzerBlock.STAGE, 0), 3);
     }
 
     private void captureProgram(ItemStack stack) {

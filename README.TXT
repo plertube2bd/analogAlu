@@ -6,7 +6,7 @@ Signal strength (0-15) is treated directly as unsigned 4-bit integer data.
 
 Mod ID          : analog_alu
 Display Name    : Analog Redstone ALU
-Version         : 0.1.0
+Version         : 0.1.2
 Description     : 4-bit analog redstone computing blocks
 Minecraft       : >= 26.1
 Fabric Loader   : >= 0.19.3
@@ -32,7 +32,7 @@ Java            : 25
   is looking. Signal therefore flows away from the player.
 
 - Input sides
-  Dual-input blocks (Adder, Subtractor, OR/AND/XOR):
+  Dual-input blocks (Adder, Subtractor, Bitwise/Logical OR/AND/XOR):
     A = left side relative to FACING
     B = right side relative to FACING
   Single-input blocks (Extender, Shift Left/Right, Bitwise NOT, Logical NOT):
@@ -63,6 +63,14 @@ Notes       :
     signal sources.
   - Acts as a new power source for the next copper-wire segment when driven
     by an Extender.
+  - Brightness follows signal strength: the wire texture ramps from dim copper
+    (strength 1) to bright orange (strength 15) and also glows by its own
+    strength (model light_emission), so it stays readable in the dark.
+  - Lock mode: right-click toggles. A locked wire shows blue corner brackets,
+    keeps the strength it had when locked, no longer connects to or exchanges
+    signal with other copper wires (neighbours treat it as absent), and keeps
+    outputting its held strength to non-wire blocks (ALU blocks, repeaters...).
+    Right-click again to unlock; it reconnects and is recalculated.
 Crafting    : 8 redstone + 1 copper nugget -> 8 copper wire
 
 --------------------------------------------------------------------------------
@@ -110,7 +118,7 @@ Input       : back
 Output      : front = (A << 1) mod 16
 
 --------------------------------------------------------------------------------
-2.7 OR Gate
+2.7 Bitwise OR Gate
 --------------------------------------------------------------------------------
 ID          : analog_alu:or_gate
 Inputs      : A (left), B (right)
@@ -118,7 +126,7 @@ Output      : front = A | B   (or ~(A | B) & 15 when inverted)
 Interaction : Right-click toggles inverted mode (NOR).
 
 --------------------------------------------------------------------------------
-2.8 AND Gate
+2.8 Bitwise AND Gate
 --------------------------------------------------------------------------------
 ID          : analog_alu:and_gate
 Inputs      : A (left), B (right)
@@ -126,7 +134,7 @@ Output      : front = A & B   (or ~(A & B) & 15 when inverted)
 Interaction : Right-click toggles inverted mode (NAND).
 
 --------------------------------------------------------------------------------
-2.9 XOR Gate
+2.9 Bitwise XOR Gate
 --------------------------------------------------------------------------------
 ID          : analog_alu:xor_gate
 Inputs      : A (left), B (right)
@@ -168,6 +176,37 @@ Write logic (evaluated every tick):
 
 Placement   : can be placed on any solid surface (no special support check).
 
+--------------------------------------------------------------------------------
+2.13 Logical OR Gate
+--------------------------------------------------------------------------------
+ID          : analog_alu:logical_or
+Inputs      : A (left), B (right)
+Output      : front = 15 if (A > 0 or B > 0), else 0   (inverted: NOR)
+Notes       : Each input is treated as TRUE (strength 1-15) or FALSE (0).
+              The result is always 0 or 15, like Logical NOT.
+Interaction : Right-click toggles inverted mode (NOR).
+
+--------------------------------------------------------------------------------
+2.14 Logical AND Gate
+--------------------------------------------------------------------------------
+ID          : analog_alu:logical_and
+Inputs      : A (left), B (right)
+Output      : front = 15 if (A > 0 and B > 0), else 0   (inverted: NAND)
+Interaction : Right-click toggles inverted mode (NAND).
+
+--------------------------------------------------------------------------------
+2.15 Logical XOR Gate
+--------------------------------------------------------------------------------
+ID          : analog_alu:logical_xor
+Inputs      : A (left), B (right)
+Output      : front = 15 if exactly one of A, B is > 0, else 0   (inverted: XNOR)
+Interaction : Right-click toggles inverted mode (XNOR).
+
+Bitwise vs Logical (A = 6, B = 3):
+  Bitwise AND : 6 & 3 = 2      Logical AND : 15  (both non-zero)
+  Bitwise OR  : 6 | 3 = 7      Logical OR  : 15
+  Bitwise XOR : 6 ^ 3 = 5      Logical XOR : 0   (both non-zero)
+
 
 ================================================================================
 3. INTERACTION SUMMARY
@@ -175,7 +214,7 @@ Placement   : can be placed on any solid surface (no special support check).
 
 Right-click (empty hand, mayBuild permission required):
   - Adder / Subtractor : toggle CARRY_ENABLED
-  - OR / AND / XOR     : toggle INVERTED (NOR / NAND / XNOR)
+  - Bitwise/Logical OR / AND / XOR : toggle INVERTED (NOR / NAND / XNOR)
 
 Placement rules:
   - Flat logic blocks require a sturdy face below or a hopper.
@@ -196,7 +235,8 @@ com.example.analogalu
     │                              #   - 1-tick scheduled update
     │                              #   - signal source implementation
     ├── AluBlocks.java             # Concrete implementations:
-    │                              #   OrGate, AndGate, XorGate,
+    │                              #   OrGate, AndGate, XorGate (bitwise),
+    │                              #   LogicalOr, LogicalAnd, LogicalXor,
     │                              #   BitwiseNot, LogicalNot,
     │                              #   Adder, Subtractor,
     │                              #   Extender, ShiftLeft, ShiftRight,
@@ -242,7 +282,8 @@ Copper Wire     : redstone + copper nugget  (shaped, yields 8)
 Extender        : copper ingot + redstone + stone-like
 Adder           : copper ingot + redstone + stone-like
 Subtractor      : copper ingot + redstone torch + redstone + stone-like
-OR / AND / XOR  : copper ingot + redstone / redstone torch + stone-like
+OR / AND / XOR  : copper ingot + redstone / redstone torch + stone-like  (bitwise)
+Logical OR/AND/XOR : matching bitwise gate + repeater  (shapeless)
 Logical NOT     : redstone torch + stone-like
 Bitwise NOT     : Logical NOT + copper ingot  (shapeless)
 Shift Left/Right: copper ingot + redstone + stone-like
@@ -258,6 +299,7 @@ Exact patterns are in:
 
 en_us.json and ko_kr.json provide display names for all blocks.
 English names include interaction hints where relevant
+Bitwise gates are labelled "Bitwise ..." / "비트 ..."; logical gates "Logical ..." / "논리 ...".
 
 
 ================================================================================
@@ -289,6 +331,12 @@ read the status bit. CRAM and FF arrays are read and written with [index].
 Operators can also be called as functions, for example +(a, b) and ++(a, b).
 Shift operators are << and >>; <<< and >>> rotate left and right respectively.
 
+Process times (all halved): blasting recipes take 1,200 / 2,400 / 3,000 / 1,200 /
+3,000 ticks (metallurgical silicon / purified / monocrystalline / ion-implanted /
+semiconductor). The mass analyzer needs 3,000 powered ticks (signal 8+); its
+block shows a progress bar on the four side faces (stage 0 = empty, 1-8 =
+1/8 to 8/8; the bar stays when the signal is cut and pauses).
+
 Saving a wafer compiles the source to versioned WBC1 stack bytecode and stores
 both source and bytecode. The bytecode is copied through crafting, furnace
 processing, and the mass analyzer. Shift-use a programmed wafer or finished
@@ -297,6 +345,15 @@ front value are sent to chat. Item execution starts all four ports at 0.
 Execution is atomic on the server; the 1 ms statement cost is logical program
 time, since Minecraft's world updates are tick-based.
 (e.g. "OR Gate (right-click: NOR)").
+
+Editor window (right-click a wafer):
+  - The layout adapts to the screen height so it is never cut off at large GUI
+    scales: the port diagram is hidden first, then the help text.
+  - Closing the window (Close button or Esc) without saving keeps the text as a
+    draft. Right-click the same wafer again to continue; the draft is kept per
+    saved code (last 8 drafts), also across game restarts
+    (config/analog_alu_wafer_drafts.json). Saving discards the draft.
+  - Revert discards the draft and reloads the code stored on the wafer.
 
 
 ================================================================================

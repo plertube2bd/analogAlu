@@ -1,22 +1,22 @@
 {
   "textures": {
-    "t": "analog_alu:block/copper_wire_line_on",
+    "t": "analog_alu:block/copper_wire_lock",
     "particle": "analog_alu:item/copper_wire"
   },
   "elements": [
     {
       "from": [
         0,
-        0,
-        0.25
+        0.5,
+        0
       ],
       "to": [
         16,
-        16,
-        0.25
+        0.5,
+        16
       ],
       "faces": {
-        "south": {
+        "up": {
           "uv": [
             0,
             0,
@@ -25,7 +25,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 8
     }
   ]
 }

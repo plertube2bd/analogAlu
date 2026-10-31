@@ -1,6 +1,6 @@
 {
   "type": "minecraft:blasting",
-  "cookingtime": 2400,
+  "cookingtime": 1200,
   "experience": 1.0,
   "ingredient": "analog_alu:silicon_boule",
   "result": {

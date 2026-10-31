@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "analog_alu:xor_gate",
+    "minecraft:repeater"
+  ],
+  "result": {
+    "id": "analog_alu:logical_xor",
+    "count": 1
+  }
+}

@@ -1,6 +1,6 @@
 {
   "type": "minecraft:blasting",
-  "cookingtime": 4800,
+  "cookingtime": 2400,
   "experience": 1.5,
   "ingredient": "analog_alu:silicon_purification_charge",
   "result": {

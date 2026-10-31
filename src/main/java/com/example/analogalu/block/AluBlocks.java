@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class AluBlocks {
     private AluBlocks() {}
 
-    /** 비트 단위 논리 게이트. 우클릭으로 반전(NOR/NAND/XNOR). NOT은 4비트 마스크로 제한한다. */
+    /** 비트 단위(Bitwise) 게이트. 우클릭으로 반전(NOR/NAND/XNOR). NOT은 4비트 마스크로 제한한다. */
     public abstract static class Gate extends AluBlock {
         protected Gate(BlockBehaviour.Properties p) { super(p); }
         @Override protected boolean hasInvert() { return true; }
@@ -40,6 +40,39 @@ public final class AluBlocks {
     public static class XorGate extends Gate {
         public XorGate(BlockBehaviour.Properties p) { super(p); }
         @Override protected int op(int a, int b) { return a ^ b; }
+    }
+
+    /**
+     * 논리(Logical) 게이트. 각 입력을 "참(신호 1 이상) / 거짓(0)"으로만 보고, 결과를 15(참) 또는 0(거짓)으로 낸다.
+     * 우클릭으로 반전(NAND/NOR/XNOR). Logical NOT과 같은 규칙(참 = 15)을 따른다.
+     */
+    public abstract static class LogicalGate extends AluBlock {
+        protected LogicalGate(BlockBehaviour.Properties p) { super(p); }
+        @Override protected boolean hasInvert() { return true; }
+        protected abstract boolean test(boolean a, boolean b);
+        @Override protected Out compute(Level level, BlockPos pos, BlockState state) {
+            boolean r = test(inputA(level, pos, state) > 0, inputB(level, pos, state) > 0);
+            if (state.getValue(INVERTED)) r = !r;
+            return new Out(r ? 15 : 0, false);
+        }
+    }
+
+    /** Logical OR: A 또는 B가 0보다 크면 15 */
+    public static class LogicalOr extends LogicalGate {
+        public LogicalOr(BlockBehaviour.Properties p) { super(p); }
+        @Override protected boolean test(boolean a, boolean b) { return a || b; }
+    }
+
+    /** Logical AND: A와 B가 모두 0보다 크면 15 */
+    public static class LogicalAnd extends LogicalGate {
+        public LogicalAnd(BlockBehaviour.Properties p) { super(p); }
+        @Override protected boolean test(boolean a, boolean b) { return a && b; }
+    }
+
+    /** Logical XOR: A와 B 중 정확히 하나만 0보다 크면 15 */
+    public static class LogicalXor extends LogicalGate {
+        public LogicalXor(BlockBehaviour.Properties p) { super(p); }
+        @Override protected boolean test(boolean a, boolean b) { return a != b; }
     }
 
     /** Bitwise NOT: R = ~A (4비트 마스크). 6(0110) -> 9(1001) */
