@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 2400,
+  "experience": 1.0,
+  "ingredient": "analog_alu:silicon_boule",
+  "result": {
+    "id": "analog_alu:silicon"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "input": "analog_alu:purified_silicon",
+  "material": "minecraft:amethyst_shard",
+  "result": {
+    "id": "analog_alu:seeded_silicon"
+  }
+}

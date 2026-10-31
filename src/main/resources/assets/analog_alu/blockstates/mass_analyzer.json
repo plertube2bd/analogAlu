@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "analog_alu:block/mass_analyzer"
+    },
+    "active=true": {
+      "model": "analog_alu:block/mass_analyzer_active"
+    }
+  }
+}

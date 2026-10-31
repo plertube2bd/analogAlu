@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "analog_alu:accelerated_focused_silicon",
+    "analog_alu:strong_ion_gas"
+  ],
+  "result": {
+    "id": "analog_alu:inactive_doped_wafer",
+    "count": 1
+  }
+}

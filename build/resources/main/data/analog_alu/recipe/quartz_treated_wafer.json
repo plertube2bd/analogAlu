@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "input": [
+    "analog_alu:silicon_wafer",
+    "analog_alu:programmed_silicon_wafer"
+  ],
+  "material": "minecraft:quartz",
+  "result": {
+    "id": "analog_alu:quartz_treated_wafer"
+  }
+}

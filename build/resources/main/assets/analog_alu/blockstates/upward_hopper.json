@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minecraft:block/hopper",
+      "x": 180
+    }
+  }
+}

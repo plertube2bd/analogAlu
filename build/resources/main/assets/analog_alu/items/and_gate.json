@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "analog_alu:block/and_gate"
+  }
+}

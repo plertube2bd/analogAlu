@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.example.analogalu.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "FurnaceResultSlotMixin",
+    "ResultSlotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

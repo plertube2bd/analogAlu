@@ -1,0 +1,388 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_on",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry_on",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "carry_enabled": "true"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "power": "0"
+          },
+          {
+            "carry": "false"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "carry_enabled": "false"
+          },
+          {
+            "OR": [
+              {
+                "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+              },
+              {
+                "carry": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/subtractor_nocarry_on",
+        "y": 270
+      }
+    }
+  ]
+}

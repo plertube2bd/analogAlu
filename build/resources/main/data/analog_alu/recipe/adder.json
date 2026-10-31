@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CRC",
+    "RSR"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone",
+    "S": [
+      "minecraft:stone",
+      "minecraft:cobblestone",
+      "minecraft:cobbled_deepslate"
+    ]
+  },
+  "result": {
+    "id": "analog_alu:adder",
+    "count": 1
+  }
+}

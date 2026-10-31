@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "CSC",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "analog_alu:semiconductor"
+  },
+  "result": {
+    "id": "analog_alu:semiconductor_block",
+    "count": 1
+  }
+}

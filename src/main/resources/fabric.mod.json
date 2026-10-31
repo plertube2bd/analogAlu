@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "analog_alu",
+  "version": "${version}",
+  "name": "Analog Redstone ALU",
+  "description": "4-bit analog redstone computing blocks",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.analogalu.AnalogAlu"],
+    "client": ["com.example.analogalu.WaferEditorClient"]
+  },
+  "mixins": ["analog_alu.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": ">=26.1",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

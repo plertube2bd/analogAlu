@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "analog_alu:block/mass_analyzer_active_top",
+    "up": "analog_alu:block/mass_analyzer_active_top",
+    "down": "analog_alu:block/mass_analyzer_active_side",
+    "north": "analog_alu:block/mass_analyzer_active_side",
+    "south": "analog_alu:block/mass_analyzer_active_side",
+    "east": "analog_alu:block/mass_analyzer_active_side",
+    "west": "analog_alu:block/mass_analyzer_active_side"
+  }
+}

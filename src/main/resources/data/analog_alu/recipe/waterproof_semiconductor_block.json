@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "analog_alu:semiconductor_block",
+    "minecraft:gold_ingot",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "analog_alu:waterproof_semiconductor_block",
+    "count": 1
+  }
+}

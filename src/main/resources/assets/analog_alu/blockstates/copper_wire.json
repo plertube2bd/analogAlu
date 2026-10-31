@@ -1,0 +1,276 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "power": "0"
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_dot"
+      }
+    },
+    {
+      "when": {
+        "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_dot_on"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "side|up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "side|up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side_on",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up_on",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "side|up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "side|up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "side|up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "side|up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "side|up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "up"
+          },
+          {
+            "power": "0"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "side|up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_side_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "up"
+          },
+          {
+            "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+          }
+        ]
+      },
+      "apply": {
+        "model": "analog_alu:block/copper_wire_up_on",
+        "y": 270
+      }
+    }
+  ]
+}

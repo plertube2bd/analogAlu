@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "RRR",
+    "RNR",
+    "RRR"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "N": "minecraft:copper_nugget"
+  },
+  "result": {
+    "id": "analog_alu:copper_wire",
+    "count": 8
+  }
+}
