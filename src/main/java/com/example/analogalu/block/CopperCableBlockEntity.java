@@ -1,15 +1,24 @@
 package com.example.analogalu.block;
 
 import com.example.analogalu.ModBlocks;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class CopperCableBlockEntity extends BlockEntity {
+public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
     public static final double AMBIENT_TEMPERATURE_C = 15.0;
     public static final double COPPER_RESISTIVITY_OHM_METERS = 1.68e-8;
     public static final double CROSS_SECTION_SQUARE_METERS = 1.5e-6;
@@ -24,6 +33,7 @@ public class CopperCableBlockEntity extends BlockEntity {
     private double current;
     private double temperatureCelsius = AMBIENT_TEMPERATURE_C;
     private double damage;
+    private int lastSyncSignature = Integer.MIN_VALUE;
 
     public CopperCableBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.COPPER_CABLE_ENTITY, pos, state);
@@ -48,7 +58,52 @@ public class CopperCableBlockEntity extends BlockEntity {
         output.putDouble("Damage", damage);
     }
 
+    // ---- 클라이언트 동기화 (툴팁에 쓰는 값)
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    /** 표시값이 눈에 띄게 바뀐 경우에만 주변 클라이언트로 전송한다. */
+    private void syncIfChanged() {
+        int signature = java.util.Objects.hash(Math.round(voltage * 100), Math.round(current * 1000),
+                Math.round(temperatureCelsius * 10), Math.round(getHealth() * 10));
+        if (signature == lastSyncSignature) return;
+        lastSyncSignature = signature;
+        BlockEntitySync.send(this);
+    }
+
+    @Override
+    public List<Component> hoverInfo(Level level) {
+        boolean locked = getBlockState().getValue(CopperCableBlock.LOCK) != 0;
+        double health = getHealth();
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.literal("Copper Cable").withStyle(ChatFormatting.GOLD));
+        lines.add(line("Voltage", String.format(Locale.ROOT, "%.2f V", voltage), ChatFormatting.YELLOW));
+        lines.add(line("Current", String.format(Locale.ROOT, "%.3f A", current), ChatFormatting.AQUA));
+        lines.add(line("Resistance", String.format(Locale.ROOT, "%.5f \u03a9", getResistanceOhms()), ChatFormatting.WHITE));
+        lines.add(line("Temperature", String.format(Locale.ROOT, "%.1f \u00b0C", temperatureCelsius),
+                temperatureCelsius >= 75.0 ? ChatFormatting.RED
+                        : temperatureCelsius >= 50.0 ? ChatFormatting.GOLD : ChatFormatting.GREEN));
+        lines.add(line("Health", String.format(Locale.ROOT, "%.1f / 100", health),
+                health < 30.0 ? ChatFormatting.RED : health < 70.0 ? ChatFormatting.GOLD : ChatFormatting.GREEN));
+        lines.add(line("Wiring", locked ? "LOCKED" : "UNLOCKED", locked ? ChatFormatting.BLUE : ChatFormatting.GRAY));
+        return lines;
+    }
+
+    static Component line(String label, String value, ChatFormatting valueColor) {
+        return Component.literal(label + ": ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(value).withStyle(valueColor));
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, CopperCableBlockEntity cable) {
+        if (Math.floorMod(level.getGameTime(), 10L) == Math.floorMod(pos.asLong(), 10L)) cable.syncIfChanged();
         if (Math.floorMod(level.getGameTime(), 20L) == Math.floorMod(pos.asLong(), 20L)) {
             CircuitSolver.solveFrom(level, pos);
         }

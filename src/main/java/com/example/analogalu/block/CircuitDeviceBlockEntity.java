@@ -1,7 +1,14 @@
 package com.example.analogalu.block;
 
 import com.example.analogalu.ModBlocks;
+import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -11,12 +18,13 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 
-public class CircuitDeviceBlockEntity extends BlockEntity {
+public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
     private static final int COAL_FUEL_TICKS = 1600;
     private static final int MAX_FUEL_TICKS = COAL_FUEL_TICKS * 8;
     private double storedEnergyJoules = CircuitDeviceBlock.BATTERY_CAPACITY_JOULES;
     private int fuelTicks;
     private long lastEnergyTick = -1L;
+    private int lastSyncSignature = Integer.MIN_VALUE;
 
     public CircuitDeviceBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.CIRCUIT_DEVICE_ENTITY, pos, state);
@@ -41,7 +49,34 @@ public class CircuitDeviceBlockEntity extends BlockEntity {
         output.putLong("LastEnergyTick", lastEnergyTick);
     }
 
+    // ---- 클라이언트 동기화 (툴팁에 쓰는 값)
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    private void syncIfChanged() {
+        int signature = java.util.Objects.hash(Math.round(storedEnergyJoules / 10.0), fuelTicks / 10);
+        if (signature == lastSyncSignature) return;
+        lastSyncSignature = signature;
+        BlockEntitySync.send(this);
+    }
+
+    @Override
+    public List<Component> hoverInfo(Level level) {
+        return CircuitDeviceBlock.hoverLines(level, worldPosition, getBlockState(), this);
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, CircuitDeviceBlockEntity device) {
+        if (!level.isClientSide() && Math.floorMod(level.getGameTime(), 10L) == Math.floorMod(pos.asLong(), 10L)) {
+            device.syncIfChanged();
+        }
         if (device.level == null || device.level.isClientSide()
                 || !(state.getBlock() instanceof CircuitDeviceBlock block)
                 || block.kind() != CircuitDeviceBlock.Kind.COAL_GENERATOR

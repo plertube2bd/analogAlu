@@ -1,7 +1,86 @@
 {
-  "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "minecraft:block/copper_block",
-    "particle": "minecraft:block/copper_block"
-  }
+    "front": "analog_alu:block/circuit_switch_end",
+    "back": "analog_alu:block/circuit_switch_end",
+    "side": "analog_alu:block/circuit_switch_side",
+    "top": "analog_alu:block/circuit_switch_top_off",
+    "bottom": "analog_alu:block/circuit_switch_side",
+    "particle": "analog_alu:block/circuit_switch_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#front",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#back",
+          "cullface": "south"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bottom",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
 }

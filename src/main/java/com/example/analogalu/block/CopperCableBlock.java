@@ -3,12 +3,16 @@ package com.example.analogalu.block;
 import com.example.analogalu.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -20,20 +24,100 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import java.util.Map;
 
 public class CopperCableBlock extends BaseEntityBlock {
     public static final IntegerProperty LOCK = IntegerProperty.create("lock", 0, 64);
 
+    /** 그 방향으로 전선 팔이 뻗어 있는가 (모델/선택 영역용). 연결 계산은 CircuitSolver가 따로 한다. */
+    public static final Map<Direction, BooleanProperty> ARMS = Map.of(
+            Direction.NORTH, BooleanProperty.create("north"),
+            Direction.EAST, BooleanProperty.create("east"),
+            Direction.SOUTH, BooleanProperty.create("south"),
+            Direction.WEST, BooleanProperty.create("west"),
+            Direction.UP, BooleanProperty.create("up"),
+            Direction.DOWN, BooleanProperty.create("down"));
+
+    /** 중심 기둥(6x6x6)과 팔(4x4)의 선택 영역. 팔 조합(6비트)별로 미리 만들어 둔다. */
+    private static final VoxelShape[] SHAPES = new VoxelShape[64];
+
+    static {
+        VoxelShape core = Block.box(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
+        for (int mask = 0; mask < 64; mask++) {
+            VoxelShape shape = core;
+            for (Direction direction : Direction.values()) {
+                if ((mask & (1 << direction.get3DDataValue())) != 0) shape = Shapes.or(shape, armShape(direction));
+            }
+            SHAPES[mask] = shape;
+        }
+    }
+
+    private static VoxelShape armShape(Direction direction) {
+        return switch (direction) {
+            case NORTH -> Block.box(6.0, 6.0, 0.0, 10.0, 10.0, 5.0);
+            case SOUTH -> Block.box(6.0, 6.0, 11.0, 10.0, 10.0, 16.0);
+            case WEST -> Block.box(0.0, 6.0, 6.0, 5.0, 10.0, 10.0);
+            case EAST -> Block.box(11.0, 6.0, 6.0, 16.0, 10.0, 10.0);
+            case DOWN -> Block.box(6.0, 0.0, 6.0, 10.0, 5.0, 10.0);
+            case UP -> Block.box(6.0, 11.0, 6.0, 10.0, 16.0, 10.0);
+        };
+    }
+
     public CopperCableBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(LOCK, 0));
+        BlockState state = defaultBlockState().setValue(LOCK, 0);
+        for (BooleanProperty arm : ARMS.values()) state = state.setValue(arm, false);
+        registerDefaultState(state);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
         builder.add(LOCK);
+        for (BooleanProperty arm : ARMS.values()) builder.add(arm);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        int mask = 0;
+        for (Direction direction : Direction.values()) {
+            if (state.getValue(ARMS.get(direction))) mask |= 1 << direction.get3DDataValue();
+        }
+        return SHAPES[mask];
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return withArms(context.getLevel(), context.getClickedPos(), defaultBlockState());
+    }
+
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
+            Direction directionToNeighbor, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+        return withArms(level, pos, state);
+    }
+
+    /** 이웃 상태에 맞춰 팔(연결 모양)을 다시 계산한다. 구리선끼리는 잠금 규칙(allowsConnection)을 따른다. */
+    private static BlockState withArms(BlockGetter level, BlockPos pos, BlockState state) {
+        for (Direction direction : Direction.values()) {
+            BlockState neighbor = level.getBlockState(pos.relative(direction));
+            boolean arm;
+            if (neighbor.getBlock() instanceof CopperCableBlock) {
+                arm = allowsConnection(state, direction) && allowsConnection(neighbor, direction.getOpposite());
+            } else if (neighbor.getBlock() instanceof CircuitDeviceBlock) {
+                Direction facing = neighbor.getValue(CircuitDeviceBlock.FACING);
+                arm = direction == facing || direction == facing.getOpposite(); // 장치의 단자 쪽
+            } else {
+                arm = false;
+            }
+            state = state.setValue(ARMS.get(direction), arm);
+        }
+        return state;
     }
 
     @Override
@@ -62,7 +146,10 @@ public class CopperCableBlock extends BaseEntityBlock {
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block,
             Orientation orientation, boolean movedByPiston) {
-        if (!level.isClientSide()) CircuitSolver.solveFrom(level, pos);
+        if (level.isClientSide()) return;
+        BlockState shaped = withArms(level, pos, state);
+        if (shaped != state) level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
+        CircuitSolver.solveFrom(level, pos);
     }
 
     @Override
@@ -84,7 +171,8 @@ public class CopperCableBlock extends BaseEntityBlock {
                 if (isConnected(level, pos, direction)) mask |= 1 << direction.get3DDataValue();
             }
         }
-        level.setBlock(pos, state.setValue(LOCK, locking ? mask + 1 : 0), Block.UPDATE_CLIENTS);
+        BlockState toggled = state.setValue(LOCK, locking ? mask + 1 : 0);
+        level.setBlock(pos, withArms(level, pos, toggled), Block.UPDATE_CLIENTS);
         level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS, 0.3F,
                 locking ? 0.55F : 0.6F);
         for (Direction direction : Direction.values()) {
@@ -92,13 +180,6 @@ public class CopperCableBlock extends BaseEntityBlock {
         }
         CircuitSolver.solveFrom(level, pos);
 
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof CopperCableBlockEntity cable) {
-                player.sendSystemMessage(Component.literal(String.format(java.util.Locale.ROOT,
-                    "R %.5f Ω | V %.2f V | I %.3f A | %.1f°C | HP %.1f/100 | %s",
-                    cable.getResistanceOhms(), cable.getVoltage(), cable.getCurrent(), cable.getTemperatureCelsius(),
-                    cable.getHealth(), locking ? "LOCKED" : "UNLOCKED")));
-        }
         return InteractionResult.SUCCESS;
     }
 

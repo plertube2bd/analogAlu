@@ -6,6 +6,9 @@
     "FurnaceResultSlotMixin",
     "ResultSlotMixin"
   ],
+  "client": [
+    "HudHoverInfoMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

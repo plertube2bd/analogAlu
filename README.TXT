@@ -358,6 +358,23 @@ Editor window (right-click a wafer):
   - Revert discards the draft and reloads the code stored on the wafer.
 
 
+Electrical circuit blocks (copper cable, battery, switch, resistor, generators):
+  - Look at (aim the crosshair at) a cable or a device: an inventory-style
+    tooltip window appears beside the crosshair with its live values (cable:
+    voltage, current, resistance, temperature, health, wiring lock; battery:
+    energy; coal generator: fuel; switch/resistor/wind/solar: state). This
+    replaces the chat messages that used to print on right-click. Only the
+    circuit switch still reacts to right-click (toggle); the cable still
+    toggles its connection lock on right-click.
+  - The values are synced to nearby clients every 10 ticks, only when they
+    change (block-entity data packet, no chunk re-mesh).
+  - The copper cable is drawn as a core post with arms toward the cables and
+    device terminals it is actually connected to (its selection box follows
+    the same shape). Battery, circuit switch and resistive load have their own
+    textures: + / - terminal faces on the facing axis, a lever that shows
+    OPEN/CLOSED on the switch, colour bands on the resistor.
+  - Assets: tools/gen_circuit_assets.py
+
 ================================================================================
 END OF README
 ================================================================================

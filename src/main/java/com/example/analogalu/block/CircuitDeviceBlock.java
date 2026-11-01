@@ -1,6 +1,10 @@
 package com.example.analogalu.block;
 
 import com.example.analogalu.ModBlocks;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -99,43 +103,73 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         CircuitSolver.recomputeAround(level, pos);
     }
 
+    /** 스위치만 우클릭으로 토글한다. 나머지 장치의 상태는 조준했을 때 뜨는 툴팁 창(HoverInfo)으로 확인한다. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
+        if (kind != Kind.SWITCH) return InteractionResult.PASS;
         if (!player.getAbilities().mayBuild) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
-        if (kind == Kind.SWITCH) {
-            boolean closed = !state.getValue(CLOSED);
-            level.setBlock(pos, state.setValue(CLOSED, closed), Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, closed ? 0.6F : 0.5F);
-            CircuitSolver.recomputeAround(level, pos);
-            player.sendSystemMessage(Component.literal(closed ? "Circuit switch: CLOSED" : "Circuit switch: OPEN"));
-        } else if (kind == Kind.BATTERY) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            double joules = blockEntity instanceof CircuitDeviceBlockEntity battery
-                    ? battery.getStoredEnergyJoules() : 0.0;
-            Direction positive = state.getValue(FACING);
-            player.sendSystemMessage(Component.literal(String.format(java.util.Locale.ROOT,
-                "Battery: %.1f V | +%s / -%s | %.0f / %.0f J", BATTERY_VOLTAGE, positive.getName(),
-                positive.getOpposite().getName(), joules, BATTERY_CAPACITY_JOULES)));
-            } else if (kind == Kind.COAL_GENERATOR) {
-                BlockEntity blockEntity = level.getBlockEntity(pos);
-                int fuelTicks = blockEntity instanceof CircuitDeviceBlockEntity generator
-                    ? generator.getFuelTicks() : 0;
-                player.sendSystemMessage(Component.literal(String.format(java.util.Locale.ROOT,
-                    "Coal generator: %.1f V | fuel %.0f s (drop coal on top)", COAL_GENERATOR_VOLTAGE,
-                    fuelTicks / 20.0)));
-            } else if (kind == Kind.WIND_GENERATOR || kind == Kind.SOLAR_GENERATOR) {
-                boolean producing = hasNaturalInput(level, pos, kind);
-                player.sendSystemMessage(Component.literal(kind == Kind.WIND_GENERATOR
-                    ? (producing ? "Wind generator: producing" : "Wind generator: place outdoors above Y=80")
-                    : (producing ? "Solar generator: producing" : "Solar generator: needs daylight and open sky")));
-        } else {
-            player.sendSystemMessage(Component.literal(String.format(java.util.Locale.ROOT,
-                    "Resistive load: %.1f Ω", LOAD_RESISTANCE)));
-        }
+        boolean closed = !state.getValue(CLOSED);
+        level.setBlock(pos, state.setValue(CLOSED, closed), Block.UPDATE_ALL);
+        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, closed ? 0.6F : 0.5F);
+        CircuitSolver.recomputeAround(level, pos);
         return InteractionResult.SUCCESS;
+    }
+
+    /** 툴팁 창에 보여줄 줄들. 첫 줄은 제목. 클라이언트에서도 호출된다. */
+    public static List<Component> hoverLines(Level level, BlockPos pos, BlockState state,
+            CircuitDeviceBlockEntity device) {
+        Kind kind = ((CircuitDeviceBlock) state.getBlock()).kind();
+        Direction positive = state.getValue(FACING);
+        List<Component> lines = new ArrayList<>();
+        switch (kind) {
+            case BATTERY -> {
+                double joules = device.getStoredEnergyJoules();
+                lines.add(Component.literal("Battery").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V", BATTERY_VOLTAGE),
+                        ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Energy", String.format(Locale.ROOT, "%.0f / %.0f J (%.0f%%)",
+                        joules, BATTERY_CAPACITY_JOULES, 100.0 * joules / BATTERY_CAPACITY_JOULES),
+                        joules < BATTERY_CAPACITY_JOULES * 0.2 ? ChatFormatting.RED : ChatFormatting.GREEN));
+                lines.add(CopperCableBlockEntity.line("Terminals", "+" + positive.getName() + " / -"
+                        + positive.getOpposite().getName(), ChatFormatting.WHITE));
+            }
+            case SWITCH -> {
+                boolean closed = state.getValue(CLOSED);
+                lines.add(Component.literal("Circuit Switch").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("State", closed ? "CLOSED (conducting)" : "OPEN",
+                        closed ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(Component.literal("Right-click to toggle").withStyle(ChatFormatting.DARK_GRAY));
+            }
+            case RESISTOR -> {
+                lines.add(Component.literal("Resistive Load").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \u03a9",
+                        LOAD_RESISTANCE), ChatFormatting.WHITE));
+            }
+            case COAL_GENERATOR -> {
+                int fuelTicks = device.getFuelTicks();
+                lines.add(Component.literal("Coal Generator").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V",
+                        COAL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
+                        fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(Component.literal("Drop coal on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
+            }
+            case WIND_GENERATOR, SOLAR_GENERATOR -> {
+                boolean wind = kind == Kind.WIND_GENERATOR;
+                boolean producing = hasNaturalInput(level, pos, kind);
+                lines.add(Component.literal(wind ? "Wind Generator" : "Solar Generator").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Status", producing ? "producing" : "idle",
+                        producing ? ChatFormatting.GREEN : ChatFormatting.RED));
+                if (!producing) {
+                    lines.add(Component.literal(wind ? "Place outdoors above Y=80" : "Needs daylight and open sky")
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                }
+            }
+        }
+        return lines;
     }
 
     public static boolean hasNaturalInput(Level level, BlockPos pos, Kind kind) {
