@@ -204,6 +204,8 @@ for index, (advancement, item, title_en, title_ko, desc_en, desc_ko) in enumerat
             "icon": {"id": f"{NAMESPACE}:{item}"},
             "title": display_title,
             "description": display_desc,
+            **({"background": "minecraft:textures/gui/advancements/backgrounds/stone.png"}
+               if previous is None else {}),
             "frame": frame,
             "show_toast": True,
             "announce_to_chat": True,
