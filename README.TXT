@@ -6,7 +6,7 @@ Signal strength (0-15) is treated directly as unsigned 4-bit integer data.
 
 Mod ID          : analog_alu
 Display Name    : Analog Redstone ALU
-Version         : 0.1.2
+Version         : 0.1.3
 Description     : 4-bit analog redstone computing blocks
 Minecraft       : >= 26.1
 Fabric Loader   : >= 0.19.3

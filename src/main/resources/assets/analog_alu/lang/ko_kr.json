@@ -57,15 +57,15 @@
   "block.analog_alu.extender": "레드스톤 연장기",
   "block.analog_alu.shift_right": "비트 시프트 우 (SHR)",
   "block.analog_alu.shift_left": "비트 시프트 좌 (SHL)",
-  "block.analog_alu.or_gate": "비트 OR 게이트 (우클릭: NOR)",
-  "block.analog_alu.and_gate": "비트 AND 게이트 (우클릭: NAND)",
-  "block.analog_alu.xor_gate": "비트 XOR 게이트 (우클릭: XNOR)",
+  "block.analog_alu.or_gate": "비트 OR 게이트",
+  "block.analog_alu.and_gate": "비트 AND 게이트",
+  "block.analog_alu.xor_gate": "비트 XOR 게이트",
   "block.analog_alu.cram": "CRAM (4비트 메모리)",
   "block.analog_alu.bitwise_not": "비트 NOT",
   "block.analog_alu.logical_not": "논리 NOT",
   "block.analog_alu.mass_analyzer": "질량 분석기",
   "block.analog_alu.mass_analyzer.description": "이온 처리 실리콘을 위에 던지고, 신호 강도 8 이상을 누적 2분 30초 공급하세요. 신호가 끊기면 일시정지됩니다.",
-  "block.analog_alu.logical_or": "논리 OR 게이트 (우클릭: NOR)",
-  "block.analog_alu.logical_and": "논리 AND 게이트 (우클릭: NAND)",
-  "block.analog_alu.logical_xor": "논리 XOR 게이트 (우클릭: XNOR)"
+  "block.analog_alu.logical_or": "논리 OR 게이트",
+  "block.analog_alu.logical_and": "논리 AND 게이트",
+  "block.analog_alu.logical_xor": "논리 XOR 게이트"
 }

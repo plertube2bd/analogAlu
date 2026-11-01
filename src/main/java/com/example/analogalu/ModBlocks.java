@@ -34,7 +34,8 @@ public final class ModBlocks {
     public static final Item COPPER_WIRE_ITEM = registerItem("copper_wire", COPPER_WIRE);
 
         public static final Block UPWARD_HOPPER = registerBlock("upward_hopper", UpwardHopperBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.HOPPER));
+            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.HOPPER)
+                .requiresCorrectToolForDrops());
         public static final Item UPWARD_HOPPER_ITEM = registerItem("upward_hopper", UPWARD_HOPPER);
             public static final BlockEntityType<UpwardHopperBlockEntity> UPWARD_HOPPER_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -61,7 +62,8 @@ public final class ModBlocks {
 
         public static final Block SEMICONDUCTOR_BLOCK = registerBlock("semiconductor_block",
             properties -> new SemiconductorBlock(properties, false),
-            BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.COPPER));
+            BlockBehaviour.Properties.of().strength(4.0F, 6.0F).requiresCorrectToolForDrops()
+                .sound(SoundType.COPPER));
         public static final Item SEMICONDUCTOR_BLOCK_ITEM = registerItem("semiconductor_block", SEMICONDUCTOR_BLOCK);
         public static final Block WATERPROOF_SEMICONDUCTOR_BLOCK = registerBlock("waterproof_semiconductor_block",
             properties -> new SemiconductorBlock(properties, true),

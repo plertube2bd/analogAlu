@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "analog_alu:semiconductor_block",
+    "analog_alu:waterproof_semiconductor_block"
+  ]
+}
