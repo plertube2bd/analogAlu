@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,closed=false": { "model": "analog_alu:block/resistor_load" },
+    "facing=north,closed=true": { "model": "analog_alu:block/resistor_load" },
+    "facing=east,closed=false": { "model": "analog_alu:block/resistor_load", "y": 90 },
+    "facing=east,closed=true": { "model": "analog_alu:block/resistor_load", "y": 90 },
+    "facing=south,closed=false": { "model": "analog_alu:block/resistor_load", "y": 180 },
+    "facing=south,closed=true": { "model": "analog_alu:block/resistor_load", "y": 180 },
+    "facing=west,closed=false": { "model": "analog_alu:block/resistor_load", "y": 270 },
+    "facing=west,closed=true": { "model": "analog_alu:block/resistor_load", "y": 270 }
+  }
+}

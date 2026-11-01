@@ -2,6 +2,10 @@ package com.example.analogalu;
 
 import com.example.analogalu.block.AluBlocks;
 import com.example.analogalu.block.CopperWireBlock;
+import com.example.analogalu.block.CopperCableBlock;
+import com.example.analogalu.block.CopperCableBlockEntity;
+import com.example.analogalu.block.CircuitDeviceBlock;
+import com.example.analogalu.block.CircuitDeviceBlockEntity;
 import com.example.analogalu.block.UpwardHopperBlock;
 import com.example.analogalu.block.UpwardHopperBlockEntity;
 import com.example.analogalu.block.MassAnalyzerBlock;
@@ -35,6 +39,46 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().noCollision().instabreak()
                     .sound(SoundType.STONE).pushReaction(PushReaction.POPPED));
     public static final Item COPPER_WIRE_ITEM = registerItem("copper_wire", COPPER_WIRE);
+
+        public static final CopperCableBlock COPPER_CABLE = registerBlock("copper_cable", CopperCableBlock::new,
+            BlockBehaviour.Properties.of().noCollision().instabreak()
+                .sound(SoundType.COPPER).pushReaction(PushReaction.POPPED));
+        public static final Item COPPER_CABLE_ITEM = registerItem("copper_cable", COPPER_CABLE);
+        public static final BlockEntityType<CopperCableBlockEntity> COPPER_CABLE_ENTITY = Registry.register(
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("copper_cable")),
+            new BlockEntityType<>(CopperCableBlockEntity::new, Set.of(COPPER_CABLE)));
+
+            public static final CircuitDeviceBlock BATTERY = registerBlock("battery",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.BATTERY),
+                BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.COPPER));
+            public static final Item BATTERY_ITEM = registerItem("battery", BATTERY);
+            public static final CircuitDeviceBlock CIRCUIT_SWITCH = registerBlock("circuit_switch",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.SWITCH),
+                BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.COPPER));
+            public static final Item CIRCUIT_SWITCH_ITEM = registerItem("circuit_switch", CIRCUIT_SWITCH);
+            public static final CircuitDeviceBlock RESISTOR_LOAD = registerBlock("resistor_load",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.RESISTOR),
+                BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.COPPER));
+            public static final Item RESISTOR_LOAD_ITEM = registerItem("resistor_load", RESISTOR_LOAD);
+            public static final CircuitDeviceBlock COAL_GENERATOR = registerBlock("coal_generator",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.COAL_GENERATOR),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item COAL_GENERATOR_ITEM = registerItem("coal_generator", COAL_GENERATOR);
+            public static final CircuitDeviceBlock WIND_GENERATOR = registerBlock("wind_generator",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.WIND_GENERATOR),
+                BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.METAL));
+            public static final Item WIND_GENERATOR_ITEM = registerItem("wind_generator", WIND_GENERATOR);
+            public static final CircuitDeviceBlock SOLAR_GENERATOR = registerBlock("solar_generator",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.SOLAR_GENERATOR),
+                BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.COPPER));
+            public static final Item SOLAR_GENERATOR_ITEM = registerItem("solar_generator", SOLAR_GENERATOR);
+            public static final BlockEntityType<CircuitDeviceBlockEntity> CIRCUIT_DEVICE_ENTITY = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("circuit_device")),
+                new BlockEntityType<>(CircuitDeviceBlockEntity::new,
+                        Set.of(BATTERY, CIRCUIT_SWITCH, RESISTOR_LOAD, COAL_GENERATOR, WIND_GENERATOR,
+                                SOLAR_GENERATOR)));
 
         public static final Block UPWARD_HOPPER = registerBlock("upward_hopper", UpwardHopperBlock::new,
             BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.HOPPER)

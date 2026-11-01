@@ -1,0 +1,33 @@
+{
+  "textures": {
+    "side": "analog_alu:block/solar_generator_side",
+    "panel": "analog_alu:block/solar_generator_panel",
+    "particle": "analog_alu:block/solar_generator_side"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 5, 16],
+      "faces": {
+        "down": { "texture": "#side" },
+        "up": { "texture": "#side" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [1, 5, 1],
+      "to": [15, 7, 15],
+      "faces": {
+        "down": { "texture": "#side" },
+        "up": { "texture": "#panel" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    }
+  ]
+}

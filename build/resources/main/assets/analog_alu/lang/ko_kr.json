@@ -1,5 +1,12 @@
 {
-  "block.analog_alu.copper_wire": "구리선",
+  "block.analog_alu.copper_wire": "배선",
+  "block.analog_alu.copper_cable": "구리 전선",
+  "block.analog_alu.battery": "건전지",
+  "block.analog_alu.circuit_switch": "전기 스위치",
+  "block.analog_alu.resistor_load": "저항 부하",
+  "block.analog_alu.coal_generator": "석탄 발전기",
+  "block.analog_alu.wind_generator": "풍력 발전기",
+  "block.analog_alu.solar_generator": "태양광 발전기",
   "item.analog_alu.silicon_boule": "실리콘 원형",
   "item.analog_alu.silicon": "실리콘",
   "item.analog_alu.silicon_purification_charge": "실리콘 정제 충전물",

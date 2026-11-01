@@ -1,0 +1,71 @@
+{
+  "textures": {
+    "side": "analog_alu:block/wind_generator_side",
+    "top": "analog_alu:block/wind_generator_top",
+    "rotor": "analog_alu:block/wind_generator_rotor",
+    "metal": "minecraft:block/iron_block",
+    "particle": "analog_alu:block/wind_generator_side"
+  },
+  "elements": [
+    {
+      "from": [1, 0, 1],
+      "to": [15, 5, 15],
+      "faces": {
+        "down": { "texture": "#side" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [6, 5, 6],
+      "to": [10, 12, 10],
+      "faces": {
+        "down": { "texture": "#metal" },
+        "up": { "texture": "#metal" },
+        "north": { "texture": "#metal" },
+        "south": { "texture": "#metal" },
+        "west": { "texture": "#metal" },
+        "east": { "texture": "#metal" }
+      }
+    },
+    {
+      "from": [7, 11, 4],
+      "to": [9, 16, 6],
+      "faces": {
+        "down": { "texture": "#metal" },
+        "up": { "texture": "#rotor" },
+        "north": { "texture": "#rotor" },
+        "south": { "texture": "#rotor" },
+        "west": { "texture": "#metal" },
+        "east": { "texture": "#metal" }
+      }
+    },
+    {
+      "from": [0, 11, 4],
+      "to": [16, 13, 6],
+      "faces": {
+        "down": { "texture": "#metal" },
+        "up": { "texture": "#rotor" },
+        "north": { "texture": "#rotor" },
+        "south": { "texture": "#rotor" },
+        "west": { "texture": "#metal" },
+        "east": { "texture": "#metal" }
+      }
+    },
+    {
+      "from": [6, 10, 3],
+      "to": [10, 14, 7],
+      "faces": {
+        "down": { "texture": "#metal" },
+        "up": { "texture": "#rotor" },
+        "north": { "texture": "#rotor" },
+        "south": { "texture": "#rotor" },
+        "west": { "texture": "#metal" },
+        "east": { "texture": "#metal" }
+      }
+    }
+  ]
+}

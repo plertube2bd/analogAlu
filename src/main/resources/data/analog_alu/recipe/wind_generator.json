@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [" I ", "ICI", " F "],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:copper_ingot",
+    "F": "minecraft:feather"
+  },
+  "result": { "id": "analog_alu:wind_generator", "count": 1 }
+}

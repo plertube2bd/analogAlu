@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "rolls": 1,
+    "entries": [{ "type": "minecraft:item", "name": "analog_alu:circuit_switch" }]
+  }]
+}

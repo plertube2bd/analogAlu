@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,closed=false": { "model": "analog_alu:block/battery" },
+    "facing=north,closed=true": { "model": "analog_alu:block/battery" },
+    "facing=east,closed=false": { "model": "analog_alu:block/battery", "y": 90 },
+    "facing=east,closed=true": { "model": "analog_alu:block/battery", "y": 90 },
+    "facing=south,closed=false": { "model": "analog_alu:block/battery", "y": 180 },
+    "facing=south,closed=true": { "model": "analog_alu:block/battery", "y": 180 },
+    "facing=west,closed=false": { "model": "analog_alu:block/battery", "y": 270 },
+    "facing=west,closed=true": { "model": "analog_alu:block/battery", "y": 270 }
+  }
+}

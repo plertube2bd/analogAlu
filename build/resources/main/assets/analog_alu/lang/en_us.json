@@ -1,5 +1,12 @@
 {
-  "block.analog_alu.copper_wire": "Copper Wire",
+  "block.analog_alu.copper_wire": "Wire",
+  "block.analog_alu.copper_cable": "Copper Cable",
+  "block.analog_alu.battery": "Battery",
+  "block.analog_alu.circuit_switch": "Circuit Switch",
+  "block.analog_alu.resistor_load": "Resistive Load",
+  "block.analog_alu.coal_generator": "Coal Generator",
+  "block.analog_alu.wind_generator": "Wind Generator",
+  "block.analog_alu.solar_generator": "Solar Generator",
   "item.analog_alu.silicon_boule": "Silicon Boule",
   "item.analog_alu.silicon": "Silicon",
   "item.analog_alu.silicon_purification_charge": "Silicon Purification Charge",
