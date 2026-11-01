@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "analog_alu:block/analog_led_blue_off"
+  }
+}

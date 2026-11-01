@@ -102,7 +102,7 @@ public class UpwardHopperBlockEntity extends RandomizableContainerBlockEntity im
 
         boolean moved = HopperBlockEntity.suckInItems(level, blockEntity);
         Container destination = HopperBlockEntity.getContainerAt(level, pos.above());
-        if (destination == null) {
+        if (destination == null && state.getValue(UpwardHopperBlock.EJECTION_ENABLED)) {
             for (int slot = 0; slot < blockEntity.getContainerSize(); slot++) {
                 ItemStack stack = blockEntity.getItem(slot);
                 if (stack.isEmpty()) continue;

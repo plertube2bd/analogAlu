@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "analog_alu:inactive_doped_wafer"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtained"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "id": "analog_alu:inactive_doped_wafer"
+    },
+    "title": {
+      "translate": "advancements.analog_alu.progression.inactive_doped_wafer.title"
+    },
+    "description": {
+      "translate": "advancements.analog_alu.progression.inactive_doped_wafer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "analog_alu:progression/accelerated_focused_silicon"
+}

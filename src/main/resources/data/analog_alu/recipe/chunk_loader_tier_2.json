@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "analog_alu:chunk_loader",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "analog_alu:chunk_loader_tier_2",
+    "count": 1
+  }
+}

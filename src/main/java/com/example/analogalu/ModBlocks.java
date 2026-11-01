@@ -7,6 +7,9 @@ import com.example.analogalu.block.UpwardHopperBlockEntity;
 import com.example.analogalu.block.MassAnalyzerBlock;
 import com.example.analogalu.block.MassAnalyzerBlockEntity;
 import com.example.analogalu.block.SemiconductorBlock;
+import com.example.analogalu.block.ChunkLoaderBlock;
+import com.example.analogalu.block.ChunkLoaderBlockEntity;
+import com.example.analogalu.block.AnalogLedBlock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +44,17 @@ public final class ModBlocks {
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("upward_hopper")),
                 new BlockEntityType<>(UpwardHopperBlockEntity::new, Set.of(UPWARD_HOPPER)));
+
+                public static final Block CHUNK_LOADER = registerBlock("chunk_loader", ChunkLoaderBlock::new,
+                        BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+                public static final Item CHUNK_LOADER_ITEM = registerItem("chunk_loader", CHUNK_LOADER);
+                public static final Block CHUNK_LOADER_TIER_2 = registerBlock("chunk_loader_tier_2", ChunkLoaderBlock::new,
+                        BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+                public static final Item CHUNK_LOADER_TIER_2_ITEM = registerItem("chunk_loader_tier_2", CHUNK_LOADER_TIER_2);
+                public static final BlockEntityType<ChunkLoaderBlockEntity> CHUNK_LOADER_ENTITY = Registry.register(
+                    BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                    ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("chunk_loader")),
+                    new BlockEntityType<>(ChunkLoaderBlockEntity::new, Set.of(CHUNK_LOADER, CHUNK_LOADER_TIER_2)));
 
     public static final Block SUBTRACTOR = alu("subtractor", AluBlocks.Subtractor::new);
     public static final Block EXTENDER = alu("extender", AluBlocks.Extender::new);
@@ -81,6 +95,15 @@ public final class ModBlocks {
             ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("mass_analyzer")),
             new BlockEntityType<>(MassAnalyzerBlockEntity::new, Set.of(MASS_ANALYZER)));
 
+    public static final Block ANALOG_LED_RED = led("analog_led_red", true);
+    public static final Block ANALOG_LED_GREEN = led("analog_led_green", true);
+    public static final Block ANALOG_LED_BLUE = led("analog_led_blue", true);
+    public static final Block ANALOG_LED_WHITE = led("analog_led_white", true);
+    public static final Block DIGITAL_LED_RED = led("digital_led_red", false);
+    public static final Block DIGITAL_LED_GREEN = led("digital_led_green", false);
+    public static final Block DIGITAL_LED_BLUE = led("digital_led_blue", false);
+    public static final Block DIGITAL_LED_WHITE = led("digital_led_white", false);
+
     private ModBlocks() {}
 
     public static void init() {}
@@ -92,6 +115,14 @@ public final class ModBlocks {
     private static <T extends Block> T alu(String name, Function<BlockBehaviour.Properties, T> factory) {
         T block = registerBlock(name, factory,
                 BlockBehaviour.Properties.of().instabreak().sound(SoundType.STONE));
+        registerItem(name, block);
+        return block;
+    }
+
+    private static Block led(String name, boolean analog) {
+        Block block = registerBlock(name, properties -> new AnalogLedBlock(properties, analog),
+                BlockBehaviour.Properties.of().strength(0.5F)
+                        .lightLevel(state -> state.getValue(AnalogLedBlock.POWER)).sound(SoundType.GLASS));
         registerItem(name, block);
         return block;
     }

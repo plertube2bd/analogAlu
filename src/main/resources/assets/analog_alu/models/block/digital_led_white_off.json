@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "analog_alu:block/digital_led_white_off",
+    "particle": "analog_alu:block/digital_led_white_off"
+  }
+}
