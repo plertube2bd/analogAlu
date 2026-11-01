@@ -1,6 +1,6 @@
 {
   "type": "minecraft:blasting",
-  "cookingtime": 6000,
+  "cookingtime": 3000,
   "experience": 2.0,
   "ingredient": "analog_alu:inactive_doped_wafer",
   "result": {

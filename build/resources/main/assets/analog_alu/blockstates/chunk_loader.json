@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "analog_alu:block/chunk_loader"
+    }
+  }
+}

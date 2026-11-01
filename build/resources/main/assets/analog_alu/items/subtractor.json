@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "analog_alu:block/subtractor"
+    "model": "analog_alu:item/subtractor_icon"
   }
 }

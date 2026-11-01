@@ -46,16 +46,16 @@ public class UpwardHopperBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
-        if (!player.isShiftKeyDown()) {
+        if (player.isShiftKeyDown()) {
             if (!level.isClientSide()) {
                 BlockState updated = state.cycle(EJECTION_ENABLED);
                 level.setBlock(pos, updated, Block.UPDATE_ALL);
                 level.playSound(null, pos, net.minecraft.sounds.SoundEvents.COMPARATOR_CLICK,
                         net.minecraft.sounds.SoundSource.BLOCKS, 0.3F,
                         updated.getValue(EJECTION_ENABLED) ? 0.7F : 0.5F);
-            player.sendOverlayMessage(Component.translatable(updated.getValue(EJECTION_ENABLED)
-                ? "block.analog_alu.upward_hopper.ejection_enabled"
-                : "block.analog_alu.upward_hopper.ejection_disabled"));
+                player.sendOverlayMessage(Component.translatable(updated.getValue(EJECTION_ENABLED)
+                        ? "block.analog_alu.upward_hopper.ejection_enabled"
+                        : "block.analog_alu.upward_hopper.ejection_disabled"));
             }
             return InteractionResult.SUCCESS;
         }

@@ -102,16 +102,18 @@ public class UpwardHopperBlockEntity extends RandomizableContainerBlockEntity im
 
         boolean moved = HopperBlockEntity.suckInItems(level, blockEntity);
         Container destination = HopperBlockEntity.getContainerAt(level, pos.above());
-        if (destination == null && state.getValue(UpwardHopperBlock.EJECTION_ENABLED)) {
-            for (int slot = 0; slot < blockEntity.getContainerSize(); slot++) {
-                ItemStack stack = blockEntity.getItem(slot);
-                if (stack.isEmpty()) continue;
-                ItemStack output = stack.split(1);
-                level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0,
-                        pos.getZ() + 0.5, output));
-                blockEntity.setItem(slot, stack);
-                moved = true;
-                break;
+        if (destination == null) {
+            if (state.getValue(UpwardHopperBlock.EJECTION_ENABLED)) {
+                for (int slot = 0; slot < blockEntity.getContainerSize(); slot++) {
+                    ItemStack stack = blockEntity.getItem(slot);
+                    if (stack.isEmpty()) continue;
+                    ItemStack output = stack.split(1);
+                    level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0,
+                            pos.getZ() + 0.5, output));
+                    blockEntity.setItem(slot, stack);
+                    moved = true;
+                    break;
+                }
             }
         } else {
             for (int slot = 0; slot < blockEntity.getContainerSize(); slot++) {

@@ -1,0 +1,20 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "power": "0"
+      },
+      "apply": {
+        "model": "analog_alu:block/analog_led_red_off"
+      }
+    },
+    {
+      "when": {
+        "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"
+      },
+      "apply": {
+        "model": "analog_alu:block/analog_led_red_on"
+      }
+    }
+  ]
+}

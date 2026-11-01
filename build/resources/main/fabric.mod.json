@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "analog_alu",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "name": "Analog Redstone ALU",
   "description": "4-bit analog redstone computing blocks",
   "environment": "*",

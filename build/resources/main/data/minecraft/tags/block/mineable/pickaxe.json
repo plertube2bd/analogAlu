@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "analog_alu:upward_hopper",
+    "analog_alu:semiconductor_block",
+    "analog_alu:waterproof_semiconductor_block",
+    "analog_alu:chunk_loader",
+    "analog_alu:chunk_loader_tier_2",
+    "analog_alu:analog_led_red",
+    "analog_alu:analog_led_green",
+    "analog_alu:analog_led_blue",
+    "analog_alu:analog_led_white",
+    "analog_alu:digital_led_red",
+    "analog_alu:digital_led_green",
+    "analog_alu:digital_led_blue",
+    "analog_alu:digital_led_white"
+  ]
+}
