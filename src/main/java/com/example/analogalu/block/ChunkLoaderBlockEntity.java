@@ -21,21 +21,14 @@ public final class ChunkLoaderBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void setLevel(Level level) {
-        super.setLevel(level);
-        updateTickets();
-    }
-
-    @Override
-    public void clearRemoved() {
-        super.clearRemoved();
-        updateTickets();
-    }
-
-    @Override
     public void setRemoved() {
         releaseTickets();
         super.setRemoved();
+    }
+
+    public static void tick(Level level, BlockPos pos, BlockState state, ChunkLoaderBlockEntity blockEntity) {
+        if (blockEntity.registered || !(level instanceof ServerLevel serverLevel)) return;
+        blockEntity.updateTickets(serverLevel);
     }
 
     public void releaseTickets() {
@@ -59,8 +52,8 @@ public final class ChunkLoaderBlockEntity extends BlockEntity {
         registered = false;
     }
 
-    private void updateTickets() {
-        if (registered || isRemoved() || !(level instanceof ServerLevel serverLevel)) return;
+    private void updateTickets(ServerLevel serverLevel) {
+        if (registered || isRemoved() || isCoveredByAnotherLoader(serverLevel)) return;
         int centerX = worldPosition.getX() >> 4;
         int centerZ = worldPosition.getZ() >> 4;
         int radius = getBlockState().is(ModBlocks.CHUNK_LOADER_TIER_2) ? 1 : 0;
@@ -82,6 +75,25 @@ public final class ChunkLoaderBlockEntity extends BlockEntity {
         }
         ticketSet.owners.put(this, chunks);
         registered = true;
+    }
+
+    private boolean isCoveredByAnotherLoader(ServerLevel serverLevel) {
+        TicketSet ticketSet = TICKETS.get(serverLevel);
+        if (ticketSet == null) return false;
+        long ownChunk = chunkKey(worldPosition.getX() >> 4, worldPosition.getZ() >> 4);
+        for (Map.Entry<ChunkLoaderBlockEntity, long[]> entry : ticketSet.owners.entrySet()) {
+            ChunkLoaderBlockEntity owner = entry.getKey();
+            if (owner == this || chunkKey(owner.worldPosition.getX() >> 4,
+                    owner.worldPosition.getZ() >> 4) == ownChunk) continue;
+            for (long loadedChunk : entry.getValue()) {
+                if (loadedChunk == ownChunk) return true;
+            }
+        }
+        return false;
+    }
+
+    private static long chunkKey(int x, int z) {
+        return ((long) z << 32) | (x & 0xFFFFFFFFL);
     }
 
     private static final class TicketSet {
