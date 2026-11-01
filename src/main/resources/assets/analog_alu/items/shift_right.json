@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "analog_alu:block/shift_right"
+    "model": "analog_alu:item/shift_right_icon"
   }
 }
