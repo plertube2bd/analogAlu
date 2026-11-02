@@ -114,7 +114,7 @@ items = {
 }
 for name, palette in items.items():
     grid = make((0, 0, 0, 0))
-    colors = [tuple(bytes.fromhex(value.removeprefix("#"))) + (255,) for value in palette]
+    colors = [tuple(bytes.fromhex(value.removeprefix("#"))) for value in palette]
     rect(grid, 4, 1, 11, 3, colors[2])
     rect(grid, 3, 3, 12, 12, colors[0])
     rect(grid, 4, 4, 11, 11, colors[1])

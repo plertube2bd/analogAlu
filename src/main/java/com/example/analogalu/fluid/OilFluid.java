@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -24,6 +25,12 @@ public final class OilFluid extends FlowingFluid {
     public OilFluid(boolean source) {
         this.source = source;
         registerDefaultState(getStateDefinition().any().setValue(LEVEL, source ? 8 : 7).setValue(FALLING, false));
+    }
+
+    @Override
+    protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+        super.createFluidStateDefinition(builder);
+        builder.add(LEVEL);
     }
 
     @Override
