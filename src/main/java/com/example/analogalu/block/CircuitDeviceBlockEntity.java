@@ -30,6 +30,7 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
     private int lastSyncSignature = Integer.MIN_VALUE;
     private double loadVoltage;
     private double loadCurrent;
+    private double sourceTerminalVoltage;
     private long nextMiningTick;
 
     public CircuitDeviceBlockEntity(BlockPos pos, BlockState state) {
@@ -47,6 +48,7 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
         lastEnergyTick = input.getLongOr("LastEnergyTick", -1L);
         loadVoltage = finiteOr(input.getDoubleOr("LoadVoltage", 0.0), 0.0);
         loadCurrent = finiteOr(input.getDoubleOr("LoadCurrent", 0.0), 0.0);
+        sourceTerminalVoltage = finiteOr(input.getDoubleOr("SourceTerminalVoltage", 0.0), 0.0);
         nextMiningTick = input.getLongOr("NextMiningTick", 0L);
     }
 
@@ -58,6 +60,7 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
         output.putLong("LastEnergyTick", lastEnergyTick);
         output.putDouble("LoadVoltage", loadVoltage);
         output.putDouble("LoadCurrent", loadCurrent);
+        output.putDouble("SourceTerminalVoltage", sourceTerminalVoltage);
         output.putLong("NextMiningTick", nextMiningTick);
     }
 
@@ -75,7 +78,8 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
 
     private void syncIfChanged() {
         int signature = java.util.Objects.hash(Math.round(storedEnergyJoules / 10.0), fuelTicks / 10,
-            Math.round(loadVoltage * 100.0), Math.round(loadCurrent * 1000.0));
+            Math.round(loadVoltage * 100.0), Math.round(loadCurrent * 1000.0),
+            Math.round(sourceTerminalVoltage * 100.0));
         if (signature == lastSyncSignature) return;
         lastSyncSignature = signature;
         BlockEntitySync.send(this);
@@ -136,6 +140,15 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
 
     public double getLoadCurrent() {
         return loadCurrent;
+    }
+
+    public double getSourceTerminalVoltage() {
+        return sourceTerminalVoltage;
+    }
+
+    public void setSourceTerminalVoltage(double voltage) {
+        sourceTerminalVoltage = finiteOr(voltage, 0.0);
+        setChanged();
     }
 
     public void setLoadState(double voltage, double current) {

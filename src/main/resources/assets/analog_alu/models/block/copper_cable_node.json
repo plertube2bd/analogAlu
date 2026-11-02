@@ -1,20 +1,7 @@
 {
+  "parent": "analog_alu:block/copper_cable_core",
   "textures": {
-    "wire": "analog_alu:block/copper_cable",
+    "cable": "analog_alu:block/copper_cable",
     "particle": "analog_alu:block/copper_cable"
-  },
-  "elements": [
-    {
-      "from": [6, 1, 6],
-      "to": [10, 3, 10],
-      "faces": {
-        "down": { "uv": [6, 0, 10, 2], "texture": "#wire" },
-        "up": { "uv": [6, 0, 10, 4], "texture": "#wire" },
-        "north": { "uv": [6, 0, 10, 2], "texture": "#wire" },
-        "south": { "uv": [6, 0, 10, 2], "texture": "#wire" },
-        "west": { "uv": [6, 0, 10, 2], "texture": "#wire" },
-        "east": { "uv": [6, 0, 10, 2], "texture": "#wire" }
-      }
-    }
-  ]
+  }
 }

@@ -132,8 +132,10 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
             case BATTERY -> {
                 double joules = device.getStoredEnergyJoules();
                 lines.add(Component.literal("Battery").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V", BATTERY_VOLTAGE),
+                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V", BATTERY_VOLTAGE),
                         ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Terminal voltage",
+                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 lines.add(CopperCableBlockEntity.line("Energy", String.format(Locale.ROOT, "%.0f / %.0f J (%.0f%%)",
                         joules, BATTERY_CAPACITY_JOULES, 100.0 * joules / BATTERY_CAPACITY_JOULES),
                         joules < BATTERY_CAPACITY_JOULES * 0.2 ? ChatFormatting.RED : ChatFormatting.GREEN));
@@ -155,8 +157,10 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
             case COAL_GENERATOR -> {
                 int fuelTicks = device.getFuelTicks();
                 lines.add(Component.literal("Coal Generator").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V",
+                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V",
                         COAL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Terminal voltage",
+                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
                 lines.add(Component.literal("Drop coal on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
@@ -164,8 +168,10 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
             case DIESEL_GENERATOR -> {
                 int fuelTicks = device.getFuelTicks();
                 lines.add(Component.literal("Diesel Generator").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V",
+                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V",
                         DIESEL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Terminal voltage",
+                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
                 lines.add(Component.literal("Drop diesel on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
@@ -185,6 +191,10 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
                 lines.add(Component.literal(wind ? "Wind Generator" : "Solar Generator").withStyle(ChatFormatting.GOLD));
                 lines.add(CopperCableBlockEntity.line("Status", producing ? "producing" : "idle",
                         producing ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(CopperCableBlockEntity.line("Rated voltage",
+                    String.format(Locale.ROOT, "%.1f V", sourceVoltage(level, pos, kind)), ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Terminal voltage",
+                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 if (!producing) {
                     lines.add(Component.literal(wind ? "Place outdoors above Y=80" : "Needs daylight and open sky")
                             .withStyle(ChatFormatting.DARK_GRAY));

@@ -80,23 +80,28 @@ public class AnalogAlu implements ModInitializer {
         CircuitDeviceBlockEntity entity = level.getBlockEntity(pos) instanceof CircuitDeviceBlockEntity value
             ? value : null;
         return switch (device.kind()) {
-            case BATTERY -> String.format(java.util.Locale.ROOT, "건전지  %.1f V  |  %.0f/%.0f J",
+            case BATTERY -> String.format(java.util.Locale.ROOT, "건전지  공칭 %.1f V  |  단자 %.2f V  |  %.0f/%.0f J",
                 CircuitDeviceBlock.BATTERY_VOLTAGE,
+                entity == null ? 0.0 : entity.getSourceTerminalVoltage(),
                 entity == null ? 0.0 : entity.getStoredEnergyJoules(),
                 CircuitDeviceBlock.BATTERY_CAPACITY_JOULES);
-            case COAL_GENERATOR -> String.format(java.util.Locale.ROOT, "석탄 발전기  %.1f V  |  연료 %.0f초",
+            case COAL_GENERATOR -> String.format(java.util.Locale.ROOT, "석탄 발전기  공칭 %.1f V  |  단자 %.2f V  |  연료 %.0f초",
                 CircuitDeviceBlock.COAL_GENERATOR_VOLTAGE,
+                entity == null ? 0.0 : entity.getSourceTerminalVoltage(),
                 entity == null ? 0.0 : entity.getFuelTicks() / 20.0);
-            case DIESEL_GENERATOR -> String.format(java.util.Locale.ROOT, "디젤 발전기  %.1f V  |  연료 %.0f초",
+            case DIESEL_GENERATOR -> String.format(java.util.Locale.ROOT, "디젤 발전기  공칭 %.1f V  |  단자 %.2f V  |  연료 %.0f초",
                 CircuitDeviceBlock.DIESEL_GENERATOR_VOLTAGE,
+                entity == null ? 0.0 : entity.getSourceTerminalVoltage(),
                 entity == null ? 0.0 : entity.getFuelTicks() / 20.0);
             case WIND_GENERATOR -> CircuitDeviceBlock.hasNaturalInput(level, pos, device.kind())
-                ? String.format(java.util.Locale.ROOT, "풍력 발전기  발전 중  |  %.1f V",
-                    CircuitDeviceBlock.sourceVoltage(level, pos, device.kind()))
+                ? String.format(java.util.Locale.ROOT, "풍력 발전기  발전 중  |  공칭 %.1f V  |  단자 %.2f V",
+                    CircuitDeviceBlock.sourceVoltage(level, pos, device.kind()),
+                    entity == null ? 0.0 : entity.getSourceTerminalVoltage())
                 : "풍력 발전기  대기  |  Y=80 이상, 하늘 필요";
             case SOLAR_GENERATOR -> CircuitDeviceBlock.hasNaturalInput(level, pos, device.kind())
-                ? String.format(java.util.Locale.ROOT, "태양광 발전기  발전 중  |  %.1f V",
-                    CircuitDeviceBlock.sourceVoltage(level, pos, device.kind()))
+                ? String.format(java.util.Locale.ROOT, "태양광 발전기  발전 중  |  공칭 %.1f V  |  단자 %.2f V",
+                    CircuitDeviceBlock.sourceVoltage(level, pos, device.kind()),
+                    entity == null ? 0.0 : entity.getSourceTerminalVoltage())
                 : "태양광 발전기  대기  |  낮과 열린 하늘 필요";
             case SWITCH -> state.getValue(CircuitDeviceBlock.CLOSED)
                 ? "전기 스위치  닫힘" : "전기 스위치  열림";

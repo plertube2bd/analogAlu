@@ -95,6 +95,7 @@ public final class CircuitSolver {
                         solution.currents.getOrDefault(cablePos, 0.0));
             }
         }
+        sourceEntity.setSourceTerminalVoltage(solution.sourceTerminalVoltage);
         sourceEntity.accountSourcePower(solution.sourceWatts, gameTime, sourceKind);
     }
 
@@ -289,7 +290,9 @@ public final class CircuitSolver {
             }
         }
         double sourceCurrentValue = Math.abs(values[sourceCurrent]);
-        return new Solution(voltages, currents, sourceCurrentValue * sourceVoltage);
+        double terminalVoltage = voltages.getOrDefault(source.positive, 0.0)
+            - voltages.getOrDefault(source.negative, 0.0);
+        return new Solution(voltages, currents, sourceCurrentValue * sourceVoltage, terminalVoltage);
     }
 
     private static void stampResistor(double[][] matrix, Map<BlockPos, Integer> variables, BlockPos ground,
@@ -356,6 +359,7 @@ public final class CircuitSolver {
             if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
                     instanceof CircuitDeviceBlockEntity device) {
                 device.setLoadState(0.0, 0.0);
+                if (branch.kind == BranchKind.SOURCE) device.setSourceTerminalVoltage(0.0);
             }
         }
     }
@@ -395,5 +399,6 @@ public final class CircuitSolver {
 
     private record Network(Set<BlockPos> cables, List<Branch> branches, BlockPos root, boolean overflow) {}
     private record PortPair(BlockPos positive, BlockPos negative) {}
-    private record Solution(Map<BlockPos, Double> voltages, Map<BlockPos, Double> currents, double sourceWatts) {}
+    private record Solution(Map<BlockPos, Double> voltages, Map<BlockPos, Double> currents, double sourceWatts,
+            double sourceTerminalVoltage) {}
 }
