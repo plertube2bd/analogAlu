@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "analog_alu:solid_oil",
+  "result": { "id": "analog_alu:oil_bucket" }
+}

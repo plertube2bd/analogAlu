@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["CRB"],
+  "key": {
+    "C": "minecraft:coal",
+    "R": "minecraft:rotten_flesh",
+    "B": "minecraft:bone"
+  },
+  "result": { "id": "analog_alu:solid_oil", "count": 1 }
+}

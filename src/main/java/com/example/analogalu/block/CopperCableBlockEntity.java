@@ -12,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -119,8 +121,9 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
             cable.damage = Math.max(0.0, cable.damage - repairRatePerSecond(cable.temperatureCelsius) / 20.0);
         }
 
-        if (cable.damage > MAX_DAMAGE) {
-            level.destroyBlock(pos, true);
+        if (cable.damage >= MAX_DAMAGE) {
+            level.playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.8F, 1.2F);
+            level.removeBlock(pos, false);
             return;
         }
         if (level.getGameTime() % 20L == 0L) cable.setChanged();
@@ -159,6 +162,14 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
     public void setCircuitState(double voltage, double current) {
         this.voltage = finiteOr(voltage, 0.0);
         this.current = finiteOr(current, 0.0);
+        if (level != null && !level.isClientSide()) {
+            BlockState state = level.getBlockState(worldPosition);
+            boolean powered = Math.abs(this.current) > 1.0e-6;
+            if (state.is(ModBlocks.COPPER_CABLE) && state.getValue(CopperCableBlock.POWERED) != powered) {
+                level.setBlock(worldPosition, state.setValue(CopperCableBlock.POWERED, powered),
+                        net.minecraft.world.level.block.Block.UPDATE_ALL);
+            }
+        }
         setChanged();
     }
 

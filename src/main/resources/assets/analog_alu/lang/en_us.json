@@ -7,6 +7,8 @@
   "block.analog_alu.coal_generator": "Coal Generator",
   "block.analog_alu.wind_generator": "Wind Generator",
   "block.analog_alu.solar_generator": "Solar Generator",
+  "block.analog_alu.miner": "Miner",
+  "tooltip.analog_alu.last_reading": "Last reading",
   "item.analog_alu.silicon_boule": "Silicon Boule",
   "item.analog_alu.silicon": "Silicon",
   "item.analog_alu.silicon_purification_charge": "Silicon Purification Charge",
@@ -104,5 +106,17 @@
   "advancements.analog_alu.progression.inactive_doped_wafer.title": "Ready for Activation",
   "advancements.analog_alu.progression.inactive_doped_wafer.description": "Prepare the doped wafer.",
   "advancements.analog_alu.progression.semiconductor.title": "From Stone to Information Age",
-  "advancements.analog_alu.progression.semiconductor.description": "Create your first semiconductor."
+  "advancements.analog_alu.progression.semiconductor.description": "Create your first semiconductor.",
+  "block.analog_alu.oil_processor": "Oil Processor",
+  "block.analog_alu.oil": "Oil",
+  "block.analog_alu.oil_drill": "Oil Drill",
+  "block.analog_alu.diesel_generator": "Diesel Generator",
+  "item.analog_alu.oil_bucket": "Oil Bucket",
+  "item.analog_alu.solid_oil": "Solid Oil",
+  "item.analog_alu.diesel": "Diesel",
+  "item.analog_alu.plastic_resin": "Plastic Resin",
+  "item.analog_alu.asphalt": "Asphalt",
+  "item.analog_alu.tank_bucket_4": "4-Unit Tank Bucket",
+  "item.analog_alu.tank_bucket_8": "8-Unit Tank Bucket",
+  "item.analog_alu.tank_bucket_16": "16-Unit Tank Bucket"
 }

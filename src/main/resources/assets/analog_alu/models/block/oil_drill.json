@@ -1,0 +1,16 @@
+{
+  "textures": {
+    "side": "analog_alu:block/oil_drill_side",
+    "front": "analog_alu:block/oil_drill_front",
+    "top": "analog_alu:block/oil_drill_top",
+    "particle": "analog_alu:block/oil_drill_side"
+  },
+  "elements": [{
+    "from": [0, 0, 0], "to": [16, 16, 16],
+    "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }
+  }]
+}

@@ -31,16 +31,20 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class CircuitDeviceBlock extends BaseEntityBlock {
-    public enum Kind { BATTERY, COAL_GENERATOR, WIND_GENERATOR, SOLAR_GENERATOR, SWITCH, RESISTOR }
+    public enum Kind { BATTERY, COAL_GENERATOR, DIESEL_GENERATOR, WIND_GENERATOR, SOLAR_GENERATOR, SWITCH, RESISTOR, MINER }
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty CLOSED = BooleanProperty.create("closed");
     public static final double BATTERY_VOLTAGE = 9.0;
     public static final double BATTERY_INTERNAL_RESISTANCE = 0.15;
     public static final double LOAD_RESISTANCE = 10.0;
+    public static final double MINER_RESISTANCE = 3.0;
+    public static final double MINER_REQUIRED_VOLTAGE = 4.0;
     public static final double BATTERY_CAPACITY_JOULES = 36_000.0;
     public static final double COAL_GENERATOR_VOLTAGE = 12.0;
     public static final double COAL_GENERATOR_RESISTANCE = 0.8;
+    public static final double DIESEL_GENERATOR_VOLTAGE = 12.0;
+    public static final double DIESEL_GENERATOR_RESISTANCE = 0.5;
     public static final double WIND_GENERATOR_RESISTANCE = 2.0;
     public static final double SOLAR_GENERATOR_VOLTAGE = 9.0;
     public static final double SOLAR_GENERATOR_RESISTANCE = 1.5;
@@ -157,6 +161,24 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
                 lines.add(Component.literal("Drop coal on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
             }
+            case DIESEL_GENERATOR -> {
+                int fuelTicks = device.getFuelTicks();
+                lines.add(Component.literal("Diesel Generator").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Voltage", String.format(Locale.ROOT, "%.1f V",
+                        DIESEL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
+                lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
+                        fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(Component.literal("Drop diesel on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
+            }
+            case MINER -> {
+                lines.add(Component.literal("Miner").withStyle(ChatFormatting.GOLD));
+                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \\u03a9",
+                        MINER_RESISTANCE), ChatFormatting.WHITE));
+                lines.add(CopperCableBlockEntity.line("Load voltage", String.format(Locale.ROOT, "%.2f V",
+                        device.getLoadVoltage()), device.getLoadVoltage() >= MINER_REQUIRED_VOLTAGE
+                                ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(Component.literal("Requires redstone power").withStyle(ChatFormatting.DARK_GRAY));
+            }
             case WIND_GENERATOR, SOLAR_GENERATOR -> {
                 boolean wind = kind == Kind.WIND_GENERATOR;
                 boolean producing = hasNaturalInput(level, pos, kind);
@@ -186,6 +208,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         return switch (kind) {
             case BATTERY -> BATTERY_VOLTAGE;
             case COAL_GENERATOR -> COAL_GENERATOR_VOLTAGE;
+            case DIESEL_GENERATOR -> DIESEL_GENERATOR_VOLTAGE;
             case WIND_GENERATOR -> Math.min(12.0, 6.0 + Math.max(0, pos.getY() - 80) * 0.05);
             case SOLAR_GENERATOR -> SOLAR_GENERATOR_VOLTAGE;
             default -> 0.0;
@@ -196,6 +219,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         return switch (kind) {
             case BATTERY -> BATTERY_INTERNAL_RESISTANCE;
             case COAL_GENERATOR -> COAL_GENERATOR_RESISTANCE;
+            case DIESEL_GENERATOR -> DIESEL_GENERATOR_RESISTANCE;
             case WIND_GENERATOR -> WIND_GENERATOR_RESISTANCE;
             case SOLAR_GENERATOR -> SOLAR_GENERATOR_RESISTANCE;
             default -> 0.0;

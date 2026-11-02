@@ -27,12 +27,20 @@ public final class CircuitSolver {
         for (Direction direction : Direction.values()) {
             BlockPos neighbor = pos.relative(direction);
             if (level.getBlockEntity(neighbor) instanceof CopperCableBlockEntity) {
-                solveFrom(level, neighbor);
+                recomputeFrom(level, neighbor);
             }
         }
     }
 
     public static void solveFrom(Level level, BlockPos start) {
+        solveFrom(level, start, false);
+    }
+
+    public static void recomputeFrom(Level level, BlockPos start) {
+        solveFrom(level, start, true);
+    }
+
+    private static void solveFrom(Level level, BlockPos start, boolean force) {
         if (level.isClientSide() || !(level.getBlockEntity(start) instanceof CopperCableBlockEntity)) return;
         Network network = discover(level, start);
         if (network.cables.isEmpty()) return;
@@ -44,7 +52,11 @@ public final class CircuitSolver {
         long gameTime = level.getGameTime();
         Map<Long, Long> solvedThisTick = SOLVED_NETWORKS.computeIfAbsent(level, ignored -> new HashMap<>());
         solvedThisTick.entrySet().removeIf(entry -> entry.getValue() != gameTime);
-        if (solvedThisTick.putIfAbsent(network.root.asLong(), gameTime) != null) return;
+        if (force) {
+            solvedThisTick.put(network.root.asLong(), gameTime);
+        } else if (solvedThisTick.putIfAbsent(network.root.asLong(), gameTime) != null) {
+            return;
+        }
 
         List<Branch> sources = network.branches.stream().filter(branch -> branch.kind == BranchKind.SOURCE).toList();
         if (sources.size() != 1) {
@@ -57,6 +69,7 @@ public final class CircuitSolver {
         boolean available = sourceEntity != null && switch (sourceKind) {
             case BATTERY -> sourceEntity.getStoredEnergyJoules() > 0.0;
             case COAL_GENERATOR -> sourceEntity.hasFuel();
+            case DIESEL_GENERATOR -> sourceEntity.hasFuel();
             case WIND_GENERATOR, SOLAR_GENERATOR ->
                     CircuitDeviceBlock.hasNaturalInput(level, source.devicePos, sourceKind);
             default -> false;
@@ -111,11 +124,13 @@ public final class CircuitSolver {
                     continue;
                 }
                 if (!(neighborState.getBlock() instanceof CircuitDeviceBlock device)
-                        || !isPortDirection(neighborState, direction)) continue;
+                    || !isPortDirection(neighborState, direction, device.kind())) continue;
+                if (!CopperCableBlock.allowsConnection(level.getBlockState(cablePos), direction)) continue;
 
-                Direction facing = neighborState.getValue(CircuitDeviceBlock.FACING);
-                BlockPos positive = neighbor.relative(facing);
-                BlockPos negative = neighbor.relative(facing.getOpposite());
+                PortPair ports = devicePorts(level, cablePos, neighbor, neighborState, device.kind());
+                if (ports == null) continue;
+                BlockPos positive = ports.positive;
+                BlockPos negative = ports.negative;
                 if (!isCable(level, positive) || !isCable(level, negative)) continue;
                 if (!devices.add(neighbor)) continue;
 
@@ -123,8 +138,11 @@ public final class CircuitSolver {
                 if (kind == CircuitDeviceBlock.Kind.SWITCH && !neighborState.getValue(CircuitDeviceBlock.CLOSED)) {
                     continue;
                 }
-                double resistance = kind == CircuitDeviceBlock.Kind.RESISTOR
-                        ? CircuitDeviceBlock.LOAD_RESISTANCE : 0.0;
+                double resistance = switch (kind) {
+                    case RESISTOR -> CircuitDeviceBlock.LOAD_RESISTANCE;
+                    case MINER -> CircuitDeviceBlock.MINER_RESISTANCE;
+                    default -> 0.0;
+                };
                 if (kind != CircuitDeviceBlock.Kind.BATTERY) {
                     resistance += wireResistance(level, positive, neighbor)
                             + wireResistance(level, negative, neighbor);
@@ -143,14 +161,43 @@ public final class CircuitSolver {
         return new Network(cables, branches, root, overflow);
     }
 
-    private static boolean isPortDirection(BlockState deviceState, Direction direction) {
+    private static boolean isPortDirection(BlockState deviceState, Direction direction,
+            CircuitDeviceBlock.Kind kind) {
+        if (kind == CircuitDeviceBlock.Kind.MINER) {
+            Direction facing = deviceState.getValue(CircuitDeviceBlock.FACING);
+            return direction == Direction.UP || direction == Direction.DOWN
+                    || direction == facing.getClockWise() || direction == facing.getCounterClockWise();
+        }
         Direction facing = deviceState.getValue(CircuitDeviceBlock.FACING);
         return direction == facing || direction == facing.getOpposite();
+    }
+
+        private static PortPair devicePorts(Level level, BlockPos cablePos, BlockPos pos,
+            BlockState state, CircuitDeviceBlock.Kind kind) {
+        if (kind != CircuitDeviceBlock.Kind.MINER) {
+            Direction facing = state.getValue(CircuitDeviceBlock.FACING);
+            return new PortPair(pos.relative(facing), pos.relative(facing.getOpposite()));
+        }
+
+        BlockPos top = pos.above();
+        BlockPos bottom = pos.below();
+        if (isCable(level, top) && isCable(level, bottom) && (cablePos.equals(top) || cablePos.equals(bottom))) {
+            return new PortPair(top, bottom);
+        }
+
+        Direction side = state.getValue(CircuitDeviceBlock.FACING).getClockWise();
+        BlockPos right = pos.relative(side);
+        BlockPos left = pos.relative(side.getOpposite());
+        if (isCable(level, right) && isCable(level, left) && (cablePos.equals(right) || cablePos.equals(left))) {
+            return new PortPair(right, left);
+        }
+        return null;
     }
 
     private static boolean isPowerSource(CircuitDeviceBlock.Kind kind) {
         return kind == CircuitDeviceBlock.Kind.BATTERY
                 || kind == CircuitDeviceBlock.Kind.COAL_GENERATOR
+            || kind == CircuitDeviceBlock.Kind.DIESEL_GENERATOR
                 || kind == CircuitDeviceBlock.Kind.WIND_GENERATOR
                 || kind == CircuitDeviceBlock.Kind.SOLAR_GENERATOR;
     }
@@ -231,6 +278,15 @@ public final class CircuitSolver {
                     - voltages.getOrDefault(branch.second, 0.0)) / branch.resistance);
             currents.merge(branch.first, current, Math::max);
             currents.merge(branch.second, current, Math::max);
+            if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
+                instanceof CircuitDeviceBlockEntity device) {
+            CircuitDeviceBlock.Kind kind = ((CircuitDeviceBlock) level.getBlockState(branch.devicePos).getBlock())
+                .kind();
+            double deviceResistance = kind == CircuitDeviceBlock.Kind.MINER
+                ? CircuitDeviceBlock.MINER_RESISTANCE
+                : kind == CircuitDeviceBlock.Kind.RESISTOR ? CircuitDeviceBlock.LOAD_RESISTANCE : 0.0;
+            device.setLoadState(current * deviceResistance, current);
+            }
         }
         double sourceCurrentValue = Math.abs(values[sourceCurrent]);
         return new Solution(voltages, currents, sourceCurrentValue * sourceVoltage);
@@ -296,6 +352,12 @@ public final class CircuitSolver {
                 cable.setCircuitState(0.0, 0.0);
             }
         }
+        for (Branch branch : network.branches) {
+            if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
+                    instanceof CircuitDeviceBlockEntity device) {
+                device.setLoadState(0.0, 0.0);
+            }
+        }
     }
 
     private static CircuitDeviceBlockEntity blockEntity(Level level, BlockPos pos) {
@@ -332,5 +394,6 @@ public final class CircuitSolver {
     }
 
     private record Network(Set<BlockPos> cables, List<Branch> branches, BlockPos root, boolean overflow) {}
+    private record PortPair(BlockPos positive, BlockPos negative) {}
     private record Solution(Map<BlockPos, Double> voltages, Map<BlockPos, Double> currents, double sourceWatts) {}
 }

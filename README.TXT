@@ -6,7 +6,7 @@ Signal strength (0-15) is treated directly as unsigned 4-bit integer data.
 
 Mod ID          : analog_alu
 Display Name    : Analog Redstone ALU
-Version         : 0.1.3
+Version         : 0.1.8
 Description     : 4-bit analog redstone computing blocks
 Minecraft       : >= 26.1
 Fabric Loader   : >= 0.19.3
@@ -296,7 +296,28 @@ Exact patterns are in:
 
 
 ================================================================================
-7. LANGUAGE FILES
+7. OIL INDUSTRY
+================================================================================
+
+- Oil generates only in newly generated Overworld chunks, in all biomes.
+  Deposits are below sea level and above Y=-20. About one in five deposits has
+  a visible surface seep connected to the underground deposit.
+- Craft solid oil from coal, rotten flesh, and a bone, then smelt it into an oil
+  bucket. The smelting result returns the empty bucket.
+- An oil drill placed above a deposit extracts one oil bucket every 30 seconds.
+  It searches up to 64 blocks below the drill; depleted source blocks are removed.
+- Tank buckets hold 4, 8, or 16 source blocks. Right-click a source oil or lava
+  block to fill one unit; use the filled tank on a block face to pour one unit.
+- Drop oil buckets or oil-filled tank buckets on an oil processor. Heat the block
+  directly below it with lava, fire, or a lit furnace/campfire. Processing takes
+  400 ticks per container and returns the empty container plus one diesel,
+  plastic resin, and asphalt per oil unit.
+- Drop diesel on top of a diesel generator to fuel it. It joins the same wired
+  circuit system as the other generators.
+
+
+================================================================================
+8. LANGUAGE FILES
 ================================================================================
 
 en_us.json and ko_kr.json provide display names for all blocks.
@@ -305,7 +326,7 @@ Bitwise gates are labelled "Bitwise ..." / "비트 ..."; logical gates "Logical 
 
 
 ================================================================================
-8. WAFER PROGRAM LANGUAGE
+9. WAFER PROGRAM LANGUAGE
 ================================================================================
 
 Programs start with one module declaration, then declare all four ports and

@@ -3,6 +3,7 @@ package com.example.analogalu.block;
 import com.example.analogalu.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundEvents;
@@ -11,9 +12,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -26,15 +27,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.BlockHitResult;
 import java.util.Map;
 
 public class CopperCableBlock extends BaseEntityBlock {
     public static final IntegerProperty LOCK = IntegerProperty.create("lock", 0, 64);
-
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     /** 그 방향으로 전선 팔이 뻗어 있는가 (모델/선택 영역용). 연결 계산은 CircuitSolver가 따로 한다. */
     public static final Map<Direction, BooleanProperty> ARMS = Map.of(
             Direction.NORTH, BooleanProperty.create("north"),
@@ -71,14 +72,14 @@ public class CopperCableBlock extends BaseEntityBlock {
 
     public CopperCableBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        BlockState state = defaultBlockState().setValue(LOCK, 0);
+        BlockState state = defaultBlockState().setValue(LOCK, 0).setValue(POWERED, false);
         for (BooleanProperty arm : ARMS.values()) state = state.setValue(arm, false);
         registerDefaultState(state);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(LOCK);
+        builder.add(LOCK, POWERED);
         for (BooleanProperty arm : ARMS.values()) builder.add(arm);
     }
 
@@ -105,17 +106,7 @@ public class CopperCableBlock extends BaseEntityBlock {
     /** 이웃 상태에 맞춰 팔(연결 모양)을 다시 계산한다. 구리선끼리는 잠금 규칙(allowsConnection)을 따른다. */
     private static BlockState withArms(BlockGetter level, BlockPos pos, BlockState state) {
         for (Direction direction : Direction.values()) {
-            BlockState neighbor = level.getBlockState(pos.relative(direction));
-            boolean arm;
-            if (neighbor.getBlock() instanceof CopperCableBlock) {
-                arm = allowsConnection(state, direction) && allowsConnection(neighbor, direction.getOpposite());
-            } else if (neighbor.getBlock() instanceof CircuitDeviceBlock) {
-                Direction facing = neighbor.getValue(CircuitDeviceBlock.FACING);
-                arm = direction == facing || direction == facing.getOpposite(); // 장치의 단자 쪽
-            } else {
-                arm = false;
-            }
-            state = state.setValue(ARMS.get(direction), arm);
+            state = state.setValue(ARMS.get(direction), isConnected(level, pos, direction));
         }
         return state;
     }
@@ -140,7 +131,10 @@ public class CopperCableBlock extends BaseEntityBlock {
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState,
             boolean movedByPiston) {
-        if (!level.isClientSide() && !oldState.is(this)) CircuitSolver.solveFrom(level, pos);
+        if (level.isClientSide() || oldState.is(this)) return;
+        BlockState updated = withArms(level, pos, state);
+        if (updated != state) level.setBlock(pos, updated, Block.UPDATE_CLIENTS);
+        CircuitSolver.recomputeFrom(level, pos);
     }
 
     @Override
@@ -149,13 +143,15 @@ public class CopperCableBlock extends BaseEntityBlock {
         if (level.isClientSide()) return;
         BlockState shaped = withArms(level, pos, state);
         if (shaped != state) level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
-        CircuitSolver.solveFrom(level, pos);
+    CircuitSolver.recomputeFrom(level, pos);
     }
 
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos,
             boolean movedByPiston) {
-        if (!movedByPiston) CircuitSolver.recomputeAround(level, pos);
+        if (!movedByPiston) {
+            CircuitSolver.recomputeAround(level, pos);
+        }
     }
 
     @Override
@@ -178,8 +174,15 @@ public class CopperCableBlock extends BaseEntityBlock {
         for (Direction direction : Direction.values()) {
             level.updateNeighborsAt(pos.relative(direction), this);
         }
-        CircuitSolver.solveFrom(level, pos);
+        CircuitSolver.recomputeFrom(level, pos);
 
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof CopperCableBlockEntity cable) {
+            player.sendOverlayMessage(Component.literal(String.format(java.util.Locale.ROOT,
+                "저항 %.5f Ω  |  전압 %.2f V  |  전류 %.3f A  |  온도 %.1f °C  |  내구도 %.1f/100  |  %s",
+                cable.getResistanceOhms(), cable.getVoltage(), cable.getCurrent(), cable.getTemperatureCelsius(),
+                cable.getHealth(), locking ? "잠김" : "해제")));
+        }
         return InteractionResult.SUCCESS;
     }
 
@@ -188,12 +191,25 @@ public class CopperCableBlock extends BaseEntityBlock {
         return lock == 0 || (((lock - 1) >> direction.get3DDataValue()) & 1) != 0;
     }
 
-    public static boolean isConnected(Level level, BlockPos pos, Direction direction) {
+    public static boolean isConnected(BlockGetter level, BlockPos pos, Direction direction) {
         BlockPos neighbor = pos.relative(direction);
         BlockState neighborState = level.getBlockState(neighbor);
         BlockState state = level.getBlockState(pos);
-        return neighborState.getBlock() instanceof CopperCableBlock
-                && allowsConnection(state, direction)
-                && allowsConnection(neighborState, direction.getOpposite());
+        if (!allowsConnection(state, direction)) return false;
+        if (neighborState.getBlock() instanceof CopperCableBlock) {
+            return allowsConnection(neighborState, direction.getOpposite());
+        }
+        if (neighborState.getBlock() instanceof CircuitDeviceBlock) {
+            CircuitDeviceBlock device = (CircuitDeviceBlock) neighborState.getBlock();
+            if (device.kind() == CircuitDeviceBlock.Kind.MINER) {
+                Direction facing = neighborState.getValue(CircuitDeviceBlock.FACING);
+                return direction == Direction.UP || direction == Direction.DOWN
+                        || direction == facing.getClockWise() || direction == facing.getCounterClockWise();
+            }
+            Direction facing = neighborState.getValue(CircuitDeviceBlock.FACING);
+            return direction.getOpposite() == facing || direction.getOpposite() == facing.getOpposite();
+        }
+        return false;
     }
+
 }

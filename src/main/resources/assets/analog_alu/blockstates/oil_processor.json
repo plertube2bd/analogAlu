@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=false": { "model": "analog_alu:block/oil_processor" },
+    "active=true": { "model": "analog_alu:block/oil_processor_active" }
+  }
+}

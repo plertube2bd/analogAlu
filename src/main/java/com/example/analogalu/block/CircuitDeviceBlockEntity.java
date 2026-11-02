@@ -3,12 +3,15 @@ package com.example.analogalu.block;
 import com.example.analogalu.ModBlocks;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -25,6 +28,9 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
     private int fuelTicks;
     private long lastEnergyTick = -1L;
     private int lastSyncSignature = Integer.MIN_VALUE;
+    private double loadVoltage;
+    private double loadCurrent;
+    private long nextMiningTick;
 
     public CircuitDeviceBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.CIRCUIT_DEVICE_ENTITY, pos, state);
@@ -39,6 +45,9 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
             : 0.0;
         fuelTicks = Math.clamp(input.getIntOr("FuelTicks", 0), 0, MAX_FUEL_TICKS);
         lastEnergyTick = input.getLongOr("LastEnergyTick", -1L);
+        loadVoltage = finiteOr(input.getDoubleOr("LoadVoltage", 0.0), 0.0);
+        loadCurrent = finiteOr(input.getDoubleOr("LoadCurrent", 0.0), 0.0);
+        nextMiningTick = input.getLongOr("NextMiningTick", 0L);
     }
 
     @Override
@@ -47,6 +56,9 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
         output.putDouble("StoredEnergyJoules", storedEnergyJoules);
         output.putInt("FuelTicks", fuelTicks);
         output.putLong("LastEnergyTick", lastEnergyTick);
+        output.putDouble("LoadVoltage", loadVoltage);
+        output.putDouble("LoadCurrent", loadCurrent);
+        output.putLong("NextMiningTick", nextMiningTick);
     }
 
     // ---- 클라이언트 동기화 (툴팁에 쓰는 값)
@@ -62,7 +74,8 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
     }
 
     private void syncIfChanged() {
-        int signature = java.util.Objects.hash(Math.round(storedEnergyJoules / 10.0), fuelTicks / 10);
+        int signature = java.util.Objects.hash(Math.round(storedEnergyJoules / 10.0), fuelTicks / 10,
+            Math.round(loadVoltage * 100.0), Math.round(loadCurrent * 1000.0));
         if (signature == lastSyncSignature) return;
         lastSyncSignature = signature;
         BlockEntitySync.send(this);
@@ -78,18 +91,28 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
             device.syncIfChanged();
         }
         if (device.level == null || device.level.isClientSide()
-                || !(state.getBlock() instanceof CircuitDeviceBlock block)
-                || block.kind() != CircuitDeviceBlock.Kind.COAL_GENERATOR
-                || device.fuelTicks >= MAX_FUEL_TICKS || level.getGameTime() % 10L != 0L) return;
+            || !(state.getBlock() instanceof CircuitDeviceBlock block)
+            || level.getGameTime() % 10L != 0L) return;
+
+        if (block.kind() == CircuitDeviceBlock.Kind.MINER) {
+            device.tickMiner(level, pos, state);
+            return;
+        }
+        if ((block.kind() != CircuitDeviceBlock.Kind.COAL_GENERATOR
+                && block.kind() != CircuitDeviceBlock.Kind.DIESEL_GENERATOR)
+            || device.fuelTicks >= MAX_FUEL_TICKS) return;
 
         AABB inputArea = new AABB(pos.getX() + 0.1, pos.getY() + 0.95, pos.getZ() + 0.1,
                 pos.getX() + 0.9, pos.getY() + 1.8, pos.getZ() + 0.9);
         for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, inputArea)) {
             var stack = itemEntity.getItem();
-            if (!stack.is(Items.COAL) && !stack.is(Items.CHARCOAL)) continue;
+            boolean coalGenerator = block.kind() == CircuitDeviceBlock.Kind.COAL_GENERATOR;
+            if (coalGenerator && !stack.is(Items.COAL) && !stack.is(Items.CHARCOAL)) continue;
+            if (!coalGenerator && !stack.is(com.example.analogalu.ModItems.DIESEL)) continue;
             stack.shrink(1);
             if (stack.isEmpty()) itemEntity.discard();
-            device.fuelTicks = Math.min(MAX_FUEL_TICKS, device.fuelTicks + COAL_FUEL_TICKS);
+            int fuelValue = coalGenerator ? COAL_FUEL_TICKS : COAL_FUEL_TICKS * 4;
+            device.fuelTicks = Math.min(MAX_FUEL_TICKS, device.fuelTicks + fuelValue);
             device.setChanged();
             break;
         }
@@ -107,13 +130,45 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
         return fuelTicks > 0;
     }
 
+    public double getLoadVoltage() {
+        return loadVoltage;
+    }
+
+    public double getLoadCurrent() {
+        return loadCurrent;
+    }
+
+    public void setLoadState(double voltage, double current) {
+        loadVoltage = finiteOr(voltage, 0.0);
+        loadCurrent = finiteOr(current, 0.0);
+        setChanged();
+    }
+
+    private void tickMiner(Level level, BlockPos pos, BlockState state) {
+        if (loadVoltage < CircuitDeviceBlock.MINER_REQUIRED_VOLTAGE
+                || !level.hasNeighborSignal(pos) || level.getGameTime() < nextMiningTick) return;
+
+        Direction facing = state.getValue(CircuitDeviceBlock.FACING);
+        BlockPos targetPos = pos.relative(facing);
+        BlockState targetState = level.getBlockState(targetPos);
+        if (targetState.isAir() || targetState.getDestroySpeed(level, targetPos) < 0.0F
+                || level.getBlockEntity(targetPos) != null) return;
+
+        if (level.destroyBlock(targetPos, true)) {
+            nextMiningTick = level.getGameTime() + 10L;
+            level.playSound(null, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F);
+            setChanged();
+        }
+    }
+
     public void accountSourcePower(double watts, long gameTime, CircuitDeviceBlock.Kind kind) {
         long elapsedTicks = lastEnergyTick < 0L ? 0L : Math.max(0L, gameTime - lastEnergyTick);
         lastEnergyTick = gameTime;
         if (Double.isFinite(watts) && watts > 0.0 && elapsedTicks > 0L) {
             if (kind == CircuitDeviceBlock.Kind.BATTERY) {
                 storedEnergyJoules = Math.max(0.0, storedEnergyJoules - watts * elapsedTicks / 20.0);
-            } else if (kind == CircuitDeviceBlock.Kind.COAL_GENERATOR) {
+            } else if (kind == CircuitDeviceBlock.Kind.COAL_GENERATOR
+                    || kind == CircuitDeviceBlock.Kind.DIESEL_GENERATOR) {
                 fuelTicks = Math.max(0, fuelTicks - (int) Math.min(Integer.MAX_VALUE, elapsedTicks));
             }
         }
@@ -122,5 +177,9 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
 
     public void consumeEnergy(double watts, long gameTime) {
         accountSourcePower(watts, gameTime, CircuitDeviceBlock.Kind.BATTERY);
+    }
+
+    private static double finiteOr(double value, double fallback) {
+        return Double.isFinite(value) ? value : fallback;
     }
 }

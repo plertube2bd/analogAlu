@@ -6,10 +6,15 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
+import net.minecraft.client.color.block.BlockTintSources;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -22,6 +27,13 @@ public final class WaferEditorClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        var oilMaterial = new Material(Identifier.fromNamespaceAndPath(AnalogAlu.MOD_ID, "block/oil_still"));
+        var flowingOilMaterial = new Material(Identifier.fromNamespaceAndPath(AnalogAlu.MOD_ID, "block/oil_flow"));
+        var oilModel = new FluidModel.Unbaked(oilMaterial, flowingOilMaterial, flowingOilMaterial,
+            BlockTintSources.constant(0xFF4A3C22));
+        FluidRenderingRegistry.register(ModFluids.STILL, oilModel);
+        FluidRenderingRegistry.register(ModFluids.FLOWING, oilModel);
+        CircuitInfoHud.init();
         UseItemCallback.EVENT.register((player, level, hand) -> {
             ItemStack stack = player.getItemInHand(hand);
             if (!level.isClientSide()) return net.minecraft.world.InteractionResult.PASS;
@@ -45,6 +57,9 @@ public final class WaferEditorClient implements ClientModInitializer {
             open(stack, hand, code);
             return net.minecraft.world.InteractionResult.SUCCESS;
         });
+        CircuitStatusTooltips.init();
+        ClientPlayNetworking.registerGlobalReceiver(CircuitStatusPayload.TYPE, (payload, context) ->
+            context.client().execute(() -> CircuitStatusTooltips.update(payload.itemId(), payload.text())));
         UseBlockCallback.EVENT.register((player, level, hand, hit) -> {
             if (level.isClientSide() && level.getBlockState(hit.getBlockPos()).is(ModBlocks.MASS_ANALYZER)) {
                 Minecraft.getInstance().setScreenAndShow(new ProcessGuideScreen("screen.analog_alu.analyzer"));

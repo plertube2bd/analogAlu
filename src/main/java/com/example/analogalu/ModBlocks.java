@@ -14,6 +14,12 @@ import com.example.analogalu.block.SemiconductorBlock;
 import com.example.analogalu.block.ChunkLoaderBlock;
 import com.example.analogalu.block.ChunkLoaderBlockEntity;
 import com.example.analogalu.block.AnalogLedBlock;
+import com.example.analogalu.block.OilLiquidBlock;
+import com.example.analogalu.block.OilDrillBlock;
+import com.example.analogalu.block.OilDrillBlockEntity;
+import com.example.analogalu.block.OilProcessorBlock;
+import com.example.analogalu.block.OilProcessorBlockEntity;
+import com.example.analogalu.ModFluids;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,9 +46,29 @@ public final class ModBlocks {
                     .sound(SoundType.STONE).pushReaction(PushReaction.POPPED));
     public static final Item COPPER_WIRE_ITEM = registerItem("copper_wire", COPPER_WIRE);
 
+        public static final Block OIL = registerBlock("oil",
+            properties -> new OilLiquidBlock((net.minecraft.world.level.material.FlowingFluid) ModFluids.STILL,
+                properties),
+            BlockBehaviour.Properties.of().noLootTable().replaceable().strength(100.0F));
+            public static final OilProcessorBlock OIL_PROCESSOR = registerBlock("oil_processor", OilProcessorBlock::new,
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item OIL_PROCESSOR_ITEM = registerItem("oil_processor", OIL_PROCESSOR);
+            public static final BlockEntityType<OilProcessorBlockEntity> OIL_PROCESSOR_ENTITY = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("oil_processor")),
+                new BlockEntityType<>(OilProcessorBlockEntity::new, Set.of(OIL_PROCESSOR)));
+            public static final OilDrillBlock OIL_DRILL = registerBlock("oil_drill", OilDrillBlock::new,
+                BlockBehaviour.Properties.of().strength(4.0F).sound(SoundType.METAL));
+            public static final Item OIL_DRILL_ITEM = registerItem("oil_drill", OIL_DRILL);
+            public static final BlockEntityType<OilDrillBlockEntity> OIL_DRILL_ENTITY = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("oil_drill")),
+                new BlockEntityType<>(OilDrillBlockEntity::new, Set.of(OIL_DRILL)));
+
         public static final CopperCableBlock COPPER_CABLE = registerBlock("copper_cable", CopperCableBlock::new,
             BlockBehaviour.Properties.of().noCollision().instabreak()
-                .sound(SoundType.COPPER).pushReaction(PushReaction.POPPED));
+                .sound(SoundType.COPPER).lightLevel(state -> state.getValue(CopperCableBlock.POWERED) ? 8 : 0)
+                .pushReaction(PushReaction.POPPED));
         public static final Item COPPER_CABLE_ITEM = registerItem("copper_cable", COPPER_CABLE);
         public static final BlockEntityType<CopperCableBlockEntity> COPPER_CABLE_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -65,6 +91,10 @@ public final class ModBlocks {
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.COAL_GENERATOR),
                 BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
             public static final Item COAL_GENERATOR_ITEM = registerItem("coal_generator", COAL_GENERATOR);
+            public static final CircuitDeviceBlock DIESEL_GENERATOR = registerBlock("diesel_generator",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.DIESEL_GENERATOR),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item DIESEL_GENERATOR_ITEM = registerItem("diesel_generator", DIESEL_GENERATOR);
             public static final CircuitDeviceBlock WIND_GENERATOR = registerBlock("wind_generator",
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.WIND_GENERATOR),
                 BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.METAL));
@@ -73,12 +103,16 @@ public final class ModBlocks {
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.SOLAR_GENERATOR),
                 BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.COPPER));
             public static final Item SOLAR_GENERATOR_ITEM = registerItem("solar_generator", SOLAR_GENERATOR);
+            public static final CircuitDeviceBlock MINER = registerBlock("miner",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.MINER),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item MINER_ITEM = registerItem("miner", MINER);
             public static final BlockEntityType<CircuitDeviceBlockEntity> CIRCUIT_DEVICE_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("circuit_device")),
                 new BlockEntityType<>(CircuitDeviceBlockEntity::new,
                         Set.of(BATTERY, CIRCUIT_SWITCH, RESISTOR_LOAD, COAL_GENERATOR, WIND_GENERATOR,
-                                SOLAR_GENERATOR)));
+                                SOLAR_GENERATOR, MINER, DIESEL_GENERATOR)));
 
         public static final Block UPWARD_HOPPER = registerBlock("upward_hopper", UpwardHopperBlock::new,
             BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.HOPPER)

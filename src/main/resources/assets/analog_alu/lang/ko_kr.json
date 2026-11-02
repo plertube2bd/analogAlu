@@ -7,6 +7,8 @@
   "block.analog_alu.coal_generator": "석탄 발전기",
   "block.analog_alu.wind_generator": "풍력 발전기",
   "block.analog_alu.solar_generator": "태양광 발전기",
+  "block.analog_alu.miner": "채굴기",
+  "tooltip.analog_alu.last_reading": "최근 측정값",
   "item.analog_alu.silicon_boule": "실리콘 원형",
   "item.analog_alu.silicon": "실리콘",
   "item.analog_alu.silicon_purification_charge": "실리콘 정제 충전물",
@@ -104,5 +106,17 @@
   "advancements.analog_alu.progression.inactive_doped_wafer.title": "활성화 준비",
   "advancements.analog_alu.progression.inactive_doped_wafer.description": "도핑된 웨이퍼를 준비하세요.",
   "advancements.analog_alu.progression.semiconductor.title": "석기에서 정보화로",
-  "advancements.analog_alu.progression.semiconductor.description": "첫 반도체를 제작하세요."
+  "advancements.analog_alu.progression.semiconductor.description": "첫 반도체를 제작하세요.",
+  "block.analog_alu.oil_processor": "석유 처리기",
+  "block.analog_alu.oil": "석유",
+  "block.analog_alu.oil_drill": "석유 시추기",
+  "block.analog_alu.diesel_generator": "디젤 발전기",
+  "item.analog_alu.oil_bucket": "석유 양동이",
+  "item.analog_alu.solid_oil": "고체 석유",
+  "item.analog_alu.diesel": "디젤",
+  "item.analog_alu.plastic_resin": "플라스틱 원액",
+  "item.analog_alu.asphalt": "아스팔트",
+  "item.analog_alu.tank_bucket_4": "4칸 탱크 양동이",
+  "item.analog_alu.tank_bucket_8": "8칸 탱크 양동이",
+  "item.analog_alu.tank_bucket_16": "16칸 탱크 양동이"
 }

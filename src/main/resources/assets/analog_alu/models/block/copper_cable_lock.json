@@ -1,0 +1,20 @@
+{
+  "textures": {
+    "badge": "analog_alu:block/copper_cable_lock",
+    "particle": "analog_alu:block/copper_cable_lock"
+  },
+  "elements": [
+    {
+      "from": [5, 3, 5],
+      "to": [11, 5, 11],
+      "faces": {
+        "down": { "uv": [4, 4, 12, 12], "texture": "#badge" },
+        "up": { "uv": [0, 0, 16, 16], "texture": "#badge" },
+        "north": { "uv": [4, 3, 12, 5], "texture": "#badge" },
+        "south": { "uv": [4, 3, 12, 5], "texture": "#badge" },
+        "west": { "uv": [4, 3, 12, 5], "texture": "#badge" },
+        "east": { "uv": [4, 3, 12, 5], "texture": "#badge" }
+      }
+    }
+  ]
+}
