@@ -106,7 +106,7 @@ public class CopperCableBlock extends BaseEntityBlock {
     /** 이웃 상태에 맞춰 팔(연결 모양)을 다시 계산한다. 구리선끼리는 잠금 규칙(allowsConnection)을 따른다. */
     private static BlockState withArms(BlockGetter level, BlockPos pos, BlockState state) {
         for (Direction direction : Direction.values()) {
-            state = state.setValue(ARMS.get(direction), isConnected(level, pos, direction));
+            state = state.setValue(ARMS.get(direction), isConnected(level, pos, state, direction));
         }
         return state;
     }
@@ -192,9 +192,13 @@ public class CopperCableBlock extends BaseEntityBlock {
     }
 
     public static boolean isConnected(BlockGetter level, BlockPos pos, Direction direction) {
+        return isConnected(level, pos, level.getBlockState(pos), direction);
+    }
+
+    private static boolean isConnected(BlockGetter level, BlockPos pos, BlockState state, Direction direction) {
+        if (!state.is(ModBlocks.COPPER_CABLE)) return false;
         BlockPos neighbor = pos.relative(direction);
         BlockState neighborState = level.getBlockState(neighbor);
-        BlockState state = level.getBlockState(pos);
         if (!allowsConnection(state, direction)) return false;
         if (neighborState.getBlock() instanceof CopperCableBlock) {
             return allowsConnection(neighborState, direction.getOpposite());
