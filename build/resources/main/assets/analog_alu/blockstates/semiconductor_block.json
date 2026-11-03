@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "": {
-      "model": "analog_alu:block/semiconductor_block"
-    }
-  }
-}

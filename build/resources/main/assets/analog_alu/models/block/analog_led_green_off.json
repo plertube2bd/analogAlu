@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "analog_alu:block/analog_led_green_off",
-    "particle": "analog_alu:block/analog_led_green_off"
-  }
-}

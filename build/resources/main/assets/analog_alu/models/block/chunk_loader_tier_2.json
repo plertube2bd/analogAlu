@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "analog_alu:block/chunk_loader_tier_2",
-    "particle": "analog_alu:block/chunk_loader_tier_2"
-  }
-}

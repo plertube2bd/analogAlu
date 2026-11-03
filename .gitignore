@@ -1,0 +1,12 @@
+# Gradle
+.gradle/
+build/
+
+# Loom / IDE
+run/
+out/
+*.iml
+.idea/
+
+# Python
+__pycache__/

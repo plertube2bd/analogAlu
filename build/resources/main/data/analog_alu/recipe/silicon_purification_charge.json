@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:crafting_transmute",
-  "category": "misc",
-  "input": "analog_alu:silicon",
-  "material": "minecraft:quartz",
-  "result": {
-    "id": "analog_alu:silicon_purification_charge"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 3000,
-  "experience": 2.0,
-  "ingredient": "analog_alu:seeded_silicon",
-  "result": {
-    "id": "analog_alu:monocrystalline_silicon"
-  }
-}
