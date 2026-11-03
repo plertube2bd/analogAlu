@@ -202,7 +202,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
             }
             case MINER -> {
                 lines.add(Component.literal("Miner").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \\u03a9",
+                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \u03a9",
                         MINER_RESISTANCE), ChatFormatting.WHITE));
                 lines.add(CopperCableBlockEntity.line("Load voltage", String.format(Locale.ROOT, "%.2f V",
                         device.getLoadVoltage()), device.getLoadVoltage() >= MINER_REQUIRED_VOLTAGE
