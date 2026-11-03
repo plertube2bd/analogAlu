@@ -88,22 +88,19 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
         boolean locked = getBlockState().getValue(CopperCableBlock.LOCK) != 0;
         double health = getHealth();
         List<Component> lines = new ArrayList<>();
-        lines.add(Component.literal("Copper Cable").withStyle(ChatFormatting.GOLD));
-        lines.add(line("Voltage", String.format(Locale.ROOT, "%.2f V", voltage), ChatFormatting.YELLOW));
-        lines.add(line("Current", String.format(Locale.ROOT, "%.3f A", current), ChatFormatting.AQUA));
-        lines.add(line("Resistance", String.format(Locale.ROOT, "%.5f \u03a9", getResistanceOhms()), ChatFormatting.WHITE));
-        lines.add(line("Temperature", String.format(Locale.ROOT, "%.1f \u00b0C", temperatureCelsius),
+        lines.add(getBlockState().getBlock().getName().withStyle(ChatFormatting.GOLD));
+        lines.add(HoverText.line("voltage", String.format(Locale.ROOT, "%.2f V", voltage), ChatFormatting.YELLOW));
+        lines.add(HoverText.line("current", String.format(Locale.ROOT, "%.3f A", current), ChatFormatting.AQUA));
+        lines.add(HoverText.line("resistance", String.format(Locale.ROOT, "%.5f \u03a9", getResistanceOhms()),
+                ChatFormatting.WHITE));
+        lines.add(HoverText.line("temperature", String.format(Locale.ROOT, "%.1f \u00b0C", temperatureCelsius),
                 temperatureCelsius >= 75.0 ? ChatFormatting.RED
                         : temperatureCelsius >= 50.0 ? ChatFormatting.GOLD : ChatFormatting.GREEN));
-        lines.add(line("Health", String.format(Locale.ROOT, "%.1f / 100", health),
+        lines.add(HoverText.line("health", String.format(Locale.ROOT, "%.1f / 100", health),
                 health < 30.0 ? ChatFormatting.RED : health < 70.0 ? ChatFormatting.GOLD : ChatFormatting.GREEN));
-        lines.add(line("Wiring", locked ? "LOCKED" : "UNLOCKED", locked ? ChatFormatting.BLUE : ChatFormatting.GRAY));
+        lines.add(HoverText.line("wiring", HoverText.value(locked ? "locked" : "unlocked"),
+                locked ? ChatFormatting.BLUE : ChatFormatting.GRAY));
         return lines;
-    }
-
-    static Component line(String label, String value, ChatFormatting valueColor) {
-        return Component.literal(label + ": ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(value).withStyle(valueColor));
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, CopperCableBlockEntity cable) {

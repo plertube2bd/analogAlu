@@ -121,7 +121,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         boolean wasRunning = device.hasFuel();
         int inserted = device.insertFuel(fuelValue, stack.getCount(), player.isShiftKeyDown() ? stack.getCount() : 1);
         if (inserted <= 0) {
-            player.sendOverlayMessage(Component.literal("Fuel tank is full").withStyle(ChatFormatting.RED));
+            player.sendOverlayMessage(Component.translatable("message.analog_alu.fuel_full").withStyle(ChatFormatting.RED));
             return InteractionResult.FAIL;
         }
         if (!player.hasInfiniteMaterials()) stack.shrink(inserted);
@@ -146,86 +146,71 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    /** 툴팁 창에 보여줄 줄들. 첫 줄은 제목. 클라이언트에서도 호출된다. */
+    /** 툴팁 창에 보여줄 줄들. 첫 줄은 제목. 클라이언트에서 호출되므로 번역 키는 플레이어 언어로 표시된다. */
     public static List<Component> hoverLines(Level level, BlockPos pos, BlockState state,
             CircuitDeviceBlockEntity device) {
         Kind kind = ((CircuitDeviceBlock) state.getBlock()).kind();
         Direction positive = state.getValue(FACING);
         List<Component> lines = new ArrayList<>();
+        lines.add(state.getBlock().getName().withStyle(ChatFormatting.GOLD));
         switch (kind) {
             case BATTERY -> {
                 double joules = device.getStoredEnergyJoules();
-                lines.add(Component.literal("Battery").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V", BATTERY_VOLTAGE),
-                        ChatFormatting.YELLOW));
-                lines.add(CopperCableBlockEntity.line("Terminal voltage",
-                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
-                lines.add(CopperCableBlockEntity.line("Energy", String.format(Locale.ROOT, "%.0f / %.0f J (%.0f%%)",
+                lines.add(HoverText.line("rated_voltage", volts(BATTERY_VOLTAGE, 1), ChatFormatting.YELLOW));
+                lines.add(HoverText.line("terminal_voltage", volts(device.getSourceTerminalVoltage(), 2),
+                        ChatFormatting.AQUA));
+                lines.add(HoverText.line("energy", String.format(Locale.ROOT, "%.0f / %.0f J (%.0f%%)",
                         joules, BATTERY_CAPACITY_JOULES, 100.0 * joules / BATTERY_CAPACITY_JOULES),
                         joules < BATTERY_CAPACITY_JOULES * 0.2 ? ChatFormatting.RED : ChatFormatting.GREEN));
-                lines.add(CopperCableBlockEntity.line("Terminals", "+" + positive.getName() + " / -"
-                        + positive.getOpposite().getName(), ChatFormatting.WHITE));
+                lines.add(HoverText.line("terminals", Component.translatable("hover.analog_alu.terminals_value",
+                        HoverText.direction(positive), HoverText.direction(positive.getOpposite())),
+                        ChatFormatting.WHITE));
             }
             case SWITCH -> {
                 boolean closed = state.getValue(CLOSED);
-                lines.add(Component.literal("Circuit Switch").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("State", closed ? "CLOSED (conducting)" : "OPEN",
+                lines.add(HoverText.line("state", HoverText.value(closed ? "closed" : "open"),
                         closed ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Right-click to toggle").withStyle(ChatFormatting.DARK_GRAY));
+                lines.add(HoverText.hint("switch"));
             }
-            case RESISTOR -> {
-                lines.add(Component.literal("Resistive Load").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \u03a9",
-                        LOAD_RESISTANCE), ChatFormatting.WHITE));
-            }
-            case COAL_GENERATOR -> {
+            case RESISTOR -> lines.add(HoverText.line("resistance", ohms(LOAD_RESISTANCE), ChatFormatting.WHITE));
+            case COAL_GENERATOR, DIESEL_GENERATOR -> {
+                boolean coal = kind == Kind.COAL_GENERATOR;
                 int fuelTicks = device.getFuelTicks();
-                lines.add(Component.literal("Coal Generator").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V",
-                        COAL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
-                lines.add(CopperCableBlockEntity.line("Terminal voltage",
-                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
-                lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
+                lines.add(HoverText.line("rated_voltage",
+                        volts(coal ? COAL_GENERATOR_VOLTAGE : DIESEL_GENERATOR_VOLTAGE, 1), ChatFormatting.YELLOW));
+                lines.add(HoverText.line("terminal_voltage", volts(device.getSourceTerminalVoltage(), 2),
+                        ChatFormatting.AQUA));
+                lines.add(HoverText.line("fuel", HoverText.seconds(fuelTicks / 20.0),
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Right-click with coal to refuel").withStyle(ChatFormatting.DARK_GRAY));
-            }
-            case DIESEL_GENERATOR -> {
-                int fuelTicks = device.getFuelTicks();
-                lines.add(Component.literal("Diesel Generator").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Rated voltage", String.format(Locale.ROOT, "%.1f V",
-                        DIESEL_GENERATOR_VOLTAGE), ChatFormatting.YELLOW));
-                lines.add(CopperCableBlockEntity.line("Terminal voltage",
-                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
-                lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
-                        fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Right-click with diesel to refuel").withStyle(ChatFormatting.DARK_GRAY));
+                lines.add(HoverText.hint(coal ? "refuel_coal" : "refuel_diesel"));
             }
             case MINER -> {
-                lines.add(Component.literal("Miner").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Resistance", String.format(Locale.ROOT, "%.1f \u03a9",
-                        MINER_RESISTANCE), ChatFormatting.WHITE));
-                lines.add(CopperCableBlockEntity.line("Load voltage", String.format(Locale.ROOT, "%.2f V",
-                        device.getLoadVoltage()), device.getLoadVoltage() >= MINER_REQUIRED_VOLTAGE
-                                ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Requires redstone power").withStyle(ChatFormatting.DARK_GRAY));
+                double loadVoltage = device.getLoadVoltage();
+                lines.add(HoverText.line("resistance", ohms(MINER_RESISTANCE), ChatFormatting.WHITE));
+                lines.add(HoverText.line("load_voltage", volts(loadVoltage, 2),
+                        loadVoltage >= MINER_REQUIRED_VOLTAGE ? ChatFormatting.GREEN : ChatFormatting.RED));
+                lines.add(HoverText.hint("miner"));
             }
             case WIND_GENERATOR, SOLAR_GENERATOR -> {
-                boolean wind = kind == Kind.WIND_GENERATOR;
                 boolean producing = hasNaturalInput(level, pos, kind);
-                lines.add(Component.literal(wind ? "Wind Generator" : "Solar Generator").withStyle(ChatFormatting.GOLD));
-                lines.add(CopperCableBlockEntity.line("Status", producing ? "producing" : "idle",
+                lines.add(HoverText.line("status", HoverText.value(producing ? "producing" : "idle"),
                         producing ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(CopperCableBlockEntity.line("Rated voltage",
-                    String.format(Locale.ROOT, "%.1f V", sourceVoltage(level, pos, kind)), ChatFormatting.YELLOW));
-                lines.add(CopperCableBlockEntity.line("Terminal voltage",
-                    String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
-                if (!producing) {
-                    lines.add(Component.literal(wind ? "Place outdoors above Y=80" : "Needs daylight and open sky")
-                            .withStyle(ChatFormatting.DARK_GRAY));
-                }
+                lines.add(HoverText.line("rated_voltage", volts(sourceVoltage(level, pos, kind), 1),
+                        ChatFormatting.YELLOW));
+                lines.add(HoverText.line("terminal_voltage", volts(device.getSourceTerminalVoltage(), 2),
+                        ChatFormatting.AQUA));
+                if (!producing) lines.add(HoverText.hint(kind == Kind.WIND_GENERATOR ? "wind" : "solar"));
             }
         }
         return lines;
+    }
+
+    private static String volts(double value, int decimals) {
+        return String.format(Locale.ROOT, "%." + decimals + "f V", value);
+    }
+
+    private static String ohms(double value) {
+        return String.format(Locale.ROOT, "%.1f \u03a9", value);
     }
 
     public static boolean hasNaturalInput(Level level, BlockPos pos, Kind kind) {

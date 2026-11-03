@@ -59,16 +59,16 @@ public final class OilProcessorBlock extends BaseEntityBlock {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         if (!processor.addOil(amount)) {
-            player.sendOverlayMessage(Component.literal("Oil tank is full ("
-                    + processor.storedOil() + " / " + OilProcessorBlockEntity.TANK_CAPACITY + ")")
+            player.sendOverlayMessage(Component.translatable("message.analog_alu.oil_full",
+                    processor.storedOil(), OilProcessorBlockEntity.TANK_CAPACITY)
                     .withStyle(ChatFormatting.RED));
             return InteractionResult.FAIL;
         }
         ItemStack empty = OilProcessorBlockEntity.emptiedContainer(stack);
         player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, empty));
         level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 0.8F);
-        player.sendOverlayMessage(Component.literal("Oil: " + processor.storedOil() + " / "
-                + OilProcessorBlockEntity.TANK_CAPACITY).withStyle(ChatFormatting.GOLD));
+        player.sendOverlayMessage(Component.translatable("message.analog_alu.oil_amount",
+                processor.storedOil(), OilProcessorBlockEntity.TANK_CAPACITY).withStyle(ChatFormatting.GOLD));
         return InteractionResult.SUCCESS;
     }
 

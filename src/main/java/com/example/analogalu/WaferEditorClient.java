@@ -33,7 +33,6 @@ public final class WaferEditorClient implements ClientModInitializer {
             BlockTintSources.constant(0xFF4A3C22));
         FluidRenderingRegistry.register(ModFluids.STILL, oilModel);
         FluidRenderingRegistry.register(ModFluids.FLOWING, oilModel);
-        CircuitInfoHud.init();
         UseItemCallback.EVENT.register((player, level, hand) -> {
             ItemStack stack = player.getItemInHand(hand);
             if (!level.isClientSide()) return net.minecraft.world.InteractionResult.PASS;
