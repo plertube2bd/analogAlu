@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CRC",
+    "GBG",
+    "CRC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone",
+    "G": "minecraft:gold_ingot",
+    "B": "analog_alu:battery"
+  },
+  "result": {
+    "id": "analog_alu:rechargeable_battery",
+    "count": 1
+  }
+}

@@ -40,7 +40,7 @@ public final class OilDrillBlockEntity extends BlockEntity {
             if (!level.getFluidState(target).isSourceOfType(ModFluids.STILL)) continue;
             level.setBlock(target, Blocks.AIR.defaultBlockState(), 3);
             ItemEntity output = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.05,
-                    pos.getZ() + 0.5, new ItemStack(ModItems.OIL_BUCKET));
+                    pos.getZ() + 0.5, new ItemStack(ModItems.OIL));
             level.addFreshEntity(output);
             drill.nextDrillTick = level.getGameTime() + DRILL_INTERVAL;
             drill.setChanged();

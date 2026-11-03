@@ -1,0 +1,108 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:copper_nugget"
+  ],
+  "result": {
+    "id": "minecraft:written_book",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "translate": "item.analog_alu.guide_book",
+        "italic": false,
+        "color": "gold"
+      },
+      "minecraft:written_book_content": {
+        "title": {
+          "raw": "Analog ALU Guide",
+          "filtered": null
+        },
+        "author": "Analog ALU",
+        "generation": 0,
+        "resolved": false,
+        "pages": [
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page1"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page2"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page3"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page4"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page5"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page6"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page7"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page8"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page9"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page10"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page11"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page12"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page13"
+            },
+            "filtered": null
+          }
+        ]
+      }
+    }
+  }
+}

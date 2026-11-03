@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "ICI",
+    "QRQ",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:copper_block",
+    "Q": "minecraft:quartz",
+    "R": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "analog_alu:step_down_transformer",
+    "count": 1
+  }
+}

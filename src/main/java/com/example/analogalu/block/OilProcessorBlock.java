@@ -10,7 +10,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -49,23 +48,22 @@ public final class OilProcessorBlock extends BaseEntityBlock {
                 : createTickerHelper(type, ModBlocks.OIL_PROCESSOR_ENTITY, OilProcessorBlockEntity::tick);
     }
 
-    /** 석유 양동이(또는 석유가 든 탱크 양동이)를 들고 우클릭하면 석유를 붓는다. */
+    /** 석유를 들고 우클릭하면 1개, 웅크리고 우클릭하면 들고 있는 만큼 넣는다. */
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
-        int amount = OilProcessorBlockEntity.oilAmount(stack);
-        if (amount <= 0) return InteractionResult.TRY_WITH_EMPTY_HAND;
+        if (!stack.is(com.example.analogalu.ModItems.OIL)) return InteractionResult.TRY_WITH_EMPTY_HAND;
         if (!(level.getBlockEntity(pos) instanceof OilProcessorBlockEntity processor)) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
-        if (!processor.addOil(amount)) {
+        int inserted = processor.addOil(player.isShiftKeyDown() ? stack.getCount() : 1);
+        if (inserted <= 0) {
             player.sendOverlayMessage(Component.translatable("message.analog_alu.oil_full",
                     processor.storedOil(), OilProcessorBlockEntity.TANK_CAPACITY)
                     .withStyle(ChatFormatting.RED));
             return InteractionResult.FAIL;
         }
-        ItemStack empty = OilProcessorBlockEntity.emptiedContainer(stack);
-        player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, empty));
+        if (!player.hasInfiniteMaterials()) stack.shrink(inserted);
         level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 0.8F);
         player.sendOverlayMessage(Component.translatable("message.analog_alu.oil_amount",
                 processor.storedOil(), OilProcessorBlockEntity.TANK_CAPACITY).withStyle(ChatFormatting.GOLD));

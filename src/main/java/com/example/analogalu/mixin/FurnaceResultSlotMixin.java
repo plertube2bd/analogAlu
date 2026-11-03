@@ -2,7 +2,6 @@ package com.example.analogalu.mixin;
 
 import com.example.analogalu.ModItems;
 import com.example.analogalu.WaferProgramData;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.FurnaceResultSlot;
 import net.minecraft.world.item.ItemStack;
@@ -21,10 +20,6 @@ public abstract class FurnaceResultSlotMixin {
         if (result.is(ModItems.ION_IMPLANTED_SILICON)) {
             ItemStack gas = new ItemStack(ModItems.STRONG_ION_GAS, result.getCount());
             if (!player.getInventory().add(gas)) player.drop(gas, false, Prediction.SERVER_ONLY);
-        }
-        if (result.is(ModItems.OIL_BUCKET)) {
-            ItemStack buckets = new ItemStack(Items.BUCKET, result.getCount());
-            if (!player.getInventory().add(buckets)) player.drop(buckets, false, Prediction.SERVER_ONLY);
         }
     }
 }

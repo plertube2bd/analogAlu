@@ -33,6 +33,20 @@ public final class WaferEditorClient implements ClientModInitializer {
             BlockTintSources.constant(0xFF4A3C22));
         FluidRenderingRegistry.register(ModFluids.STILL, oilModel);
         FluidRenderingRegistry.register(ModFluids.FLOWING, oilModel);
+        net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            Double stored = stack.get(ModComponents.STORED_ENERGY);
+            double capacity = stack.is(ModBlocks.BATTERY_ITEM)
+                    ? com.example.analogalu.block.CircuitDeviceBlock.BATTERY_CAPACITY_JOULES
+                    : stack.is(ModBlocks.RECHARGEABLE_BATTERY_ITEM)
+                            ? com.example.analogalu.block.CircuitDeviceBlock.RECHARGEABLE_CAPACITY_JOULES : 0.0;
+            if (capacity <= 0.0) return;
+            // 컴포넌트가 없으면 갓 만든 건전지: 일반은 가득, 충전식은 비어 있다.
+            double joules = stored != null ? stored : stack.is(ModBlocks.BATTERY_ITEM) ? capacity : 0.0;
+            lines.add(1, net.minecraft.network.chat.Component.translatable("tooltip.analog_alu.stored_energy",
+                    String.format(java.util.Locale.ROOT, "%.0f", joules),
+                    String.format(java.util.Locale.ROOT, "%.0f", capacity))
+                    .withStyle(net.minecraft.ChatFormatting.GRAY));
+        });
         UseItemCallback.EVENT.register((player, level, hand) -> {
             ItemStack stack = player.getItemInHand(hand);
             if (!level.isClientSide()) return net.minecraft.world.InteractionResult.PASS;

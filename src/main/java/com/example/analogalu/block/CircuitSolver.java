@@ -58,16 +58,48 @@ public final class CircuitSolver {
             return;
         }
 
+        // 전원 선택: 발전기/일반 건전지는 회로당 하나만 허용한다. 그런 전원이 있으면 충전식 건전지는 충전 부하가 되고,
+        // 없으면 에너지가 가장 많은 충전식 건전지 하나가 전원이 된다(나머지는 회로에서 빠진다).
         List<Branch> sources = network.branches.stream().filter(branch -> branch.kind == BranchKind.SOURCE).toList();
-        if (sources.size() != 1) {
+        List<Branch> fixedSources = sources.stream().filter(branch -> !isRechargeable(level, branch)).toList();
+        List<Branch> rechargeables = sources.stream().filter(branch -> isRechargeable(level, branch)).toList();
+        Branch source;
+        if (fixedSources.size() > 1) {
+            clearState(level, network);
+            return;
+        } else if (fixedSources.size() == 1) {
+            source = fixedSources.getFirst();
+        } else if (!rechargeables.isEmpty()) {
+            source = rechargeables.stream().max(Comparator
+                    .comparingDouble((Branch branch) -> storedEnergy(level, branch))
+                    .thenComparingLong(branch -> -branch.devicePos.asLong())).orElseThrow();
+        } else {
             clearState(level, network);
             return;
         }
-        Branch source = sources.getFirst();
+        List<Branch> chargers = new ArrayList<>();
+        if (rechargeables.size() > (source.kind == BranchKind.SOURCE && isRechargeable(level, source) ? 1 : 0)) {
+            List<Branch> branches = new ArrayList<>(network.branches);
+            for (Branch battery : rechargeables) {
+                if (battery == source) continue;
+                branches.remove(battery);
+                CircuitDeviceBlockEntity entity = blockEntity(level, battery.devicePos);
+                if (entity == null) continue;
+                entity.setSourceTerminalVoltage(0.0);
+                entity.setLoadState(0.0, 0.0);
+                if (fixedSources.isEmpty() || entity.isFullyCharged()) continue;
+                Branch charger = Branch.passive(battery.devicePos, battery.positive, battery.negative,
+                        battery.resistance);
+                branches.add(charger);
+                chargers.add(charger);
+            }
+            network = new Network(network.cables, branches, network.root, network.overflow);
+        }
         CircuitDeviceBlock.Kind sourceKind = ((CircuitDeviceBlock) level.getBlockState(source.devicePos).getBlock()).kind();
         CircuitDeviceBlockEntity sourceEntity = blockEntity(level, source.devicePos);
         boolean available = sourceEntity != null && switch (sourceKind) {
-            case BATTERY -> sourceEntity.getStoredEnergyJoules() > 0.0;
+            case BATTERY, RECHARGEABLE_BATTERY -> sourceEntity.getStoredEnergyJoules() > 0.0;
+            case STEP_UP, STEP_DOWN -> sourceEntity.converterAvailable(gameTime);
             case COAL_GENERATOR -> sourceEntity.hasFuel();
             case DIESEL_GENERATOR -> sourceEntity.hasFuel();
             case WIND_GENERATOR, SOLAR_GENERATOR ->
@@ -80,7 +112,9 @@ public final class CircuitSolver {
             return;
         }
 
-        double sourceVoltage = CircuitDeviceBlock.sourceVoltage(level, source.devicePos, sourceKind);
+        double sourceVoltage = CircuitDeviceBlock.isConverter(sourceKind)
+                ? sourceEntity.converterOutputVoltage()
+                : CircuitDeviceBlock.sourceVoltage(level, source.devicePos, sourceKind);
         Solution solution = solveNetwork(level, network, source, sourceVoltage,
                 CircuitDeviceBlock.sourceResistance(sourceKind));
         if (solution == null) {
@@ -96,7 +130,28 @@ public final class CircuitSolver {
             }
         }
         sourceEntity.setSourceTerminalVoltage(solution.sourceTerminalVoltage);
-        sourceEntity.accountSourcePower(solution.sourceWatts, gameTime, sourceKind);
+        sourceEntity.setLoadState(0.0, 0.0);
+        if (CircuitDeviceBlock.isConverter(sourceKind)) {
+            sourceEntity.setConverterOutput(sourceVoltage, solution.sourceWatts, gameTime);
+        } else {
+            sourceEntity.accountSourcePower(solution.sourceWatts, gameTime, sourceKind);
+        }
+        for (Branch charger : chargers) {
+            CircuitDeviceBlockEntity battery = blockEntity(level, charger.devicePos);
+            if (battery == null) continue;
+            double current = battery.getLoadCurrent();
+            battery.accountCharge(current * current * CircuitDeviceBlock.RECHARGE_RESISTANCE, gameTime);
+        }
+    }
+
+    private static boolean isRechargeable(Level level, Branch branch) {
+        return level.getBlockState(branch.devicePos).getBlock() instanceof CircuitDeviceBlock device
+                && device.kind() == CircuitDeviceBlock.Kind.RECHARGEABLE_BATTERY;
+    }
+
+    private static double storedEnergy(Level level, Branch branch) {
+        CircuitDeviceBlockEntity entity = blockEntity(level, branch.devicePos);
+        return entity == null ? 0.0 : entity.getStoredEnergyJoules();
     }
 
     private static Network discover(Level level, BlockPos start) {
@@ -139,17 +194,21 @@ public final class CircuitSolver {
                 if (kind == CircuitDeviceBlock.Kind.SWITCH && !neighborState.getValue(CircuitDeviceBlock.CLOSED)) {
                     continue;
                 }
+                // 승압기/변압기: 앞뒤 단자는 입력(부하), 위아래 단자는 출력(전원). 두 쪽은 서로 다른 회로다.
+                boolean converterOutput = CircuitDeviceBlock.isConverter(kind) && positive.equals(neighbor.above());
                 double resistance = switch (kind) {
                     case RESISTOR -> CircuitDeviceBlock.LOAD_RESISTANCE;
                     case MINER -> CircuitDeviceBlock.MINER_RESISTANCE;
+                    case RECHARGEABLE_BATTERY -> CircuitDeviceBlock.RECHARGE_RESISTANCE;
+                    case STEP_UP, STEP_DOWN -> converterInputResistance(level, neighbor);
                     default -> 0.0;
                 };
                 if (kind != CircuitDeviceBlock.Kind.BATTERY) {
                     resistance += wireResistance(level, positive, neighbor)
                             + wireResistance(level, negative, neighbor);
                 }
-                Branch branch = isPowerSource(kind)
-                    ? Branch.source(neighbor, positive, negative)
+                Branch branch = (CircuitDeviceBlock.isConverter(kind) ? converterOutput : isPowerSource(kind))
+                    ? Branch.source(neighbor, positive, negative, Math.max(resistance, 1.0e-9))
                         : Branch.passive(neighbor, positive, negative, Math.max(resistance, 1.0e-9));
                 addBranch(branches, branchKeys, branch);
                 queue.addLast(positive);
@@ -162,8 +221,18 @@ public final class CircuitSolver {
         return new Network(cables, branches, root, overflow);
     }
 
+    private static double converterInputResistance(Level level, BlockPos pos) {
+        CircuitDeviceBlockEntity entity = blockEntity(level, pos);
+        return entity == null ? 1.0e6 : entity.converterInputResistance();
+    }
+
     private static boolean isPortDirection(BlockState deviceState, Direction direction,
             CircuitDeviceBlock.Kind kind) {
+        if (CircuitDeviceBlock.isConverter(kind)) {
+            Direction facing = deviceState.getValue(CircuitDeviceBlock.FACING);
+            return direction == Direction.UP || direction == Direction.DOWN
+                    || direction == facing || direction == facing.getOpposite();
+        }
         if (kind == CircuitDeviceBlock.Kind.MINER) {
             Direction facing = deviceState.getValue(CircuitDeviceBlock.FACING);
             return direction == Direction.UP || direction == Direction.DOWN
@@ -175,6 +244,14 @@ public final class CircuitSolver {
 
         private static PortPair devicePorts(Level level, BlockPos cablePos, BlockPos pos,
             BlockState state, CircuitDeviceBlock.Kind kind) {
+        if (CircuitDeviceBlock.isConverter(kind)) {
+            // 케이블이 위/아래에 닿아 있으면 출력 단자(위 +, 아래 -), 앞/뒤면 입력 단자(앞 +, 뒤 -).
+            if (cablePos.equals(pos.above()) || cablePos.equals(pos.below())) {
+                return new PortPair(pos.above(), pos.below());
+            }
+            Direction facing = state.getValue(CircuitDeviceBlock.FACING);
+            return new PortPair(pos.relative(facing), pos.relative(facing.getOpposite()));
+        }
         if (kind != CircuitDeviceBlock.Kind.MINER) {
             Direction facing = state.getValue(CircuitDeviceBlock.FACING);
             return new PortPair(pos.relative(facing), pos.relative(facing.getOpposite()));
@@ -197,6 +274,8 @@ public final class CircuitSolver {
 
     private static boolean isPowerSource(CircuitDeviceBlock.Kind kind) {
         return kind == CircuitDeviceBlock.Kind.BATTERY
+                || kind == CircuitDeviceBlock.Kind.RECHARGEABLE_BATTERY
+                || CircuitDeviceBlock.isConverter(kind)
                 || kind == CircuitDeviceBlock.Kind.COAL_GENERATOR
             || kind == CircuitDeviceBlock.Kind.DIESEL_GENERATOR
                 || kind == CircuitDeviceBlock.Kind.WIND_GENERATOR
@@ -283,9 +362,17 @@ public final class CircuitSolver {
                 instanceof CircuitDeviceBlockEntity device) {
             CircuitDeviceBlock.Kind kind = ((CircuitDeviceBlock) level.getBlockState(branch.devicePos).getBlock())
                 .kind();
-            double deviceResistance = kind == CircuitDeviceBlock.Kind.MINER
-                ? CircuitDeviceBlock.MINER_RESISTANCE
-                : kind == CircuitDeviceBlock.Kind.RESISTOR ? CircuitDeviceBlock.LOAD_RESISTANCE : 0.0;
+            if (CircuitDeviceBlock.isConverter(kind)) {
+                device.setConverterInput(current * device.converterInputResistance(), current, level.getGameTime(),
+                        sourceVoltage);
+                continue;
+            }
+            double deviceResistance = switch (kind) {
+                case MINER -> CircuitDeviceBlock.MINER_RESISTANCE;
+                case RESISTOR -> CircuitDeviceBlock.LOAD_RESISTANCE;
+                case RECHARGEABLE_BATTERY -> CircuitDeviceBlock.RECHARGE_RESISTANCE;
+                default -> 0.0;
+            };
             device.setLoadState(current * deviceResistance, current);
             }
         }
@@ -358,8 +445,13 @@ public final class CircuitSolver {
         for (Branch branch : network.branches) {
             if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
                     instanceof CircuitDeviceBlockEntity device) {
+                if (branch.kind == BranchKind.SOURCE) {
+                    device.setSourceTerminalVoltage(0.0);
+                } else if (CircuitDeviceBlock.isConverter(device.kindOrNull())) {
+                    device.setConverterInput(0.0, 0.0, level.getGameTime(), 0.0);
+                    continue;
+                }
                 device.setLoadState(0.0, 0.0);
-                if (branch.kind == BranchKind.SOURCE) device.setSourceTerminalVoltage(0.0);
             }
         }
     }
@@ -380,8 +472,9 @@ public final class CircuitSolver {
             return new Branch(BranchKind.PASSIVE, positive, negative, resistance, device, null, null);
         }
 
-        static Branch source(BlockPos device, BlockPos positive, BlockPos negative) {
-            return new Branch(BranchKind.SOURCE, positive, negative, 0.0, device, positive, negative);
+        /** resistance 는 충전식 건전지가 충전 부하로 바뀔 때만 쓰인다. */
+        static Branch source(BlockPos device, BlockPos positive, BlockPos negative, double resistance) {
+            return new Branch(BranchKind.SOURCE, positive, negative, resistance, device, positive, negative);
         }
 
         String key() {

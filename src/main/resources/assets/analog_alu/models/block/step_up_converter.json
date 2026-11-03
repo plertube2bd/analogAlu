@@ -1,0 +1,50 @@
+{
+  "textures": {
+    "front": "analog_alu:block/step_up_converter_front",
+    "back": "analog_alu:block/step_up_converter_back",
+    "side": "analog_alu:block/step_up_converter_side",
+    "top": "analog_alu:block/step_up_converter_top",
+    "bottom": "analog_alu:block/step_up_converter_bottom",
+    "particle": "analog_alu:block/step_up_converter_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#back",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#bottom",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

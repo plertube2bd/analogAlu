@@ -1,6 +1,5 @@
 package com.example.analogalu;
 
-import com.example.analogalu.item.TankBucketItem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.Registry;
@@ -9,8 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.level.material.Fluid;
 import java.util.function.Function;
 
 public final class ModItems {
@@ -32,18 +29,12 @@ public final class ModItems {
     public static final Item ACCELERATED_FOCUSED_SILICON = register("accelerated_focused_silicon");
     public static final Item INACTIVE_DOPED_WAFER = register("inactive_doped_wafer");
     public static final Item SEMICONDUCTOR = register("semiconductor", SemiconductorItem::new);
-        public static final Item OIL_BUCKET = register("oil_bucket", properties ->
-            new BucketItem(ModFluids.STILL, properties.stacksTo(1)));
+    /** 석유. 빈 양동이로 석유 원천을 우클릭하면 얻는다(양동이는 그대로 남는다). */
+    public static final Item OIL = register("oil");
             public static final Item SOLID_OIL = register("solid_oil");
             public static final Item DIESEL = register("diesel");
             public static final Item PLASTIC_RESIN = register("plastic_resin");
             public static final Item ASPHALT = register("asphalt");
-            public static final Item TANK_BUCKET_4 = register("tank_bucket_4",
-                properties -> new TankBucketItem(properties, 4));
-            public static final Item TANK_BUCKET_8 = register("tank_bucket_8",
-                properties -> new TankBucketItem(properties, 8));
-            public static final Item TANK_BUCKET_16 = register("tank_bucket_16",
-                properties -> new TankBucketItem(properties, 16));
 
     private ModItems() {}
 

@@ -6,6 +6,8 @@ import com.example.analogalu.WaferProgramCompiler;
 import com.example.analogalu.WaferProgramData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -18,7 +20,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 
-public class MassAnalyzerBlockEntity extends BlockEntity {
+public class MassAnalyzerBlockEntity extends BlockEntity implements WorldlyContainer {
     public static final int REQUIRED_SIGNAL = 8;
     public static final int PROCESSING_TICKS = 3000;
     private static final String HAS_INPUT_KEY = "HasInput";
@@ -101,6 +103,77 @@ public class MassAnalyzerBlockEntity extends BlockEntity {
         }
         return false;
     }
+
+    // ---- 호퍼 입력: 이온 주입 실리콘 1개를 받아 바로 가공 대기열에 넣는다.
+
+    private static final int[] SLOTS = {0};
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return SLOTS;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
+        return canPlaceItem(slot, stack);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return !hasInput && stack.is(ModItems.ION_IMPLANTED_SILICON);
+    }
+
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int slot) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        if (hasInput || !stack.is(ModItems.ION_IMPLANTED_SILICON)) return;
+        captureProgram(stack);
+        hasInput = true;
+        progress = 0;
+        setChanged();
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return false;
+    }
+
+    @Override
+    public void clearContent() {}
 
     private void completeProcessing() {
         ItemStack outputStack = new ItemStack(ModItems.MASS_SELECTED_SILICON);

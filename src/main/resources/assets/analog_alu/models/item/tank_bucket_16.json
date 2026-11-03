@@ -1,1 +1,0 @@
-{ "parent": "minecraft:item/generated", "textures": { "layer0": "analog_alu:item/tank_bucket_16" } }

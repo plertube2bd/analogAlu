@@ -18,9 +18,11 @@ public class AnalogAlu implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModComponents.init();
         ModBlocks.init();
         ModItems.init();
         com.example.analogalu.fluid.OilDrowning.init();
+        com.example.analogalu.fluid.OilBucketing.init();
         PayloadTypeRegistry.serverboundPlay().register(SaveWaferCodePayload.TYPE, SaveWaferCodePayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(RunWaferProgramPayload.TYPE, RunWaferProgramPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(CircuitStatusPayload.TYPE, CircuitStatusPayload.CODEC);
@@ -28,7 +30,11 @@ public class AnalogAlu implements ModInitializer {
             context.server().execute(() -> saveWaferCode(payload, context.player())));
         ServerPlayNetworking.registerGlobalReceiver(RunWaferProgramPayload.TYPE, (payload, context) ->
             context.server().execute(() -> runWaferProgram(payload, context.player())));
-        ModCreativeTabs.init();
+        net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents.modifyOutputEvent(
+                net.minecraft.world.item.CreativeModeTabs.REDSTONE_BLOCKS).register(output -> {
+            ModBlocks.ITEMS.forEach(output::accept);
+            ModItems.ITEMS.forEach(output::accept);
+        });
     }
 
     private static void saveWaferCode(SaveWaferCodePayload payload, net.minecraft.server.level.ServerPlayer player) {

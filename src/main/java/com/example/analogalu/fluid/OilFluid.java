@@ -2,7 +2,6 @@ package com.example.analogalu.fluid;
 
 import com.example.analogalu.ModBlocks;
 import com.example.analogalu.ModFluids;
-import com.example.analogalu.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -124,6 +123,7 @@ public final class OilFluid extends FlowingFluid {
 
     @Override
     public Item getBucket() {
-        return ModItems.OIL_BUCKET;
+        // 석유 양동이는 없다. 빈 양동이 우클릭은 OilBucketing 이 처리한다.
+        return net.minecraft.world.item.Items.AIR;
     }
 }

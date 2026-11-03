@@ -79,6 +79,20 @@ public final class ModBlocks {
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.BATTERY),
                 BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.COPPER));
             public static final Item BATTERY_ITEM = registerItem("battery", BATTERY);
+            public static final CircuitDeviceBlock RECHARGEABLE_BATTERY = registerBlock("rechargeable_battery",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.RECHARGEABLE_BATTERY),
+                BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.COPPER));
+            public static final Item RECHARGEABLE_BATTERY_ITEM = registerItem("rechargeable_battery",
+                RECHARGEABLE_BATTERY);
+            public static final CircuitDeviceBlock STEP_UP_CONVERTER = registerBlock("step_up_converter",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.STEP_UP),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item STEP_UP_CONVERTER_ITEM = registerItem("step_up_converter", STEP_UP_CONVERTER);
+            public static final CircuitDeviceBlock STEP_DOWN_TRANSFORMER = registerBlock("step_down_transformer",
+                properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.STEP_DOWN),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+            public static final Item STEP_DOWN_TRANSFORMER_ITEM = registerItem("step_down_transformer",
+                STEP_DOWN_TRANSFORMER);
             public static final CircuitDeviceBlock CIRCUIT_SWITCH = registerBlock("circuit_switch",
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.SWITCH),
                 BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.COPPER));
@@ -111,12 +125,12 @@ public final class ModBlocks {
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("circuit_device")),
                 new BlockEntityType<>(CircuitDeviceBlockEntity::new,
-                        Set.of(BATTERY, CIRCUIT_SWITCH, RESISTOR_LOAD, COAL_GENERATOR, WIND_GENERATOR,
+                        Set.of(BATTERY, RECHARGEABLE_BATTERY, STEP_UP_CONVERTER, STEP_DOWN_TRANSFORMER, CIRCUIT_SWITCH, RESISTOR_LOAD, COAL_GENERATOR, WIND_GENERATOR,
                                 SOLAR_GENERATOR, MINER, DIESEL_GENERATOR)));
 
         public static final Block UPWARD_HOPPER = registerBlock("upward_hopper", UpwardHopperBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.HOPPER)
-                .requiresCorrectToolForDrops());
+            BlockBehaviour.Properties.of().mapColor(net.minecraft.world.level.material.MapColor.STONE)
+                .strength(3.0F, 4.8F).sound(SoundType.METAL).noOcclusion());
         public static final Item UPWARD_HOPPER_ITEM = registerItem("upward_hopper", UPWARD_HOPPER);
             public static final BlockEntityType<UpwardHopperBlockEntity> UPWARD_HOPPER_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -154,19 +168,16 @@ public final class ModBlocks {
 
         public static final Block SEMICONDUCTOR_BLOCK = registerBlock("semiconductor_block",
             properties -> new SemiconductorBlock(properties, false),
-            BlockBehaviour.Properties.of().strength(4.0F, 6.0F).requiresCorrectToolForDrops()
-                .sound(SoundType.COPPER));
+            BlockBehaviour.Properties.of().strength(4.0F, 6.0F).sound(SoundType.COPPER));
         public static final Item SEMICONDUCTOR_BLOCK_ITEM = registerItem("semiconductor_block", SEMICONDUCTOR_BLOCK);
         public static final Block WATERPROOF_SEMICONDUCTOR_BLOCK = registerBlock("waterproof_semiconductor_block",
             properties -> new SemiconductorBlock(properties, true),
-            BlockBehaviour.Properties.of().strength(2.0F, 6.0F).requiresCorrectToolForDrops()
-                .sound(SoundType.COPPER));
+            BlockBehaviour.Properties.of().strength(2.0F, 6.0F).sound(SoundType.COPPER));
         public static final Item WATERPROOF_SEMICONDUCTOR_BLOCK_ITEM = registerItem(
             "waterproof_semiconductor_block", WATERPROOF_SEMICONDUCTOR_BLOCK);
 
         public static final Block MASS_ANALYZER = registerBlock("mass_analyzer", MassAnalyzerBlock::new,
-            BlockBehaviour.Properties.of().strength(4.0F, 6.0F).requiresCorrectToolForDrops()
-                .sound(SoundType.COPPER));
+            BlockBehaviour.Properties.of().strength(4.0F, 6.0F).sound(SoundType.COPPER));
         public static final Item MASS_ANALYZER_ITEM = registerItem("mass_analyzer", MASS_ANALYZER);
         public static final BlockEntityType<MassAnalyzerBlockEntity> MASS_ANALYZER_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
