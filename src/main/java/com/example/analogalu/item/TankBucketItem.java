@@ -17,6 +17,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -37,25 +38,7 @@ public final class TankBucketItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (hit.getType() != HitResult.Type.BLOCK) return InteractionResult.PASS;
-        BlockPos pos = hit.getBlockPos();
-        FluidState fluid = level.getFluidState(pos);
-        if (!fluid.isSource()) return InteractionResult.PASS;
-
-        String fluidId = fluid.is(FluidTags.LAVA) ? "lava"
-                : fluid.is(ModFluids.STILL) ? "oil" : "";
-        if (fluidId.isEmpty()) return InteractionResult.PASS;
-        CompoundTag data = data(stack);
-        String stored = data.getStringOr(FLUID_KEY, "");
-        int amount = data.getIntOr(AMOUNT_KEY, 0);
-        if ((!stored.isEmpty() && !stored.equals(fluidId)) || amount >= capacity) return InteractionResult.PASS;
-
-        if (!level.isClientSide()) {
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-            data.putString(FLUID_KEY, fluidId);
-            data.putInt(AMOUNT_KEY, amount + 1);
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
-        }
-        return InteractionResult.SUCCESS;
+        return fillFromSource(level, hit.getBlockPos(), stack);
     }
 
     @Override
@@ -64,14 +47,17 @@ public final class TankBucketItem extends Item {
         CompoundTag data = data(stack);
         String fluid = data.getStringOr(FLUID_KEY, "");
         int amount = data.getIntOr(AMOUNT_KEY, 0);
+        Level level = context.getLevel();
+        InteractionResult filled = fillFromSource(level, context.getClickedPos(), stack);
+        if (filled.consumesAction()) return filled;
         if (fluid.isEmpty() || amount <= 0) return InteractionResult.PASS;
 
-        Level level = context.getLevel();
         BlockPos target = context.getClickedPos().relative(context.getClickedFace());
         if (!level.getBlockState(target).canBeReplaced()) return InteractionResult.PASS;
         if (!level.isClientSide()) {
-            level.setBlock(target, fluid.equals("oil") ? ModBlocks.OIL.defaultBlockState()
-                    : Blocks.LAVA.defaultBlockState(), 3);
+            BlockState placedFluid = fluid.equals("oil") ? ModBlocks.OIL.defaultBlockState()
+                    : Blocks.LAVA.defaultBlockState();
+            level.setBlock(target, placedFluid, 3);
             amount--;
             if (amount == 0) {
                 data.remove(FLUID_KEY);
@@ -79,6 +65,27 @@ public final class TankBucketItem extends Item {
             } else {
                 data.putInt(AMOUNT_KEY, amount);
             }
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult fillFromSource(Level level, BlockPos pos, ItemStack stack) {
+        FluidState fluid = level.getFluidState(pos);
+        if (!fluid.isSource()) return InteractionResult.PASS;
+
+        String fluidId = fluid.is(FluidTags.LAVA) ? "lava"
+                : fluid.is(ModFluids.STILL) ? "oil" : "";
+        if (fluidId.isEmpty()) return InteractionResult.PASS;
+        CompoundTag data = data(stack);
+        String stored = data.getStringOr(FLUID_KEY, "");
+        int amount = storedAmount(stack);
+        if ((!stored.isEmpty() && !stored.equals(fluidId)) || amount >= capacity) return InteractionResult.PASS;
+
+        if (!level.isClientSide()) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            data.putString(FLUID_KEY, fluidId);
+            data.putInt(AMOUNT_KEY, amount + 1);
             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
         }
         return InteractionResult.SUCCESS;

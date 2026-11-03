@@ -12,18 +12,19 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.AABB;
 
 public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
     private static final int COAL_FUEL_TICKS = 1600;
-    private static final int MAX_FUEL_TICKS = COAL_FUEL_TICKS * 8;
+    private static final int DIESEL_FUEL_TICKS = COAL_FUEL_TICKS * 4;
+    /** 디젤 128개(석탄 512개)분량. */
+    private static final int MAX_FUEL_TICKS = DIESEL_FUEL_TICKS * 128;
     private double storedEnergyJoules = CircuitDeviceBlock.BATTERY_CAPACITY_JOULES;
     private int fuelTicks;
     private long lastEnergyTick = -1L;
@@ -98,28 +99,30 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo {
             || !(state.getBlock() instanceof CircuitDeviceBlock block)
             || level.getGameTime() % 10L != 0L) return;
 
-        if (block.kind() == CircuitDeviceBlock.Kind.MINER) {
-            device.tickMiner(level, pos, state);
-            return;
-        }
-        if ((block.kind() != CircuitDeviceBlock.Kind.COAL_GENERATOR
-                && block.kind() != CircuitDeviceBlock.Kind.DIESEL_GENERATOR)
-            || device.fuelTicks >= MAX_FUEL_TICKS) return;
+        if (block.kind() == CircuitDeviceBlock.Kind.MINER) device.tickMiner(level, pos, state);
+    }
 
-        AABB inputArea = new AABB(pos.getX() + 0.1, pos.getY() + 0.95, pos.getZ() + 0.1,
-                pos.getX() + 0.9, pos.getY() + 1.8, pos.getZ() + 0.9);
-        for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, inputArea)) {
-            var stack = itemEntity.getItem();
-            boolean coalGenerator = block.kind() == CircuitDeviceBlock.Kind.COAL_GENERATOR;
-            if (coalGenerator && !stack.is(Items.COAL) && !stack.is(Items.CHARCOAL)) continue;
-            if (!coalGenerator && !stack.is(com.example.analogalu.ModItems.DIESEL)) continue;
-            stack.shrink(1);
-            if (stack.isEmpty()) itemEntity.discard();
-            int fuelValue = coalGenerator ? COAL_FUEL_TICKS : COAL_FUEL_TICKS * 4;
-            device.fuelTicks = Math.min(MAX_FUEL_TICKS, device.fuelTicks + fuelValue);
-            device.setChanged();
-            break;
+    /** 발전기 연료 1개의 연소 시간(틱). 해당 발전기에 맞지 않는 아이템이면 0. */
+    public static int fuelValue(CircuitDeviceBlock.Kind kind, ItemStack stack) {
+        if (kind == CircuitDeviceBlock.Kind.COAL_GENERATOR) {
+            return stack.is(Items.COAL) || stack.is(Items.CHARCOAL) ? COAL_FUEL_TICKS : 0;
         }
+        if (kind == CircuitDeviceBlock.Kind.DIESEL_GENERATOR) {
+            return stack.is(com.example.analogalu.ModItems.DIESEL) ? DIESEL_FUEL_TICKS : 0;
+        }
+        return 0;
+    }
+
+    /** 연료를 최대 maxItems개까지 넣고 실제로 넣은 개수를 돌려준다. */
+    public int insertFuel(int fuelValue, int available, int maxItems) {
+        if (fuelValue <= 0) return 0;
+        int room = (MAX_FUEL_TICKS - fuelTicks) / fuelValue;
+        int inserted = Math.min(Math.min(available, maxItems), room);
+        if (inserted <= 0) return 0;
+        fuelTicks += inserted * fuelValue;
+        setChanged();
+        syncIfChanged();
+        return inserted;
     }
 
     public double getStoredEnergyJoules() {

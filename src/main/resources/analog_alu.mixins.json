@@ -8,7 +8,8 @@
     "OilWorldgenMixin"
   ],
   "client": [
-    "HudHoverInfoMixin"
+    "HudHoverInfoMixin",
+    "OilFogMixin"
   ],
   "injectors": {
     "defaultRequire": 1

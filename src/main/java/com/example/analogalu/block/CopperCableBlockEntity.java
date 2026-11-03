@@ -25,8 +25,10 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
     public static final double COPPER_RESISTIVITY_OHM_METERS = 1.68e-8;
     public static final double CROSS_SECTION_SQUARE_METERS = 1.5e-6;
     public static final double TEMPERATURE_COEFFICIENT = 0.00393;
+    /** 게임 밸런스를 위해 실제 구리보다 저항을 5배 낮춘다. */
+    public static final double RESISTANCE_SCALE = 0.2;
     private static final double BASE_RESISTANCE_OHMS =
-            COPPER_RESISTIVITY_OHM_METERS / CROSS_SECTION_SQUARE_METERS;
+            COPPER_RESISTIVITY_OHM_METERS / CROSS_SECTION_SQUARE_METERS * RESISTANCE_SCALE;
     private static final double MAX_DAMAGE = 100.0;
     private static final double THERMAL_GAIN_PER_TICK = 0.01;
     private static final double COOLING_PER_TICK = 0.0005;

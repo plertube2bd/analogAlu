@@ -30,6 +30,7 @@ public class AnalogAlu implements ModInitializer {
     public void onInitialize() {
         ModBlocks.init();
         ModItems.init();
+        com.example.analogalu.fluid.OilDrowning.init();
         PayloadTypeRegistry.serverboundPlay().register(SaveWaferCodePayload.TYPE, SaveWaferCodePayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(RunWaferProgramPayload.TYPE, RunWaferProgramPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(CircuitInfoRequestPayload.TYPE, CircuitInfoRequestPayload.CODEC);

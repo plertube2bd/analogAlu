@@ -44,6 +44,11 @@ public final class OilFluid extends FlowingFluid {
     }
 
     @Override
+    public boolean isSame(Fluid fluid) {
+        return fluid == ModFluids.STILL || fluid == ModFluids.FLOWING;
+    }
+
+    @Override
     protected boolean canConvertToSource(ServerLevel level) {
         return false;
     }
@@ -55,7 +60,7 @@ public final class OilFluid extends FlowingFluid {
 
     @Override
     protected int getSlopeFindDistance(LevelReader level) {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -65,7 +70,7 @@ public final class OilFluid extends FlowingFluid {
 
     @Override
     public int getTickDelay(LevelReader level) {
-        return 12;
+        return 30;
     }
 
     @Override
@@ -107,6 +112,14 @@ public final class OilFluid extends FlowingFluid {
     @Override
     public VoxelShape getShape(FluidState state, BlockGetter level, BlockPos pos) {
         return Shapes.block();
+    }
+
+    /** 눈 높이가 석유 속에 잠겨 있는지. 서버(익사)와 클라이언트(안개) 모두에서 쓴다. */
+    public static boolean isInOil(BlockGetter level, net.minecraft.world.phys.Vec3 point) {
+        BlockPos pos = BlockPos.containing(point);
+        FluidState fluid = level.getFluidState(pos);
+        if (!(fluid.getType() instanceof OilFluid)) return false;
+        return point.y < pos.getY() + fluid.getHeight(level, pos);
     }
 
     @Override

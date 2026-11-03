@@ -11,8 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -43,7 +45,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
     public static final double BATTERY_CAPACITY_JOULES = 36_000.0;
     public static final double COAL_GENERATOR_VOLTAGE = 12.0;
     public static final double COAL_GENERATOR_RESISTANCE = 0.8;
-    public static final double DIESEL_GENERATOR_VOLTAGE = 12.0;
+    public static final double DIESEL_GENERATOR_VOLTAGE = 24.0;
     public static final double DIESEL_GENERATOR_RESISTANCE = 0.5;
     public static final double WIND_GENERATOR_RESISTANCE = 2.0;
     public static final double SOLAR_GENERATOR_VOLTAGE = 9.0;
@@ -107,6 +109,28 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         CircuitSolver.recomputeAround(level, pos);
     }
 
+    /** 석탄/디젤 발전기: 연료를 들고 우클릭하면 1개, 웅크리고 우클릭하면 들어가는 만큼 넣는다. */
+    @Override
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, InteractionHand hand, BlockHitResult hit) {
+        int fuelValue = CircuitDeviceBlockEntity.fuelValue(kind, stack);
+        if (fuelValue <= 0) return InteractionResult.TRY_WITH_EMPTY_HAND;
+        if (!(level.getBlockEntity(pos) instanceof CircuitDeviceBlockEntity device)) return InteractionResult.PASS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+
+        boolean wasRunning = device.hasFuel();
+        int inserted = device.insertFuel(fuelValue, stack.getCount(), player.isShiftKeyDown() ? stack.getCount() : 1);
+        if (inserted <= 0) {
+            player.sendOverlayMessage(Component.literal("Fuel tank is full").withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
+        }
+        if (!player.hasInfiniteMaterials()) stack.shrink(inserted);
+        level.playSound(null, pos, kind == Kind.COAL_GENERATOR ? SoundEvents.FIRECHARGE_USE : SoundEvents.BUCKET_EMPTY,
+                SoundSource.BLOCKS, 0.6F, 1.0F);
+        if (!wasRunning) CircuitSolver.recomputeAround(level, pos);
+        return InteractionResult.SUCCESS;
+    }
+
     /** 스위치만 우클릭으로 토글한다. 나머지 장치의 상태는 조준했을 때 뜨는 툴팁 창(HoverInfo)으로 확인한다. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
@@ -163,7 +187,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
                     String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Drop coal on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
+                lines.add(Component.literal("Right-click with coal to refuel").withStyle(ChatFormatting.DARK_GRAY));
             }
             case DIESEL_GENERATOR -> {
                 int fuelTicks = device.getFuelTicks();
@@ -174,7 +198,7 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
                     String.format(Locale.ROOT, "%.2f V", device.getSourceTerminalVoltage()), ChatFormatting.AQUA));
                 lines.add(CopperCableBlockEntity.line("Fuel", String.format(Locale.ROOT, "%.0f s", fuelTicks / 20.0),
                         fuelTicks > 0 ? ChatFormatting.GREEN : ChatFormatting.RED));
-                lines.add(Component.literal("Drop diesel on top to refuel").withStyle(ChatFormatting.DARK_GRAY));
+                lines.add(Component.literal("Right-click with diesel to refuel").withStyle(ChatFormatting.DARK_GRAY));
             }
             case MINER -> {
                 lines.add(Component.literal("Miner").withStyle(ChatFormatting.GOLD));

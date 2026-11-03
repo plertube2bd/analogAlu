@@ -176,13 +176,6 @@ public class CopperCableBlock extends BaseEntityBlock {
         }
         CircuitSolver.recomputeFrom(level, pos);
 
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof CopperCableBlockEntity cable) {
-            player.sendOverlayMessage(Component.literal(String.format(java.util.Locale.ROOT,
-                "저항 %.5f Ω  |  전압 %.2f V  |  전류 %.3f A  |  온도 %.1f °C  |  내구도 %.1f/100  |  %s",
-                cable.getResistanceOhms(), cable.getVoltage(), cable.getCurrent(), cable.getTemperatureCelsius(),
-                cable.getHealth(), locking ? "잠김" : "해제")));
-        }
         return InteractionResult.SUCCESS;
     }
 
