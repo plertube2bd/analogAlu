@@ -7,22 +7,20 @@
         {
           "type": "minecraft:item",
           "name": "analog_alu:battery",
-          "functions": [
-            {
-              "function": "minecraft:copy_components",
-              "source": "block_entity",
-              "include": [
-                "analog_alu:stored_energy"
-              ]
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "analog_alu:stored_energy": 0.0,
+              "minecraft:item_name": {
+                "translate": "item.analog_alu.used_battery"
+              }
             }
-          ]
+          }
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ]
 }

@@ -178,7 +178,7 @@
   "book.analog_alu.guide.page5": "3. ELECTRICITY\n\nCopper Cable carries current. Devices connect through two terminals: the front is +, the back is -. Current needs a closed loop from + back to -.\n\nLook at a cable or device to see its voltage, current and temperature.",
   "book.analog_alu.guide.page6": "Each circuit may have only one generator or Battery. Too much current overheats and damages cables.\n\nCircuit Switch: right-click to open or close it.\n\nResistive Load: a 10 Ω test load.",
   "book.analog_alu.guide.page7": "4. GENERATORS\n\nCoal: 12 V. Right-click with coal.\nDiesel: 24 V. Right-click with Diesel; holds 128.\nSneak-click inserts the stack. Hoppers can refuel both.\n\nWind: open sky at Y 80+.\nSolar: daylight and open sky.",
-  "book.analog_alu.guide.page8": "5. BATTERIES\n\nBattery: 9 V, 36 kJ. Starts full and cannot be recharged.\n\nRechargeable Battery: 12 V, 72 kJ. Starts empty. Wire it into a circuit with a generator to charge it. Without a generator it powers the circuit itself.\n\nBatteries keep their charge when mined.",
+  "book.analog_alu.guide.page8": "5. BATTERIES\n\nBattery: 9 V, 36 kJ. Starts full and cannot be recharged. Once placed, mining it gives a Used Battery (0 J).\n\nRechargeable Battery: 12 V, 72 kJ. Starts empty. Wire it into a circuit with a generator to charge it. Without a generator it powers the circuit itself. It keeps its charge when mined.",
   "book.analog_alu.guide.page9": "6. MINER & HOPPERS\n\nMiner: with 4 V or more and a redstone signal, it breaks the block in front of it. Its terminals are top/bottom or the two sides.\n\nHoppers can feed the Oil Processor, generators and the Mass Analyzer.",
   "book.analog_alu.guide.page10": "7. SILICON\n\nSand + diamond = Silicon Boule. Blast it into Silicon. Add quartz and blast for Purified Silicon. Add an amethyst shard and blast for Monocrystalline Silicon. Cut it with a Wafer Cutting Wire into 8 wafers.",
   "book.analog_alu.guide.page11": "Program a wafer, add quartz and blast it. Feed the result to a Mass Analyzer with signal 8+. Surround the output with 8 redstone torches, add Strong Ion Gas, and blast for a Semiconductor.\n\nBook + redstone = programming guide.",
@@ -194,5 +194,6 @@
   "hover.analog_alu.converter_terminals": "In: %s + / %s -, Out: top + / bottom -",
   "hover.analog_alu.hint.converter": "Right-click: raise, sneak-right-click: lower",
   "message.analog_alu.converter_setpoint": "Output setting: %s",
-  "book.analog_alu.guide.page13": "9. CONVERTERS\n\nThey link two circuits. Input: front + / back -. Output: top + / bottom -.\n\nStep-Up: 24 V up to 3 kV.\nStep-Down: down to 4 V.\nRight-click raises the setting; sneak-right-click lowers it.\n\nEfficiency is 90%. A weak source makes the output sag."
+  "book.analog_alu.guide.page13": "9. CONVERTERS\n\nThey link two circuits. Input: front + / back -. Output: top + / bottom -.\n\nStep-Up: 24 V up to 3 kV.\nStep-Down: down to 4 V.\nRight-click raises the setting; sneak-right-click lowers it.\n\nEfficiency is 90%. A weak source makes the output sag.",
+  "item.analog_alu.used_battery": "Used Battery"
 }
