@@ -6,7 +6,7 @@ Signal strength (0-15) is treated directly as unsigned 4-bit integer data.
 
 Mod ID          : analog_alu
 Display Name    : Analog Redstone ALU
-Version         : 0.1.8
+Version         : 0.2.1
 Description     : 4-bit analog redstone computing blocks
 Minecraft       : >= 26.1
 Fabric Loader   : >= 0.19.3
@@ -353,6 +353,30 @@ millisecond. Arithmetic is 4-bit: + and - discard carry/borrow; ++ returns
 read the status bit. CRAM and FF arrays are read and written with [index].
 Operators can also be called as functions, for example +(a, b) and ++(a, b).
 Shift operators are << and >>; <<< and >>> rotate left and right respectively.
+
+Semiconductor process ("blast" means any blasting cooker, such as a blast
+furnace; an ordinary furnace or smoker cannot do these steps):
+
+   1. Silicon Boule            : sand + diamond                  (shapeless)
+   2. Silicon                  : blast the boule
+   3. Silicon Purification Charge : silicon + quartz
+   4. Purified Silicon         : blast the charge
+   5. Seeded Silicon           : purified silicon + amethyst shard
+   6. Monocrystalline Silicon  : blast the seeded silicon
+   7. Silicon Wafer  x8        : monocrystalline silicon + wafer cutting wire
+                                 (wire: string surrounded by 8 iron nuggets)
+   8. Quartz-Treated Wafer     : wafer (blank or programmed) + quartz
+   9. Ion-Implanted Silicon    : blast the quartz-treated wafer
+                                 + the same number of Strong Ion Gas
+  10. Mass-Selected Silicon    : throw ion-implanted silicon onto a mass analyzer
+  11. Accelerated and Focused Silicon : mass-selected silicon surrounded by
+                                 8 redstone torches
+  12. Inactive Doped Wafer     : accelerated and focused silicon + strong ion gas
+  13. Semiconductor            : blast the inactive doped wafer
+
+Strong Ion Gas is handed to the player who takes ion-implanted silicon out of
+a cooker's result slot, one per item, whether by clicking it or shift-clicking
+it. A hopper pulling the result out gets no gas, so take it by hand.
 
 Process times (all halved): blasting recipes take 1,200 / 2,400 / 3,000 / 1,200 /
 3,000 ticks (metallurgical silicon / purified / monocrystalline / ion-implanted /
