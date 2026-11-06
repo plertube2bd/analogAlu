@@ -453,7 +453,7 @@ Electrical circuit blocks (copper cable, battery, switch, resistor, generators):
 ================================================================================
 
 Black powder : gunpowder + coal or charcoal (shapeless) -> 1
-Gunpowder    : bone meal + coal or charcoal + flint (shapeless) -> 1
+Gunpowder    : bone meal + coal or charcoal + flint (shapeless) -> 4
 9mm round    : black powder + iron ingot -> 4
 Musket ball  : black powder + 2 iron ingots -> 4
 45 gauge     : black powder + 8 iron nuggets -> 1

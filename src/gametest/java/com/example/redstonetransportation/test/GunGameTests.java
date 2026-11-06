@@ -264,8 +264,8 @@ public final class GunGameTests {
     public void blackPowderAndAmmunitionRecipes(GameTestHelper helper) {
         assertMakes(helper, craft(helper, 2, 1, Items.GUNPOWDER, Items.CHARCOAL), ModGuns.BLACK_POWDER, 1, "gunpowder + charcoal");
         assertMakes(helper, craft(helper, 2, 1, Items.GUNPOWDER, Items.COAL), ModGuns.BLACK_POWDER, 1, "gunpowder + coal");
-        assertMakes(helper, craft(helper, 3, 1, Items.BONE_MEAL, Items.COAL, Items.FLINT), Items.GUNPOWDER, 1, "bone meal + coal + flint");
-        assertMakes(helper, craft(helper, 3, 1, Items.FLINT, Items.CHARCOAL, Items.BONE_MEAL), Items.GUNPOWDER, 1, "flint + charcoal + bone meal");
+        assertMakes(helper, craft(helper, 3, 1, Items.BONE_MEAL, Items.COAL, Items.FLINT), Items.GUNPOWDER, 4, "bone meal + coal + flint");
+        assertMakes(helper, craft(helper, 3, 1, Items.FLINT, Items.CHARCOAL, Items.BONE_MEAL), Items.GUNPOWDER, 4, "flint + charcoal + bone meal");
         helper.assertTrue(craft(helper, 2, 1, Items.BONE_MEAL, Items.COAL).isEmpty(), "bone meal and coal alone made gunpowder");
         assertMakes(helper, craft(helper, 2, 1, ModGuns.BLACK_POWDER, Items.IRON_INGOT), ModGuns.BULLET_9MM, 4, "black powder + iron");
         assertMakes(helper, craft(helper, 3, 1, ModGuns.BLACK_POWDER, Items.IRON_INGOT, Items.IRON_INGOT), ModGuns.MUSKET_BALL, 4,

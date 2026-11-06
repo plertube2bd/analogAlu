@@ -356,7 +356,7 @@ def write_recipes() -> None:
         "type": "minecraft:crafting_shapeless",
         "category": "misc",
         "ingredients": ["minecraft:bone_meal", "#minecraft:coals", "minecraft:flint"],
-        "result": {"id": "minecraft:gunpowder", "count": 1},
+        "result": {"id": "minecraft:gunpowder", "count": 4},
     })
     shapeless("bullet_9mm", [f"{NS}:black_powder", "minecraft:iron_ingot"], 4)
     shapeless("musket_ball", [f"{NS}:black_powder", "minecraft:iron_ingot", "minecraft:iron_ingot"], 4)

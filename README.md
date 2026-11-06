@@ -18,7 +18,7 @@ Fabric · Minecraft 26.3 · Java 25 · Fabric API 필요
 | 기능 | 내용 | 설명서 |
 |---|---|---|
 | 총기 | 리볼버(6발, 매번 R, 25 피해, 32블록), 머스킷(30 피해, 48블록, 3초 간격), 샷건(2발, 산탄 40알, 16블록). 손에 들면 3D 모델 | [docs/GUNS_KO.md](docs/GUNS_KO.md) |
-| 흑색화약 | 화약 + 석탄(또는 숯). 9mm 총알, 머스킷 총알, 45게이지 산탄의 재료. 화약은 뼛가루 + 석탄/숯 + 부싯돌로도 만듦 | [docs/GUNS_KO.md](docs/GUNS_KO.md) |
+| 흑색화약 | 화약 + 석탄(또는 숯). 9mm 총알, 머스킷 총알, 45게이지 산탄의 재료. 화약은 뼛가루 + 석탄/숯 + 부싯돌로 4개씩 만듦 | [docs/GUNS_KO.md](docs/GUNS_KO.md) |
 | 석유 | 매장지가 예전의 5%(구역당 3.75%)로 줄고, 그중 90%가 지표에 드러남 | [README.TXT](README.TXT) 7장 |
 | 전원 직렬·병렬 | 건전지·발전기를 여러 개 이으면 직렬은 전압이 더해지고 병렬은 전류를 나눔 | [전기 가이드](docs/transportation/ELECTRIC_GUIDE_KO.md) |
 | +/− 표시 | 모든 전원의 + 면과 − 면에 크게 표시 | [전기 가이드](docs/transportation/ELECTRIC_GUIDE_KO.md) |
