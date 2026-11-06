@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "C",
+    "T"
+  ],
+  "key": {
+    "C": "minecraft:chest",
+    "T": "redstone_transportation:redstone_tram"
+  },
+  "result": {
+    "id": "redstone_transportation:cargo_tram",
+    "count": 1
+  }
+}

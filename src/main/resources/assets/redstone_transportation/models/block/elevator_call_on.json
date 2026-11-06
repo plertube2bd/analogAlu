@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "redstone_transportation:block/elevator_call_on"
+  }
+}

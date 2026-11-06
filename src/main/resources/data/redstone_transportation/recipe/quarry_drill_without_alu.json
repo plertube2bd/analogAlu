@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "analog_alu"
+        ]
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IPI",
+    "RMR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "P": "minecraft:diamond_pickaxe",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "redstone_transportation:quarry_drill",
+    "count": 1
+  }
+}

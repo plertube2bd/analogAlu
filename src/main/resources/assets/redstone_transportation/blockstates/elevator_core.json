@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "redstone_transportation:block/elevator_core"
+    },
+    "facing=east": {
+      "model": "redstone_transportation:block/elevator_core",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "redstone_transportation:block/elevator_core",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "redstone_transportation:block/elevator_core",
+      "y": 270
+    }
+  }
+}

@@ -5,4 +5,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = 'analog-alu'
+rootProject.name = 'modernization-world'

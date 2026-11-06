@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IRI",
+    "DCD",
+    "IRI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "D": "minecraft:detector_rail",
+    "C": "minecraft:comparator"
+  },
+  "result": {
+    "id": "redstone_transportation:vehicle_station",
+    "count": 1
+  }
+}

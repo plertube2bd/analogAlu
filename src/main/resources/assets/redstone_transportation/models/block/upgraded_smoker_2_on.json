@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/upgraded_smoker_2_side",
+    "down": "redstone_transportation:block/upgraded_smoker_2_top",
+    "up": "redstone_transportation:block/upgraded_smoker_2_top",
+    "north": "redstone_transportation:block/upgraded_smoker_2_front_on",
+    "south": "redstone_transportation:block/upgraded_smoker_2_side",
+    "east": "redstone_transportation:block/upgraded_smoker_2_side",
+    "west": "redstone_transportation:block/upgraded_smoker_2_side"
+  }
+}

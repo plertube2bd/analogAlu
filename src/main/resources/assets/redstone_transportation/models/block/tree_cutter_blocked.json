@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/machine_side",
+    "down": "redstone_transportation:block/machine_bottom",
+    "up": "redstone_transportation:block/machine_top_blocked",
+    "north": "redstone_transportation:block/tree_cutter_front",
+    "south": "redstone_transportation:block/machine_side",
+    "east": "redstone_transportation:block/machine_side",
+    "west": "redstone_transportation:block/machine_side"
+  }
+}

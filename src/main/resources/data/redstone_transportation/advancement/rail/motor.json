@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:redstone_motor"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.motor.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.motor.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:redstone_motor"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:root"
+}

@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.factory.controller.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.factory.controller.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:factory_controller"
+    },
+    "frame": "goal"
+  },
+  "parent": "redstone_transportation:factory/tree_cutter"
+}

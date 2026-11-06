@@ -1,18 +1,35 @@
 {
   "schemaVersion": 1,
-  "id": "analog_alu",
+  "id": "modernization_world",
   "version": "${version}",
-  "name": "Analog Redstone ALU",
-  "description": "4-bit analog redstone computing blocks",
+  "name": "Modernization World",
+  "description": "Analog redstone computing, electric circuits, oil and semiconductors, firearms, and self-driving rail transport, factories and moving structures in one mod.",
+  "license": "All Rights Reserved",
+  "contact": {
+    "sources": "https://github.com/plertube2bd/analogAlu"
+  },
   "environment": "*",
   "entrypoints": {
-    "main": ["com.example.analogalu.AnalogAlu"],
-    "client": ["com.example.analogalu.WaferEditorClient"]
+    "main": [
+      "com.example.analogalu.AnalogAlu",
+      "com.example.redstonetransportation.RedstoneTransportation"
+    ],
+    "client": [
+      "com.example.analogalu.WaferEditorClient",
+      "com.example.redstonetransportation.client.RedstoneTransportationClient"
+    ]
   },
-  "mixins": ["analog_alu.mixins.json"],
+  "mixins": [
+    "analog_alu.mixins.json",
+    "redstone_transportation.mixins.json"
+  ],
+  "provides": [
+    "analog_alu",
+    "redstone_transportation"
+  ],
   "depends": {
     "fabricloader": ">=0.19.3",
-    "minecraft": ">=26.1",
+    "minecraft": ">=26.3 <26.4",
     "java": ">=25",
     "fabric-api": "*"
   }

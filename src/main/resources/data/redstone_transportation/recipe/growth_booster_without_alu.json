@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "analog_alu"
+        ]
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IBI",
+    "RMR",
+    "IDI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "B": "minecraft:bone_block",
+    "D": "minecraft:dispenser"
+  },
+  "result": {
+    "id": "redstone_transportation:growth_booster",
+    "count": 1
+  }
+}

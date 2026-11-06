@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IGI",
+    "RMR",
+    "IGI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor"
+  },
+  "result": {
+    "id": "redstone_transportation:redstone_motor_2",
+    "count": 1
+  }
+}

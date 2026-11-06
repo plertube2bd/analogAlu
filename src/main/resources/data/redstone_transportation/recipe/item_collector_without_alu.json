@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "analog_alu"
+        ]
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IHI",
+    "RMR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "H": "minecraft:hopper",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "redstone_transportation:item_collector",
+    "count": 1
+  }
+}

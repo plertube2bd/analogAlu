@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "NDN",
+    "RMR",
+    "NDN"
+  ],
+  "key": {
+    "N": "minecraft:netherite_ingot",
+    "D": "minecraft:diamond",
+    "R": "minecraft:redstone_block",
+    "M": "redstone_transportation:redstone_motor_3"
+  },
+  "result": {
+    "id": "redstone_transportation:redstone_motor_4",
+    "count": 1
+  }
+}

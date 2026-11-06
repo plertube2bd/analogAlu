@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "docked=false,powered=false": {
+      "model": "redstone_transportation:block/route_beacon"
+    },
+    "docked=false,powered=true": {
+      "model": "redstone_transportation:block/route_beacon"
+    },
+    "docked=true,powered=false": {
+      "model": "redstone_transportation:block/route_beacon_docked"
+    },
+    "docked=true,powered=true": {
+      "model": "redstone_transportation:block/route_beacon_docked"
+    }
+  }
+}

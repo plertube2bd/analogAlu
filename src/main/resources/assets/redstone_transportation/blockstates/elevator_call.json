@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "redstone_transportation:block/elevator_call"
+    },
+    "powered=true": {
+      "model": "redstone_transportation:block/elevator_call_on"
+    }
+  }
+}

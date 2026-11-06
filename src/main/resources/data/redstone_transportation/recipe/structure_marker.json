@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "  C",
+    " S ",
+    "S  "
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "redstone_transportation:structure_marker",
+    "count": 1
+  }
+}

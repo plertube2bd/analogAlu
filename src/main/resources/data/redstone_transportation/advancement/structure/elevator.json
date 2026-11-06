@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.structure.elevator.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.structure.elevator.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:elevator_core"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:structure/first"
+}

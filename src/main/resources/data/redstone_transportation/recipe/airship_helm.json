@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IFI",
+    "RMR",
+    "IBI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "F": "minecraft:feather",
+    "B": "redstone_transportation:lift_balloon"
+  },
+  "result": {
+    "id": "redstone_transportation:airship_helm",
+    "count": 1
+  }
+}

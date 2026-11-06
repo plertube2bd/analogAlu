@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "redstone_transportation:redstone_motor",
+    "redstone_transportation:redstone_motor_2",
+    "redstone_transportation:redstone_motor_3",
+    "redstone_transportation:redstone_motor_4",
+    "redstone_transportation:drive_rail",
+    "redstone_transportation:conveyor_belt",
+    "redstone_transportation:factory_controller",
+    "redstone_transportation:power_cell",
+    "redstone_transportation:vehicle_controller",
+    "redstone_transportation:signal_relay",
+    "redstone_transportation:tree_cutter",
+    "redstone_transportation:auto_planter",
+    "redstone_transportation:growth_booster",
+    "redstone_transportation:crop_harvester",
+    "redstone_transportation:quarry_drill",
+    "redstone_transportation:item_collector"
+  ]
+}

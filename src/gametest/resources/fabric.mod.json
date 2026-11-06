@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "redstone_transportation_test",
+  "version": "1.0.0",
+  "name": "Redstone Transportation Tests",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.example.redstonetransportation.test.TestContent"
+    ],
+    "fabric-gametest": [
+      "com.example.redstonetransportation.test.RailGameTests",
+      "com.example.redstonetransportation.test.FactoryGameTests",
+      "com.example.redstonetransportation.test.StructureGameTests",
+      "com.example.redstonetransportation.test.FurnaceGameTests",
+      "com.example.redstonetransportation.test.AdvancementGameTests",
+      "com.example.redstonetransportation.test.StationGameTests",
+      "com.example.redstonetransportation.test.ElectricGameTests",
+      "com.example.redstonetransportation.test.LevelerGameTests",
+      "com.example.redstonetransportation.test.PowerGameTests",
+      "com.example.redstonetransportation.test.GunGameTests",
+      "com.example.redstonetransportation.test.OilGameTests"
+    ],
+    "fabric-client-gametest": [
+      "com.example.redstonetransportation.test.ScreenshotClientTest",
+      "com.example.redstonetransportation.test.DedicatedServerClientTest"
+    ]
+  },
+  "depends": {
+    "redstone_transportation": "*"
+  }
+}

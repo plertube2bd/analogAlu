@@ -1,0 +1,42 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:alu_train_controller"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.alu.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.alu.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:alu_train_controller"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:rail/tram",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "analog_alu"
+      ]
+    }
+  ]
+}

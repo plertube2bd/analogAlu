@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "join": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "join"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.root.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.root.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:redstone_motor"
+    },
+    "frame": "task",
+    "background": "minecraft:gui/advancements/backgrounds/stone",
+    "show_toast": false,
+    "announce_to_chat": false
+  }
+}

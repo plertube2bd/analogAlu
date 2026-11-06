@@ -1,0 +1,150 @@
+{
+  "variants": {
+    "powered=false,reversed=false,shape=north_south": {
+      "model": "redstone_transportation:block/drive_rail",
+      "y": 180
+    },
+    "powered=false,reversed=false,shape=east_west": {
+      "model": "redstone_transportation:block/drive_rail",
+      "y": 90
+    },
+    "powered=false,reversed=false,shape=ascending_north": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne"
+    },
+    "powered=false,reversed=false,shape=ascending_south": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw"
+    },
+    "powered=false,reversed=false,shape=ascending_east": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne",
+      "y": 90
+    },
+    "powered=false,reversed=false,shape=ascending_west": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw",
+      "y": 90
+    },
+    "powered=false,reversed=false,shape=south_east": {
+      "model": "redstone_transportation:block/drive_rail_corner"
+    },
+    "powered=false,reversed=false,shape=south_west": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 90
+    },
+    "powered=false,reversed=false,shape=north_west": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 180
+    },
+    "powered=false,reversed=false,shape=north_east": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 270
+    },
+    "powered=false,reversed=true,shape=north_south": {
+      "model": "redstone_transportation:block/drive_rail"
+    },
+    "powered=false,reversed=true,shape=east_west": {
+      "model": "redstone_transportation:block/drive_rail",
+      "y": 270
+    },
+    "powered=false,reversed=true,shape=ascending_north": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne"
+    },
+    "powered=false,reversed=true,shape=ascending_south": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw"
+    },
+    "powered=false,reversed=true,shape=ascending_east": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne",
+      "y": 90
+    },
+    "powered=false,reversed=true,shape=ascending_west": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw",
+      "y": 90
+    },
+    "powered=false,reversed=true,shape=south_east": {
+      "model": "redstone_transportation:block/drive_rail_corner"
+    },
+    "powered=false,reversed=true,shape=south_west": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 90
+    },
+    "powered=false,reversed=true,shape=north_west": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 180
+    },
+    "powered=false,reversed=true,shape=north_east": {
+      "model": "redstone_transportation:block/drive_rail_corner",
+      "y": 270
+    },
+    "powered=true,reversed=false,shape=north_south": {
+      "model": "redstone_transportation:block/drive_rail_on",
+      "y": 180
+    },
+    "powered=true,reversed=false,shape=east_west": {
+      "model": "redstone_transportation:block/drive_rail_on",
+      "y": 90
+    },
+    "powered=true,reversed=false,shape=ascending_north": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne_on"
+    },
+    "powered=true,reversed=false,shape=ascending_south": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw_on"
+    },
+    "powered=true,reversed=false,shape=ascending_east": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne_on",
+      "y": 90
+    },
+    "powered=true,reversed=false,shape=ascending_west": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw_on",
+      "y": 90
+    },
+    "powered=true,reversed=false,shape=south_east": {
+      "model": "redstone_transportation:block/drive_rail_corner_on"
+    },
+    "powered=true,reversed=false,shape=south_west": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 90
+    },
+    "powered=true,reversed=false,shape=north_west": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 180
+    },
+    "powered=true,reversed=false,shape=north_east": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 270
+    },
+    "powered=true,reversed=true,shape=north_south": {
+      "model": "redstone_transportation:block/drive_rail_on"
+    },
+    "powered=true,reversed=true,shape=east_west": {
+      "model": "redstone_transportation:block/drive_rail_on",
+      "y": 270
+    },
+    "powered=true,reversed=true,shape=ascending_north": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne_on"
+    },
+    "powered=true,reversed=true,shape=ascending_south": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw_on"
+    },
+    "powered=true,reversed=true,shape=ascending_east": {
+      "model": "redstone_transportation:block/drive_rail_raised_ne_on",
+      "y": 90
+    },
+    "powered=true,reversed=true,shape=ascending_west": {
+      "model": "redstone_transportation:block/drive_rail_raised_sw_on",
+      "y": 90
+    },
+    "powered=true,reversed=true,shape=south_east": {
+      "model": "redstone_transportation:block/drive_rail_corner_on"
+    },
+    "powered=true,reversed=true,shape=south_west": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 90
+    },
+    "powered=true,reversed=true,shape=north_west": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 180
+    },
+    "powered=true,reversed=true,shape=north_east": {
+      "model": "redstone_transportation:block/drive_rail_corner_on",
+      "y": 270
+    }
+  }
+}

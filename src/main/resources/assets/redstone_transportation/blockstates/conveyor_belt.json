@@ -1,0 +1,184 @@
+{
+  "variants": {
+    "facing=north,powered=false,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt"
+    },
+    "facing=north,powered=false,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left"
+    },
+    "facing=north,powered=false,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right"
+    },
+    "facing=north,powered=false,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both"
+    },
+    "facing=north,powered=false,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up"
+    },
+    "facing=north,powered=false,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down"
+    },
+    "facing=north,powered=true,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt_stopped"
+    },
+    "facing=north,powered=true,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left_stopped"
+    },
+    "facing=north,powered=true,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right_stopped"
+    },
+    "facing=north,powered=true,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both_stopped"
+    },
+    "facing=north,powered=true,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up_stopped"
+    },
+    "facing=north,powered=true,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down_stopped"
+    },
+    "facing=east,powered=false,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up",
+      "y": 90
+    },
+    "facing=east,powered=false,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt_stopped",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left_stopped",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right_stopped",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both_stopped",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up_stopped",
+      "y": 90
+    },
+    "facing=east,powered=true,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down_stopped",
+      "y": 90
+    },
+    "facing=south,powered=false,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt",
+      "y": 180
+    },
+    "facing=south,powered=false,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left",
+      "y": 180
+    },
+    "facing=south,powered=false,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right",
+      "y": 180
+    },
+    "facing=south,powered=false,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both",
+      "y": 180
+    },
+    "facing=south,powered=false,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up",
+      "y": 180
+    },
+    "facing=south,powered=false,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt_stopped",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left_stopped",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right_stopped",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both_stopped",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up_stopped",
+      "y": 180
+    },
+    "facing=south,powered=true,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down_stopped",
+      "y": 180
+    },
+    "facing=west,powered=false,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt",
+      "y": 270
+    },
+    "facing=west,powered=false,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left",
+      "y": 270
+    },
+    "facing=west,powered=false,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right",
+      "y": 270
+    },
+    "facing=west,powered=false,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both",
+      "y": 270
+    },
+    "facing=west,powered=false,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up",
+      "y": 270
+    },
+    "facing=west,powered=false,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=straight": {
+      "model": "redstone_transportation:block/conveyor_belt_stopped",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=left": {
+      "model": "redstone_transportation:block/conveyor_belt_left_stopped",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=right": {
+      "model": "redstone_transportation:block/conveyor_belt_right_stopped",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=both": {
+      "model": "redstone_transportation:block/conveyor_belt_both_stopped",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=up": {
+      "model": "redstone_transportation:block/conveyor_belt_up_stopped",
+      "y": 270
+    },
+    "facing=west,powered=true,shape=down": {
+      "model": "redstone_transportation:block/conveyor_belt_down_stopped",
+      "y": 270
+    }
+  }
+}

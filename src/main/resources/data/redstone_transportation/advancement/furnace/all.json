@@ -1,0 +1,61 @@
+{
+  "criteria": {
+    "upgraded_furnace_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "redstone_transportation:upgraded_furnace_3"
+          }
+        ]
+      }
+    },
+    "upgraded_blast_furnace_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "redstone_transportation:upgraded_blast_furnace_3"
+          }
+        ]
+      }
+    },
+    "upgraded_smoker_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "redstone_transportation:upgraded_smoker_3"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgraded_furnace_3"
+    ],
+    [
+      "upgraded_blast_furnace_3"
+    ],
+    [
+      "upgraded_smoker_3"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.furnace.all.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.furnace.all.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:upgraded_blast_furnace_3"
+    },
+    "frame": "challenge"
+  },
+  "parent": "redstone_transportation:furnace/third",
+  "rewards": {
+    "experience": 100
+  }
+}

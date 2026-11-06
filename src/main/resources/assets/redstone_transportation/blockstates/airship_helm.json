@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "redstone_transportation:block/airship_helm"
+    },
+    "facing=east": {
+      "model": "redstone_transportation:block/airship_helm",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "redstone_transportation:block/airship_helm",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "redstone_transportation:block/airship_helm",
+      "y": 270
+    }
+  }
+}

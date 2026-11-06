@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:conveyor_belt"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.factory.conveyor.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.factory.conveyor.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:conveyor_belt"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:factory/tree_cutter"
+}

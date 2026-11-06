@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/upgraded_furnace_3_side",
+    "down": "redstone_transportation:block/upgraded_furnace_3_top",
+    "up": "redstone_transportation:block/upgraded_furnace_3_top",
+    "north": "redstone_transportation:block/upgraded_furnace_3_front_on",
+    "south": "redstone_transportation:block/upgraded_furnace_3_side",
+    "east": "redstone_transportation:block/upgraded_furnace_3_side",
+    "west": "redstone_transportation:block/upgraded_furnace_3_side"
+  }
+}

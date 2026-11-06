@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:drive_rail"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.drive_rail.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.drive_rail.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:drive_rail"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:rail/motor"
+}

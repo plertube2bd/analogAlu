@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "package": "com.example.redstonetransportation.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractMinecartMixin",
+    "CopperCableBlockMixin",
+    "EntityFluidInteractionMixin",
+    "LevelMixin",
+    "MinecartFurnaceMixin",
+    "NewMinecartBehaviorMixin"
+  ],
+  "client": [
+    "client.CameraMixin",
+    "client.MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

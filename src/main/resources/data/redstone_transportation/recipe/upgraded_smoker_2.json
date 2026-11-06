@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GGG",
+    "RFR",
+    "GGG"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "G": "minecraft:gold_ingot",
+    "F": "redstone_transportation:upgraded_smoker_1"
+  },
+  "result": {
+    "id": "redstone_transportation:upgraded_smoker_2",
+    "count": 1
+  }
+}

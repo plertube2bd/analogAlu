@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/factory_controller_side",
+    "down": "redstone_transportation:block/machine_bottom",
+    "up": "redstone_transportation:block/factory_controller_signal",
+    "north": "redstone_transportation:block/factory_controller_signal",
+    "south": "redstone_transportation:block/factory_controller_signal",
+    "east": "redstone_transportation:block/factory_controller_side",
+    "west": "redstone_transportation:block/factory_controller_side"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/vehicle_station",
+    "down": "redstone_transportation:block/vehicle_station",
+    "up": "redstone_transportation:block/vehicle_station_top",
+    "north": "redstone_transportation:block/vehicle_station_front",
+    "south": "redstone_transportation:block/vehicle_station",
+    "east": "redstone_transportation:block/vehicle_station",
+    "west": "redstone_transportation:block/vehicle_station"
+  }
+}

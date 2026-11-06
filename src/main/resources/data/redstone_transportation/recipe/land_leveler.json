@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "SPS",
+    "RMR",
+    "IFI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "S": "minecraft:iron_shovel",
+    "P": "minecraft:diamond_pickaxe",
+    "F": "minecraft:furnace"
+  },
+  "result": {
+    "id": "redstone_transportation:land_leveler",
+    "count": 1
+  }
+}

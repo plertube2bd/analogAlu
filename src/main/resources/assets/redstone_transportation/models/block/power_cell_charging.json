@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/power_cell",
+    "down": "redstone_transportation:block/power_cell",
+    "up": "redstone_transportation:block/power_cell_top_charging",
+    "north": "redstone_transportation:block/power_cell_front_charging",
+    "south": "redstone_transportation:block/power_cell",
+    "east": "redstone_transportation:block/power_cell",
+    "west": "redstone_transportation:block/power_cell"
+  }
+}

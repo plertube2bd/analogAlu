@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "analog_alu"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "WAW",
+    "SCS",
+    "IRI"
+  ],
+  "key": {
+    "W": "analog_alu:copper_wire",
+    "A": "analog_alu:adder",
+    "S": "analog_alu:semiconductor_block",
+    "C": "analog_alu:cram",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "redstone_transportation:alu_train_controller",
+    "count": 1
+  }
+}

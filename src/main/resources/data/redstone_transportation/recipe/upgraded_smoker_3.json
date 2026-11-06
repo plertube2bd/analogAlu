@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "DBD",
+    "BFB",
+    "DBD"
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "B": "minecraft:blaze_rod",
+    "F": "redstone_transportation:upgraded_smoker_2"
+  },
+  "result": {
+    "id": "redstone_transportation:upgraded_smoker_3",
+    "count": 1
+  }
+}

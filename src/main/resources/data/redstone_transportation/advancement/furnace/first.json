@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:upgraded_furnace_1",
+              "redstone_transportation:upgraded_blast_furnace_1",
+              "redstone_transportation:upgraded_smoker_1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.furnace.first.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.furnace.first.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:upgraded_furnace_1"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:root"
+}

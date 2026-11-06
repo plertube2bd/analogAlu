@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:tree_cutter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.factory.tree_cutter.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.factory.tree_cutter.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:tree_cutter"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:root"
+}

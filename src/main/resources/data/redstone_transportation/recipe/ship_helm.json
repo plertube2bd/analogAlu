@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "WSW",
+    "RMR",
+    "WBW"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "W": "#minecraft:planks",
+    "S": "minecraft:stick",
+    "B": "#minecraft:boats"
+  },
+  "result": {
+    "id": "redstone_transportation:ship_helm",
+    "count": 1
+  }
+}

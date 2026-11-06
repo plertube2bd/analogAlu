@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:cargo_tram"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.cargo.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.cargo.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:cargo_tram"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:rail/train"
+}

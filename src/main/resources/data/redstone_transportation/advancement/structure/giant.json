@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.structure.giant.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.structure.giant.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:lift_balloon"
+    },
+    "frame": "challenge"
+  },
+  "parent": "redstone_transportation:structure/airship",
+  "rewards": {
+    "experience": 100
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "TPT",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "T": "minecraft:rail",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "redstone_transportation:track_layer",
+    "count": 1
+  }
+}

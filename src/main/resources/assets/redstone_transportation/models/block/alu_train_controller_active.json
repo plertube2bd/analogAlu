@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/vehicle_controller",
+    "down": "redstone_transportation:block/vehicle_controller",
+    "up": "redstone_transportation:block/vehicle_controller_top_active",
+    "north": "redstone_transportation:block/vehicle_controller_front_active",
+    "south": "redstone_transportation:block/vehicle_controller",
+    "east": "redstone_transportation:block/vehicle_controller",
+    "west": "redstone_transportation:block/vehicle_controller"
+  }
+}

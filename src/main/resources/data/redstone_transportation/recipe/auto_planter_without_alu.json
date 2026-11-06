@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "analog_alu"
+        ]
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IWI",
+    "RMR",
+    "IDI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "W": "minecraft:wheat_seeds",
+    "D": "minecraft:dispenser"
+  },
+  "result": {
+    "id": "redstone_transportation:auto_planter",
+    "count": 1
+  }
+}

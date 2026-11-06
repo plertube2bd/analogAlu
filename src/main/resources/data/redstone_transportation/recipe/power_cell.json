@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CAC",
+    "RGR",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "A": "minecraft:amethyst_shard",
+    "R": "minecraft:redstone",
+    "G": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "redstone_transportation:power_cell",
+    "count": 1
+  }
+}

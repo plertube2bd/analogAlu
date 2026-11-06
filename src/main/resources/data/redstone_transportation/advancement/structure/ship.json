@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.structure.ship.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.structure.ship.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:ship_helm"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:structure/first"
+}

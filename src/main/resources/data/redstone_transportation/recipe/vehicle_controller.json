@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IRI",
+    "RCR",
+    "IRI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "C": "minecraft:comparator"
+  },
+  "result": {
+    "id": "redstone_transportation:vehicle_controller",
+    "count": 1
+  }
+}

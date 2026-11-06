@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "ride": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:vehicle": {
+              "minecraft:entity_type": "redstone_transportation:redstone_tram"
+            }
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ride"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.tram.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.tram.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:redstone_tram"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:rail/motor"
+}

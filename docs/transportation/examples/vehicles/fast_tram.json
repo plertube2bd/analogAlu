@@ -1,0 +1,15 @@
+{
+  "id": "redstone_transportation:fast_tram",
+  "behavior": "rail_vehicle",
+  "display_name": "entity.redstone_transportation.fast_tram",
+  "max_speed": 0.55,
+  "acceleration": 0.06,
+  "minimum_signal": 1,
+  "drive_mode": "SIGNAL_AS_THROTTLE",
+  "model": {
+    "renderer": "custom",
+    "model": "redstone_transportation:geo/redstone_tram",
+    "texture": "redstone_transportation:textures/entity/redstone_tram.png",
+    "animation": "redstone_transportation:animations/redstone_tram"
+  }
+}

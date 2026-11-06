@@ -1,14 +1,19 @@
 ================================================================================
-ANALOG REDSTONE ALU
+MODERNIZATION WORLD (formerly ANALOG REDSTONE ALU)
 ================================================================================
-Minecraft Fabric mod that provides 4-bit analog redstone computing blocks.
-Signal strength (0-15) is treated directly as unsigned 4-bit integer data.
+Minecraft Fabric mod: 4-bit analog redstone computing, electric circuits, oil
+and semiconductors, firearms, and (merged from Redstone Transportation)
+self-driving rail transport, factories and moving structures.
+This file is the reference for the Analog ALU half. README.md is the overview,
+and docs/transportation/ holds the transportation guides.
 
-Mod ID          : analog_alu
-Display Name    : Analog Redstone ALU
-Version         : 0.2.1
-Description     : 4-bit analog redstone computing blocks
-Minecraft       : >= 26.1
+Mod ID          : modernization_world (also provides analog_alu and
+                  redstone_transportation, so their block and item IDs and
+                  existing worlds keep working)
+Display Name    : Modernization World
+Version         : 1.0.0
+Description     : Analog computing, electricity, oil, firearms and transport
+Minecraft       : 26.3
 Fabric Loader   : >= 0.19.3
 Fabric API      : required
 Java            : 25
@@ -300,8 +305,11 @@ Exact patterns are in:
 ================================================================================
 
 - Oil generates only in newly generated Overworld chunks, in all biomes.
-  Deposits are below sea level and above Y=-20. About one in five deposits has
-  a visible surface seep connected to the underground deposit.
+  Deposits are below sea level and above Y=-20. The world is cut into regions of
+  13x13 chunks; since 1.0.0 a region holds a deposit with a 3.75 % chance
+  (one twentieth of the 75 % in 0.2.x), and 90 % of deposits (80 % before) have
+  a seep column up to the surface, with an oil lake over it on dry land above
+  sea level. Chunks generated before the update keep the oil they got then.
 - Craft solid oil from coal, rotten flesh, and a bone, then smelt it into an oil
   bucket. The smelting result returns the empty bucket.
 - An oil drill placed above a deposit extracts one oil bucket every 30 seconds.
@@ -418,7 +426,51 @@ Electrical circuit blocks (copper cable, battery, switch, resistor, generators):
     the same shape). Battery, circuit switch and resistive load have their own
     textures: + / - terminal faces on the facing axis, a lever that shows
     OPEN/CLOSED on the switch, colour bands on the resistor.
+  - Since 1.0.0 every power source marks its terminals: a bold white + on a
+    red disc (or a red + badge) on the face it points at, and a white - on
+    blue on the face behind. Generators gained a separate back face for it.
+    Assets: tools/gen_terminal_marks.py
+  - Since 1.0.0 a circuit may hold any number of power sources. Batteries,
+    generators and converter outputs in series (+ of one cabled to - of the
+    next) add their voltages; in parallel (across the same pair of cables)
+    they share the current, so each one runs down more slowly. The circuit is
+    solved as a whole (modified nodal analysis), voltages are measured from
+    the circuit's lowest point, and a source that cannot run (flat battery,
+    no fuel, no wind or sun) drops out. A circuit that carries no current is
+    still dead, as before. Rechargeable batteries are charged while any other
+    source is present, and are the sources themselves when none is.
   - Assets: tools/gen_circuit_assets.py
+
+================================================================================
+10. FIREARMS AND BLACK POWDER (1.0.0)
+================================================================================
+
+Black powder : gunpowder + charcoal (shapeless) -> 1
+9mm round    : black powder + iron ingot -> 4
+Musket ball  : black powder + 2 iron ingots -> 4
+45 gauge     : black powder + 8 iron nuggets -> 1
+
+Revolver  (III /  T P /   P ; I iron ingot, T tripwire hook, P planks)
+  6 rounds. Press R (rebindable, "Gun: cock / reload") to cock before every
+  shot, then right-click to fire. 25 damage, range 32 blocks. Once all six are
+  spent, R starts a 4 second reload that loads up to six 9mm rounds.
+Musket    (I   /  I F /   L ; F flint and steel, L log)
+  Loads one musket ball from the inventory per shot, no reload key. 30 damage,
+  range 48 blocks, 3 seconds between shots.
+Shotgun   (II  / I T F /  L L)
+  R reloads (3.5 s) two 45 gauge shells; each shot throws 40 pellets in a
+  9 degree cone, 1.5 damage each, range 16 blocks. Pellets that hit one target
+  add up into one hit.
+
+- Bullets are instant: they stop at the first solid block and hit the first
+  entity in their path within range.
+- Damage is in health points (a player has 20) and counts against armour and
+  Projectile Protection (damage type analog_alu:bullet, tagged is_projectile
+  and bypasses_cooldown, so quick follow-up shots land in full).
+- Gun state lives on the item (analog_alu:gun_rounds, gun_cocked,
+  gun_reload_until); the item bar shows the rounds loaded.
+- Creative players need no ammunition.
+- Assets: tools/gen_gun_assets.py
 
 ================================================================================
 END OF README

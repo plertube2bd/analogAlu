@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.full_speed.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.full_speed.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:redstone_motor_4"
+    },
+    "frame": "challenge"
+  },
+  "parent": "redstone_transportation:rail/motor_4",
+  "rewards": {
+    "experience": 100
+  }
+}

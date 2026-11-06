@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "ICI",
+    "RCR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "redstone_transportation:redstone_tram",
+    "count": 1
+  }
+}

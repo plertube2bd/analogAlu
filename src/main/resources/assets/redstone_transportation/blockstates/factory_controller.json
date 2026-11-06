@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "mode=stopped": {
+      "model": "redstone_transportation:block/factory_controller_stopped"
+    },
+    "mode=running": {
+      "model": "redstone_transportation:block/factory_controller_running"
+    },
+    "mode=signal": {
+      "model": "redstone_transportation:block/factory_controller_signal"
+    }
+  }
+}

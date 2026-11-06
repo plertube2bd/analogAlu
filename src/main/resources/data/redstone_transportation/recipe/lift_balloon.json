@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "WWW",
+    "W W",
+    "SIS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "W": "#minecraft:wool",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "redstone_transportation:lift_balloon",
+    "count": 4
+  }
+}

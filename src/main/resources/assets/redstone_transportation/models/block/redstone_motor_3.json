@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redstone_transportation:block/redstone_motor_3",
+    "down": "redstone_transportation:block/redstone_motor_3",
+    "up": "redstone_transportation:block/redstone_motor_3_top",
+    "north": "redstone_transportation:block/redstone_motor_3",
+    "south": "redstone_transportation:block/redstone_motor_3",
+    "east": "redstone_transportation:block/redstone_motor_3",
+    "west": "redstone_transportation:block/redstone_motor_3"
+  }
+}

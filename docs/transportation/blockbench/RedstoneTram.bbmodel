@@ -1,0 +1,4167 @@
+{
+  "meta": {
+    "format_version": "5.0",
+    "model_format": "java_block",
+    "box_uv": false
+  },
+  "name": "Redstone Tram - Fabric 26.3",
+  "model_identifier": "redstone_transportation:redstone_tram_body",
+  "visible_box": [
+    16,
+    16,
+    0
+  ],
+  "resolution": {
+    "width": 64,
+    "height": 64
+  },
+  "elements": [
+    {
+      "name": "Lower chassis beam",
+      "type": "cube",
+      "uuid": "5bb6bd22-50e9-42fb-9187-98118e21c569",
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        5,
+        15
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Central underside battery tray",
+      "type": "cube",
+      "uuid": "715e2bc5-f3a9-4949-9f98-bab36175ec02",
+      "from": [
+        3,
+        1,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left wheel guard",
+      "type": "cube",
+      "uuid": "18c5a80c-b8ef-4472-87ec-60250cc7eb14",
+      "from": [
+        0,
+        3,
+        3
+      ],
+      "to": [
+        2,
+        6,
+        13
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right wheel guard",
+      "type": "cube",
+      "uuid": "e5152469-b6c9-4c33-8bc4-e13ff837b895",
+      "from": [
+        14,
+        3,
+        3
+      ],
+      "to": [
+        16,
+        6,
+        13
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front impact bumper",
+      "type": "cube",
+      "uuid": "3d8d79ca-888f-4799-abd0-cea95447375b",
+      "from": [
+        1,
+        3,
+        0
+      ],
+      "to": [
+        15,
+        5,
+        2
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear impact bumper",
+      "type": "cube",
+      "uuid": "906ecd89-12da-4ce2-af83-454eac098309",
+      "from": [
+        1,
+        3,
+        14
+      ],
+      "to": [
+        15,
+        5,
+        16
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front lower red stripe",
+      "type": "cube",
+      "uuid": "ed258333-1551-4a13-8ce5-a966d620896c",
+      "from": [
+        3,
+        3,
+        0.5
+      ],
+      "to": [
+        13,
+        4,
+        1.3
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear lower red stripe",
+      "type": "cube",
+      "uuid": "31760194-8439-4d88-97a0-cb22bc7d3d9d",
+      "from": [
+        3,
+        3,
+        14.7
+      ],
+      "to": [
+        13,
+        4,
+        15.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Main tram hull",
+      "type": "cube",
+      "uuid": "5b565bc7-ac9e-4302-b961-8acb5aa3cc2b",
+      "from": [
+        2,
+        5,
+        2
+      ],
+      "to": [
+        14,
+        12,
+        14
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Cabin roof armor",
+      "type": "cube",
+      "uuid": "62cd102b-9d5b-46d0-991e-5b443b6a16a2",
+      "from": [
+        1,
+        11.5,
+        2.5
+      ],
+      "to": [
+        15,
+        14,
+        13.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front windscreen",
+      "type": "cube",
+      "uuid": "97ec0e11-8661-45d5-b822-4601b1dd9609",
+      "from": [
+        4,
+        7.5,
+        1.8
+      ],
+      "to": [
+        12,
+        10.8,
+        2.15
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear windscreen",
+      "type": "cube",
+      "uuid": "a17a3191-7096-4934-98b2-ac8ce134b346",
+      "from": [
+        4,
+        7.5,
+        13.85
+      ],
+      "to": [
+        12,
+        10.8,
+        14.2
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left cabin window 1",
+      "type": "cube",
+      "uuid": "c215013a-1af5-4481-a2b8-b327b1884deb",
+      "from": [
+        1.8,
+        8,
+        4
+      ],
+      "to": [
+        2.15,
+        10.5,
+        6
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left cabin window 2",
+      "type": "cube",
+      "uuid": "cb86964e-c29b-4d48-9dfb-1fcba97e0832",
+      "from": [
+        1.8,
+        8,
+        7
+      ],
+      "to": [
+        2.15,
+        10.5,
+        9
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left cabin window 3",
+      "type": "cube",
+      "uuid": "06658109-c8c2-4d95-b77c-5e66682503b8",
+      "from": [
+        1.8,
+        8,
+        10
+      ],
+      "to": [
+        2.15,
+        10.5,
+        12
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left lower window sill",
+      "type": "cube",
+      "uuid": "68eed089-2cc1-4250-9b3e-1642370705a7",
+      "from": [
+        1.8,
+        7.5,
+        3.5
+      ],
+      "to": [
+        2.15,
+        8,
+        12.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left upper window frame",
+      "type": "cube",
+      "uuid": "ed6dcbc3-3ee7-4d3e-a10b-f3a96a949884",
+      "from": [
+        1.8,
+        10.5,
+        3.5
+      ],
+      "to": [
+        2.15,
+        11,
+        12.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right cabin window 1",
+      "type": "cube",
+      "uuid": "eb88f55a-a966-4491-9f46-5cf07d6b887e",
+      "from": [
+        13.85,
+        8,
+        4
+      ],
+      "to": [
+        14.2,
+        10.5,
+        6
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right cabin window 2",
+      "type": "cube",
+      "uuid": "9d9ffdc1-c10e-4632-9d97-ed5eb843f72e",
+      "from": [
+        13.85,
+        8,
+        7
+      ],
+      "to": [
+        14.2,
+        10.5,
+        9
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right cabin window 3",
+      "type": "cube",
+      "uuid": "0d3b7ac1-81dd-4e90-8ae4-39d3842adbec",
+      "from": [
+        13.85,
+        8,
+        10
+      ],
+      "to": [
+        14.2,
+        10.5,
+        12
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right lower window sill",
+      "type": "cube",
+      "uuid": "ddd67666-5da5-4b1c-a65c-509bbbc5bb3a",
+      "from": [
+        13.85,
+        7.5,
+        3.5
+      ],
+      "to": [
+        14.2,
+        8,
+        12.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right upper window frame",
+      "type": "cube",
+      "uuid": "0f4fc8dc-19a4-446d-9620-b78c92a9722c",
+      "from": [
+        13.85,
+        10.5,
+        3.5
+      ],
+      "to": [
+        14.2,
+        11,
+        12.5
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            32,
+            16,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left glowing side conduit",
+      "type": "cube",
+      "uuid": "643b18a9-89ad-463c-81c4-c813e5b23f71",
+      "from": [
+        1.55,
+        6.1,
+        6
+      ],
+      "to": [
+        2.25,
+        7.3,
+        10
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right glowing side conduit",
+      "type": "cube",
+      "uuid": "4b8ace81-777d-4043-84fb-b40af9cee508",
+      "from": [
+        13.75,
+        6.1,
+        6
+      ],
+      "to": [
+        14.45,
+        7.3,
+        10
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left conduit copper frame",
+      "type": "cube",
+      "uuid": "4d552c9b-7f5a-4c36-9f40-e51efcebf701",
+      "from": [
+        1.35,
+        5.8,
+        5.7
+      ],
+      "to": [
+        2.35,
+        6.1,
+        10.3
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right conduit copper frame",
+      "type": "cube",
+      "uuid": "44fd29b3-c866-44dd-b0bd-b78cbd933cdc",
+      "from": [
+        13.65,
+        5.8,
+        5.7
+      ],
+      "to": [
+        14.65,
+        6.1,
+        10.3
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front left headlamp",
+      "type": "cube",
+      "uuid": "22edc18b-2f82-4419-b763-69987549c800",
+      "from": [
+        2,
+        4.8,
+        1.35
+      ],
+      "to": [
+        4,
+        6.8,
+        2.45
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front right headlamp",
+      "type": "cube",
+      "uuid": "4d1b81d4-0834-463d-9af1-bbe8ed90aca8",
+      "from": [
+        12,
+        4.8,
+        1.35
+      ],
+      "to": [
+        14,
+        6.8,
+        2.45
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front center redstone marker",
+      "type": "cube",
+      "uuid": "52c38c68-987e-490e-b241-98d270a470cc",
+      "from": [
+        7,
+        5.2,
+        1.35
+      ],
+      "to": [
+        9,
+        6.7,
+        2.45
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear left headlamp",
+      "type": "cube",
+      "uuid": "3d0a0066-54fa-4098-84cf-47262914b528",
+      "from": [
+        2,
+        4.8,
+        13.55
+      ],
+      "to": [
+        4,
+        6.8,
+        14.65
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear right headlamp",
+      "type": "cube",
+      "uuid": "bcae07ec-55cc-4640-ad05-2f05effad98a",
+      "from": [
+        12,
+        4.8,
+        13.55
+      ],
+      "to": [
+        14,
+        6.8,
+        14.65
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear center redstone marker",
+      "type": "cube",
+      "uuid": "3ee63a12-1895-44d5-aa2c-69f50d0b5697",
+      "from": [
+        7,
+        5.2,
+        13.55
+      ],
+      "to": [
+        9,
+        6.7,
+        14.65
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Reactor mounting plate",
+      "type": "cube",
+      "uuid": "fb3b69e0-12a0-48d0-a7ca-564e405f2ebd",
+      "from": [
+        4,
+        13.8,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        12
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left reactor rail",
+      "type": "cube",
+      "uuid": "1f3a8d7c-d520-4103-8a09-0f030fdea87f",
+      "from": [
+        3,
+        13.7,
+        4
+      ],
+      "to": [
+        4,
+        15,
+        12
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right reactor rail",
+      "type": "cube",
+      "uuid": "513f966b-6398-4104-bca6-431b3509d557",
+      "from": [
+        12,
+        13.7,
+        4
+      ],
+      "to": [
+        13,
+        15,
+        12
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            0,
+            48,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Redstone reactor core",
+      "type": "cube",
+      "uuid": "4e926fbd-0d8a-4d24-9bce-50ad214ea619",
+      "from": [
+        6,
+        14.5,
+        5
+      ],
+      "to": [
+        10,
+        16,
+        11
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            64,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            32,
+            48,
+            48
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Front roof vent",
+      "type": "cube",
+      "uuid": "61d574be-0c34-490e-ab6f-a3cc18be4e74",
+      "from": [
+        5,
+        14,
+        2.8
+      ],
+      "to": [
+        11,
+        15,
+        3.8
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Rear roof vent",
+      "type": "cube",
+      "uuid": "1150e629-724f-4fd4-ab23-25260265b047",
+      "from": [
+        5,
+        14,
+        12.2
+      ],
+      "to": [
+        11,
+        15,
+        13.2
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Left roof indicator",
+      "type": "cube",
+      "uuid": "d4232ab8-4a69-41f6-8a63-41458b73696e",
+      "from": [
+        2,
+        13.8,
+        6
+      ],
+      "to": [
+        3,
+        14.7,
+        10
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    },
+    {
+      "name": "Right roof indicator",
+      "type": "cube",
+      "uuid": "fe8fcad4-ba7e-41f0-90a8-0f993ba111a2",
+      "from": [
+        13,
+        13.8,
+        6
+      ],
+      "to": [
+        14,
+        14.7,
+        10
+      ],
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "autouv": 0,
+      "color": 0,
+      "shade": true,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "east": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0,
+          "enabled": true,
+          "rotation": 0
+        }
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Underframe",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "uuid": "475e4291-bf4b-4975-ac71-3a5d4d503922",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    },
+    {
+      "name": "Body",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 1,
+      "uuid": "c0069165-c338-4879-b6b3-05367440ff89",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    },
+    {
+      "name": "Cabin",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 2,
+      "uuid": "5258ff0f-ab9e-406d-8575-ad5312ee6188",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    },
+    {
+      "name": "PowerCore",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 3,
+      "uuid": "7582a5a4-24fd-4e74-9184-9904a88fd847",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    },
+    {
+      "name": "Lights",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 4,
+      "uuid": "04c11786-8698-44be-a4dc-da4ba047b476",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    },
+    {
+      "name": "Reactor",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 5,
+      "uuid": "f4ede06e-622f-4826-a52a-e1d44bdc6fa9",
+      "export": true,
+      "isOpen": true,
+      "locked": false,
+      "visibility": true,
+      "autouv": 0
+    }
+  ],
+  "outliner": [
+    {
+      "uuid": "475e4291-bf4b-4975-ac71-3a5d4d503922",
+      "isOpen": true,
+      "children": [
+        "5bb6bd22-50e9-42fb-9187-98118e21c569",
+        "715e2bc5-f3a9-4949-9f98-bab36175ec02",
+        "18c5a80c-b8ef-4472-87ec-60250cc7eb14",
+        "e5152469-b6c9-4c33-8bc4-e13ff837b895",
+        "3d8d79ca-888f-4799-abd0-cea95447375b",
+        "906ecd89-12da-4ce2-af83-454eac098309",
+        "ed258333-1551-4a13-8ce5-a966d620896c",
+        "31760194-8439-4d88-97a0-cb22bc7d3d9d"
+      ]
+    },
+    {
+      "uuid": "c0069165-c338-4879-b6b3-05367440ff89",
+      "isOpen": true,
+      "children": [
+        "5b565bc7-ac9e-4302-b961-8acb5aa3cc2b",
+        "62cd102b-9d5b-46d0-991e-5b443b6a16a2"
+      ]
+    },
+    {
+      "uuid": "5258ff0f-ab9e-406d-8575-ad5312ee6188",
+      "isOpen": true,
+      "children": [
+        "97ec0e11-8661-45d5-b822-4601b1dd9609",
+        "a17a3191-7096-4934-98b2-ac8ce134b346",
+        "c215013a-1af5-4481-a2b8-b327b1884deb",
+        "cb86964e-c29b-4d48-9dfb-1fcba97e0832",
+        "06658109-c8c2-4d95-b77c-5e66682503b8",
+        "68eed089-2cc1-4250-9b3e-1642370705a7",
+        "ed6dcbc3-3ee7-4d3e-a10b-f3a96a949884",
+        "eb88f55a-a966-4491-9f46-5cf07d6b887e",
+        "9d9ffdc1-c10e-4632-9d97-ed5eb843f72e",
+        "0d3b7ac1-81dd-4e90-8ae4-39d3842adbec",
+        "ddd67666-5da5-4b1c-a65c-509bbbc5bb3a",
+        "0f4fc8dc-19a4-446d-9620-b78c92a9722c"
+      ]
+    },
+    {
+      "uuid": "7582a5a4-24fd-4e74-9184-9904a88fd847",
+      "isOpen": true,
+      "children": [
+        "643b18a9-89ad-463c-81c4-c813e5b23f71",
+        "4b8ace81-777d-4043-84fb-b40af9cee508",
+        "4d552c9b-7f5a-4c36-9f40-e51efcebf701",
+        "44fd29b3-c866-44dd-b0bd-b78cbd933cdc"
+      ]
+    },
+    {
+      "uuid": "04c11786-8698-44be-a4dc-da4ba047b476",
+      "isOpen": true,
+      "children": [
+        "22edc18b-2f82-4419-b763-69987549c800",
+        "4d1b81d4-0834-463d-9af1-bbe8ed90aca8",
+        "52c38c68-987e-490e-b241-98d270a470cc",
+        "3d0a0066-54fa-4098-84cf-47262914b528",
+        "bcae07ec-55cc-4640-ad05-2f05effad98a",
+        "3ee63a12-1895-44d5-aa2c-69f50d0b5697"
+      ]
+    },
+    {
+      "uuid": "f4ede06e-622f-4826-a52a-e1d44bdc6fa9",
+      "isOpen": true,
+      "children": [
+        "fb3b69e0-12a0-48d0-a7ca-564e405f2ebd",
+        "1f3a8d7c-d520-4103-8a09-0f030fdea87f",
+        "513f966b-6398-4104-bca6-431b3509d557",
+        "4e926fbd-0d8a-4d24-9bce-50ad214ea619",
+        "61d574be-0c34-490e-ab6f-a3cc18be4e74",
+        "1150e629-724f-4fd4-ab23-25260265b047",
+        "d4232ab8-4a69-41f6-8a63-41458b73696e",
+        "fe8fcad4-ba7e-41f0-90a8-0f993ba111a2"
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "uuid": "2fd2488f-27a7-4753-b8d7-8ec9abf8aded",
+      "id": "0",
+      "name": "redstone_tram_atlas.png",
+      "path": "textures/redstone_tram_atlas.png",
+      "relative_path": "textures/redstone_tram_atlas.png",
+      "namespace": "redstone_transportation",
+      "folder": "block",
+      "width": 64,
+      "height": 64,
+      "uv_width": 64,
+      "uv_height": 64,
+      "particle": false,
+      "mode": "bitmap",
+      "saved": true,
+      "visible": true,
+      "source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAGu0lEQVR4nO1bf2hVVRz/vPEMpL18XrP5Y86lbm7Jox5W1jaWf4TYL0LZXuWskYSI+U9oUmKJFUPSIZRFSBgr9Y8pVtBPKEpxlqBNWEip4GiLFsJ18Cb+4cj+eO/ee8655+c9d+9p9IEH955zPud7v+d8z7nf7/eel5iXefB6KpWCCRzHgeu6AICGTAY2/KUjn1nxs0evGPPTjoPRIr+CJTuOo+zAEw4gJLzc/LQGf5TgJ72L3bveBAC8tOk1qnE+nw8J4bVdtfIRAMDBI18r+by22Xvr/eu5825XKtF/6hx1n25ZGFxjupI/evx3AMUBqK6u9ivIa13Y8oGwQiKQ5s/CU0qGtOMAdwUDlLi7adl1nc5FuK+pSevhRHjiyvdW/NZfKgAULeDsJcq8RUi3LKQtwAMrnGe+MsTJH/gzT9VlZqv78ZRPz6nk1w+NhcoqZB1G2aDi5LOw5fM2SN8CdMyPN8PW/OIU/HjuMlU37VbKOIv1QZul9VOL8qeIBe7ZCGzo9m/Z5ZHP54MBcF0XY2NhE+GhsrJgYuQMR+ZfKZQtrZ9KtWGXAFvPyueCUJ6HVCpF7wHeg/GgM8O2fBls+SJUeJ2roDL/cvJ1nB8WHj8p6lxlXqz5x81X7fokf9R1Kedn6Oxf2vKTskoPpuYXhU96gjqQOU4891jkHyS9hxO5wkB4hsi2Hl/kCvP4ZFuPr+sJArSFkcqR7jALkXucvJGcH10+a/5A4AabyqdcYR5U5ku6wlH4pCsche+5wiLIzB8AEqlps63yAWN31FjF8z1jp634jbs7jflwHKDIT0bZsNh4PNuWM3sAAHMB9B/uRdP2xRjYFax/T35mUz1V7oEtDylPKCdRwL9MzKptkC4B1ZpKzF+EbFsO/Yd7jfjZthx67ww4pFKZTcEb4cS2wELIcq/9/R9uKBRMv0emRhiXzgBQBENA/AFRR/cOAKCUBwLlSCUBoGn7Ym45ew8AGDyi9yNADUAUj8yE39G9Awc2voLzL4frBnad4yplWm6KkuUDoih/Yttp3wJ02vtYsIZffmFfqKgk+YCoMx9JeUP4AzBRAY1M+Rmv58ti9h7y+XwwADLlRFAFNDLlcxdzGHkjvLxKpTxQeH7hErA1/3V73xMqX7cz/BYAom2EtoglH8BCNvN1OxHLW+DEttNBebnzASQ6unfgg7Uvcs07LuVDG6TrAtNrgnvObi96fu4SiGr+3sxPtPJx7gXJqNlcb5DIwTE1+0K5pfKk71+7UqoHD6FYwDieLsYCAH9jy13MGZWbOj+TG5ZR98bPrwqGVBaSmL+Iuidnum5nwGfLee1FAZGs3A+GxApIo8NER7bGKh/ww9Uqq3h+1k/9ducDul614v/nzgeY8v1gaEvnA0oiia6en6n7t9/aAgDYvLWLKuetSV7b/c82G8lf/UkfdV83ZwYA4PzQiFI+2dYfAFYhEXh7QhznA4CwUiL57zzWyJE/biB/3L+iwuEor0QAGB4exuatXdrfD1griUN+wB8J1csgzAdUpyfRQkavKTuLK5+wv7WWW7/62GDs8pUpMRI32/kAHfn+AEyelKB+LCZPSuBq/jJVH+cHTi72bNTmR5XvL4Gr16T+ELc+lvMB+FvcUOP7vq187sdRHsp9PkAHUeTfNOcDWMQlX5gPGEb5zgc8+eVAyc4nxOYJih4OKM35gqh8Px+g6wkC4XyA67pCVxgIzxDZlnw4U3eYlC9yhXnyKVe4HMdjeA/nucGlPp+QWNe6yCofcCq5QCpAxV/46wUrfuu7fLdal5+ouKXSKh9Qvf+wVTw+c/lyK/5Tz8z4Px9gw/ffAg8/+riSSOK7r76g7tcvIfN16vP+75+kP2r0rHrISH7nwaPUfW1NlX99W2UV2zyEwT8KHijlCZ7sU8fjALCkmb9bs0rx4DgOnq7jDxCrlIi/e3kmVO4ppMMnLcAoGtTpXAWb8wUTwefGAs+teZ5L/njfR0adR32l9TTz3yydffI3Bin/WP8wVdea5WeKYrUAFuXOB+jwpdFgZ0c7eg4cEtbrfEInESkfQITEMv6nxwepOvb/BoX6oM2Kllo6H8CDTHkgPMN7mxuk7T2cGf+Hyw/BIB+woqWWqmOXAFvv8Sd0CdxIEC2fpKxSBt4H0rV9v2lx1y+pF35gjSo/6gdebj5AtdsDvIAoeLfbBlQrv1F/LlMFZKJdn+Vrp8RMUI58AOkJAgaeINm5yMOTgeTT7jALvvdHHZw2dIdJvq4nCNAWmpgybabV+YDGz78Vdq6D+vZ2K/4La+us+KG3QLn/LFlq/r/1w5rDjWfvYwAAAABJRU5ErkJggg=="
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

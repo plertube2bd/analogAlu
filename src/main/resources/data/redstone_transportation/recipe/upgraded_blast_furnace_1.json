@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "III",
+    "RFR",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "F": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "redstone_transportation:upgraded_blast_furnace_1",
+    "count": 1
+  }
+}

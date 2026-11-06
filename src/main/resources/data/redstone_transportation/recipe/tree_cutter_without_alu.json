@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "analog_alu"
+        ]
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IAI",
+    "RMR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "A": "minecraft:iron_axe",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "redstone_transportation:tree_cutter",
+    "count": 1
+  }
+}

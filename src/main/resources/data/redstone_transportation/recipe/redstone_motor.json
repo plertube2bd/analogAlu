@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "ICI",
+    "RPR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "redstone_transportation:redstone_motor",
+    "count": 1
+  }
+}

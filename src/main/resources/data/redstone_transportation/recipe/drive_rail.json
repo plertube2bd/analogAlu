@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GMG",
+    "GSG",
+    "GRG"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "redstone_transportation:drive_rail",
+    "count": 8
+  }
+}

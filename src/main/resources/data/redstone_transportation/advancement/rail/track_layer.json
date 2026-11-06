@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "redstone_transportation:track_layer"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.redstone_transportation.rail.track_layer.title"
+    },
+    "description": {
+      "translate": "advancements.redstone_transportation.rail.track_layer.description"
+    },
+    "icon": {
+      "id": "redstone_transportation:track_layer"
+    },
+    "frame": "task"
+  },
+  "parent": "redstone_transportation:rail/drive_rail"
+}

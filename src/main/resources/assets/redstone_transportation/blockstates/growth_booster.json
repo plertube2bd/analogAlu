@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,status=off": {
+      "model": "redstone_transportation:block/growth_booster_off"
+    },
+    "facing=north,status=ready": {
+      "model": "redstone_transportation:block/growth_booster_ready"
+    },
+    "facing=north,status=working": {
+      "model": "redstone_transportation:block/growth_booster_working"
+    },
+    "facing=north,status=blocked": {
+      "model": "redstone_transportation:block/growth_booster_blocked"
+    },
+    "facing=east,status=off": {
+      "model": "redstone_transportation:block/growth_booster_off",
+      "y": 90
+    },
+    "facing=east,status=ready": {
+      "model": "redstone_transportation:block/growth_booster_ready",
+      "y": 90
+    },
+    "facing=east,status=working": {
+      "model": "redstone_transportation:block/growth_booster_working",
+      "y": 90
+    },
+    "facing=east,status=blocked": {
+      "model": "redstone_transportation:block/growth_booster_blocked",
+      "y": 90
+    },
+    "facing=south,status=off": {
+      "model": "redstone_transportation:block/growth_booster_off",
+      "y": 180
+    },
+    "facing=south,status=ready": {
+      "model": "redstone_transportation:block/growth_booster_ready",
+      "y": 180
+    },
+    "facing=south,status=working": {
+      "model": "redstone_transportation:block/growth_booster_working",
+      "y": 180
+    },
+    "facing=south,status=blocked": {
+      "model": "redstone_transportation:block/growth_booster_blocked",
+      "y": 180
+    },
+    "facing=west,status=off": {
+      "model": "redstone_transportation:block/growth_booster_off",
+      "y": 270
+    },
+    "facing=west,status=ready": {
+      "model": "redstone_transportation:block/growth_booster_ready",
+      "y": 270
+    },
+    "facing=west,status=working": {
+      "model": "redstone_transportation:block/growth_booster_working",
+      "y": 270
+    },
+    "facing=west,status=blocked": {
+      "model": "redstone_transportation:block/growth_booster_blocked",
+      "y": 270
+    }
+  }
+}

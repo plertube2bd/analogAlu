@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IGI",
+    "RMR",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "G": "minecraft:compass"
+  },
+  "result": {
+    "id": "redstone_transportation:route_beacon",
+    "count": 1
+  }
+}

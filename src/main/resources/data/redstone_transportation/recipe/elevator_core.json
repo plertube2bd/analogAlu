@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IPI",
+    "RMR",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "M": "redstone_transportation:redstone_motor",
+    "P": "minecraft:piston",
+    "C": "minecraft:iron_chain"
+  },
+  "result": {
+    "id": "redstone_transportation:elevator_core",
+    "count": 1
+  }
+}

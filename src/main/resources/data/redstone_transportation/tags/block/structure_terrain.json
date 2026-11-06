@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:dirt",
+    "#minecraft:grass_blocks",
+    "#minecraft:sand",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:base_stone_nether",
+    "#minecraft:terracotta",
+    "#minecraft:snow",
+    "#minecraft:ice",
+    "minecraft:gravel",
+    "minecraft:clay",
+    "minecraft:mud",
+    "minecraft:moss_block"
+  ]
+}
