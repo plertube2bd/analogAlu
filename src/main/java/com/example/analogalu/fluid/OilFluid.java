@@ -126,4 +126,31 @@ public final class OilFluid extends FlowingFluid {
         // 석유 양동이는 없다. 빈 양동이 우클릭은 OilBucketing 이 처리한다.
         return net.minecraft.world.item.Items.AIR;
     }
+
+    /** How deep an entity stands in oil, from the bottom of its box up to the surface. */
+    public static double submergedDepth(net.minecraft.world.entity.Entity entity) {
+        net.minecraft.world.phys.AABB box = entity.getBoundingBox().deflate(0.001);
+        BlockGetter level = entity.level();
+        int minX = net.minecraft.util.Mth.floor(box.minX);
+        int maxX = net.minecraft.util.Mth.ceil(box.maxX);
+        int minY = net.minecraft.util.Mth.floor(box.minY);
+        int maxY = net.minecraft.util.Mth.ceil(box.maxY);
+        int minZ = net.minecraft.util.Mth.floor(box.minZ);
+        int maxZ = net.minecraft.util.Mth.ceil(box.maxZ);
+        double depth = 0.0;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    pos.set(x, y, z);
+                    FluidState fluid = level.getFluidState(pos);
+                    if (fluid.getType() instanceof OilFluid) {
+                        double surface = y + fluid.getHeight(level, pos);
+                        if (surface > box.minY) depth = Math.max(depth, surface - box.minY);
+                    }
+                }
+            }
+        }
+        return depth;
+    }
 }

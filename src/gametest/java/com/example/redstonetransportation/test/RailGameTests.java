@@ -824,16 +824,16 @@ public final class RailGameTests {
             return;
         }
         TestWorld.floor(helper, Blocks.STONE);
+        // The tree cutter draws no power, so a control signal alone runs it; the others need the controller's volts too.
         BlockPos direct = new BlockPos(5, 1, 5);
-        helper.setBlock(direct, ModContent.MACHINES.get(MachineType.ITEM_COLLECTOR));
+        helper.setBlock(direct, ModContent.MACHINES.get(MachineType.TREE_CUTTER));
         helper.setBlock(direct.west(), copperWire);
         helper.setBlock(direct.west().west(), TestContent.SIGNAL);
 
         BlockPos linked = new BlockPos(5, 1, 10);
         BlockPos controller = linked.east();
         helper.setBlock(linked, ModContent.MACHINES.get(MachineType.ITEM_COLLECTOR));
-        helper.setBlock(controller, ModContent.FACTORY_CONTROLLER.defaultBlockState()
-                .setValue(FactoryControllerBlock.MODE, FactoryControllerBlock.Mode.SIGNAL));
+        TestWorld.poweredController(helper, controller, FactoryControllerBlock.Mode.SIGNAL);
         helper.setBlock(controller.east(), copperWire);
         helper.setBlock(controller.east().east(), TestContent.SIGNAL);
 

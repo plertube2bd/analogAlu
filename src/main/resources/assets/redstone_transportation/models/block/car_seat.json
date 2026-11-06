@@ -1,0 +1,73 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "seat": "redstone_transportation:block/car_seat",
+    "particle": "redstone_transportation:block/car_seat"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        7,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#seat"
+        },
+        "south": {
+          "texture": "#seat"
+        },
+        "east": {
+          "texture": "#seat"
+        },
+        "west": {
+          "texture": "#seat"
+        },
+        "up": {
+          "texture": "#seat"
+        },
+        "down": {
+          "texture": "#seat"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        7,
+        13
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#seat"
+        },
+        "south": {
+          "texture": "#seat"
+        },
+        "east": {
+          "texture": "#seat"
+        },
+        "west": {
+          "texture": "#seat"
+        },
+        "up": {
+          "texture": "#seat"
+        },
+        "down": {
+          "texture": "#seat"
+        }
+      }
+    }
+  ]
+}

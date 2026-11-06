@@ -1,0 +1,7 @@
+{
+  "parent": "analog_alu:block/pvc_insulated_cable_core",
+  "textures": {
+    "cable": "analog_alu:block/pvc_insulated_cable",
+    "particle": "analog_alu:block/pvc_insulated_cable"
+  }
+}

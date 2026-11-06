@@ -1,0 +1,55 @@
+{
+  "variants": {
+    "color=0": {
+      "model": "analog_alu:block/asphalt_block"
+    },
+    "color=1": {
+      "model": "analog_alu:block/asphalt_block_white"
+    },
+    "color=2": {
+      "model": "analog_alu:block/asphalt_block_orange"
+    },
+    "color=3": {
+      "model": "analog_alu:block/asphalt_block_magenta"
+    },
+    "color=4": {
+      "model": "analog_alu:block/asphalt_block_light_blue"
+    },
+    "color=5": {
+      "model": "analog_alu:block/asphalt_block_yellow"
+    },
+    "color=6": {
+      "model": "analog_alu:block/asphalt_block_lime"
+    },
+    "color=7": {
+      "model": "analog_alu:block/asphalt_block_pink"
+    },
+    "color=8": {
+      "model": "analog_alu:block/asphalt_block_gray"
+    },
+    "color=9": {
+      "model": "analog_alu:block/asphalt_block_light_gray"
+    },
+    "color=10": {
+      "model": "analog_alu:block/asphalt_block_cyan"
+    },
+    "color=11": {
+      "model": "analog_alu:block/asphalt_block_purple"
+    },
+    "color=12": {
+      "model": "analog_alu:block/asphalt_block_blue"
+    },
+    "color=13": {
+      "model": "analog_alu:block/asphalt_block_brown"
+    },
+    "color=14": {
+      "model": "analog_alu:block/asphalt_block_green"
+    },
+    "color=15": {
+      "model": "analog_alu:block/asphalt_block_red"
+    },
+    "color=16": {
+      "model": "analog_alu:block/asphalt_block_black"
+    }
+  }
+}

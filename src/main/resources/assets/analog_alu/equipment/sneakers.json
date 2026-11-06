@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "analog_alu:sneakers"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "analog_alu:sneakers"
+      }
+    ]
+  }
+}

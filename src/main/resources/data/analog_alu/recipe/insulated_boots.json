@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "R R",
+    "RPR"
+  ],
+  "key": {
+    "R": "analog_alu:synthetic_rubber",
+    "P": "analog_alu:polyvinyl_chloride"
+  },
+  "result": {
+    "id": "analog_alu:insulated_boots",
+    "count": 1
+  }
+}

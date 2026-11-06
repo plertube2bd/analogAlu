@@ -113,6 +113,7 @@ public final class StructureAssembler {
             case ELEVATOR -> ModAdvancements.ELEVATOR;
             case SHIP -> ModAdvancements.SHIP;
             case AIRSHIP -> ModAdvancements.AIRSHIP;
+            case CAR -> ModAdvancements.CAR;
         });
         if (structure.blocks().size() >= GIANT_BLOCKS) ModAdvancements.award(player, ModAdvancements.GIANT);
     }
@@ -138,7 +139,31 @@ public final class StructureAssembler {
                 yield balloons >= needed ? null
                         : Component.translatable("message.redstone_transportation.structure_no_lift", needed - balloons, BLOCKS_PER_BALLOON);
             }
+            case CAR -> missingCarParts(level, blocks);
         };
+    }
+
+    /** A car needs a seat, four wheels on its bottom layer, an engine and a fuel tank; the wheel is its core. */
+    public static final int CAR_WHEELS = 4;
+
+    private static @Nullable Component missingCarParts(ServerLevel level, List<BlockPos> blocks) {
+        int bottom = blocks.stream().mapToInt(BlockPos::getY).min().orElse(0);
+        long wheels = blocks.stream().filter(pos -> pos.getY() == bottom && level.getBlockState(pos).is(ModContent.CAR_WHEEL)).count();
+        long seats = blocks.stream().filter(pos -> level.getBlockState(pos).is(ModContent.CAR_SEAT)).count();
+        long engines = blocks.stream().filter(pos -> level.getBlockState(pos).is(ModContent.CAR_ENGINE)).count();
+        long tanks = blocks.stream().filter(pos -> level.getBlockState(pos).is(ModContent.FUEL_TANK)).count();
+        List<Component> missing = new ArrayList<>();
+        if (seats < 1) missing.add(Component.translatable("message.redstone_transportation.car_part.seat"));
+        if (wheels < CAR_WHEELS) missing.add(Component.translatable("message.redstone_transportation.car_part.wheels", CAR_WHEELS - wheels));
+        if (engines < 1) missing.add(Component.translatable("message.redstone_transportation.car_part.engine"));
+        if (tanks < 1) missing.add(Component.translatable("message.redstone_transportation.car_part.tank"));
+        if (missing.isEmpty()) return null;
+        net.minecraft.network.chat.MutableComponent list = Component.empty();
+        for (int index = 0; index < missing.size(); index++) {
+            if (index > 0) list.append(", ");
+            list.append(missing.get(index));
+        }
+        return Component.translatable("message.redstone_transportation.car_missing", list);
     }
 
     private static boolean isOnWater(ServerLevel level, List<BlockPos> blocks) {

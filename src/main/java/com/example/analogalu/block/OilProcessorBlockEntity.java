@@ -230,7 +230,7 @@ public final class OilProcessorBlockEntity extends BlockEntity implements HoverI
 
     private void finishProcessing() {
         drop(ModItems.DIESEL, batchUnits);
-        drop(ModItems.PLASTIC_RESIN, batchUnits);
+        drop(ModItems.NAPHTHA, batchUnits);
         drop(ModItems.ASPHALT, batchUnits);
         progress = 0;
         batchUnits = 0;
@@ -239,8 +239,6 @@ public final class OilProcessorBlockEntity extends BlockEntity implements HoverI
     }
 
     private void drop(net.minecraft.world.item.Item item, int count) {
-        ItemEntity output = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.05,
-                worldPosition.getZ() + 0.5, new ItemStack(item, count));
-        level.addFreshEntity(output);
+        MachineOutput.emit(level, worldPosition, new ItemStack(item, count));
     }
 }

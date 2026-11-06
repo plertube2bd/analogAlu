@@ -199,6 +199,128 @@ GUN_DISPLAY = {
 }
 
 
+# Solid colours for the 3D guns, each a 2x2 patch of one shared texture.
+SWATCH = {"steel": (0, 0), "metal": (2, 0), "dark": (4, 0), "bore": (6, 0), "brass": (8, 0),
+          "wood": (0, 2), "darkwood": (2, 2)}
+SWATCH_COLORS = {"steel": M, "metal": m, "dark": d, "bore": (14, 14, 18), "brass": B, "wood": W, "darkwood": w}
+
+
+def write_parts_texture() -> None:
+    pixels = [[(0, 0, 0, 0)] * 16 for _ in range(16)]
+    for name, (u, v) in SWATCH.items():
+        for y in range(v, v + 2):
+            for x in range(u, u + 2):
+                pixels[y][x] = (*SWATCH_COLORS[name], 255)
+    path = ASSETS / "textures" / "item" / "gun_parts.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    raw = b"".join(b"\x00" + bytes(c for px in row for c in px) for row in pixels)
+
+    def chunk(kind: bytes, body: bytes) -> bytes:
+        return struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
+
+    path.write_bytes(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 16, 16, 8, 6, 0, 0, 0))
+                     + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
+
+
+def box(start, end, color, front=None, rotation=None):
+    """One cuboid of a gun, every face one colour; {front} is the colour of the face looking down the barrel (+x)."""
+    faces = {}
+    for face in ("north", "south", "east", "west", "up", "down"):
+        u, v = SWATCH[front if face == "east" and front else color]
+        faces[face] = {"uv": [u, v, u + 2, v + 2], "texture": "#parts"}
+    element = {"from": start, "to": end, "faces": faces}
+    if rotation:
+        element["rotation"] = rotation
+    return element
+
+
+GRIP_SLANT = 22.5
+
+# Barrels point along +x and the top is +y; the hand holds the grip near x = 0.
+GUN_ELEMENTS = {
+    "revolver": [
+        box([7, 9, 7.25], [16, 10.5, 8.75], "steel", front="bore"),
+        box([8, 8.25, 7.5], [15, 9, 8.5], "metal"),
+        box([15, 10.5, 7.75], [15.75, 11, 8.25], "dark"),
+        box([4, 8, 6.75], [7, 10.75, 9.25], "metal"),
+        box([2, 8, 7.25], [4, 11, 8.75], "dark"),
+        box([2, 11, 7.6], [3, 12, 8.4], "dark"),
+        box([4, 6.5, 7.6], [7, 7, 8.4], "dark"),
+        box([6.5, 7, 7.6], [7, 8, 8.4], "dark"),
+        box([5, 7, 7.75], [5.5, 8, 8.25], "dark"),
+        box([0.5, 3.5, 7.1], [3, 8.25, 8.9], "wood",
+            rotation={"angle": GRIP_SLANT, "axis": "z", "origin": [2, 8, 8]}),
+        box([0.5, 3, 7.1], [3, 3.5, 8.9], "dark",
+            rotation={"angle": GRIP_SLANT, "axis": "z", "origin": [2, 8, 8]}),
+    ],
+    "musket": [
+        box([-2, 9.5, 7.4], [26, 10.7, 8.6], "metal", front="bore"),
+        box([-2, 8.3, 7.2], [22, 9.5, 8.8], "wood"),
+        box([2, 7.9, 7.75], [22, 8.3, 8.25], "darkwood"),
+        box([-3, 8.6, 6.9], [0, 10, 7.2], "dark"),
+        box([-2, 10.5, 7.6], [-1, 11.5, 8.4], "dark"),
+        box([-4, 7.6, 7.6], [-1, 8.0, 8.4], "brass"),
+        box([-6, 7.5, 7.2], [-2, 9.6, 8.8], "wood"),
+        box([-14, 5.5, 7.1], [-6, 9.3, 8.9], "wood",
+            rotation={"angle": GRIP_SLANT, "axis": "z", "origin": [-6, 8, 8]}),
+        box([-14.5, 5.5, 7.1], [-14, 9.3, 8.9], "brass",
+            rotation={"angle": GRIP_SLANT, "axis": "z", "origin": [-6, 8, 8]}),
+    ],
+    "shotgun": [
+        box([3, 9.5, 6.9], [22, 10.6, 8], "steel", front="bore"),
+        box([3, 9.5, 8], [22, 10.6, 9.1], "steel", front="bore"),
+        box([3, 10.6, 7.9], [22, 10.8, 8.1], "dark"),
+        box([8, 8.4, 7.1], [17, 9.5, 8.9], "wood"),
+        box([-1, 8.2, 7.0], [3, 10.8, 9.0], "dark"),
+        box([-1, 10.8, 7.2], [0, 11.6, 7.7], "dark"),
+        box([-1, 10.8, 8.3], [0, 11.6, 8.8], "dark"),
+        box([-1, 7.0, 7.6], [2, 7.4, 8.4], "dark"),
+        box([0.5, 7.4, 7.75], [1, 8.2, 8.25], "dark"),
+        box([-10, 5.5, 7.1], [-1, 9.5, 8.9], "wood",
+            rotation={"angle": GRIP_SLANT, "axis": "z", "origin": [-1, 8, 8]}),
+    ],
+}
+
+# How each gun sits in the hand. First person: barrel straight ahead, turned a touch toward the
+# crosshair. Third person: barrel forward from the hand, grip in the fist.
+GUN_HELD = {
+    "revolver": {"scale": 0.68, "first": [-1.0, 2.0, -1.0], "third_scale": 0.8, "third": [0, 4.5, 1.5]},
+    "musket": {"scale": 0.55, "first": [-1.0, 1.5, -4.0], "third_scale": 0.6, "third": [0, 6.0, 0.0]},
+    "shotgun": {"scale": 0.6, "first": [-1.0, 1.5, -3.0], "third_scale": 0.62, "third": [0, 5.0, 0.3]},
+}
+AIM_TURN = 94
+
+
+def held_display(name: str) -> dict:
+    held = GUN_HELD[name]
+    first = [held["scale"]] * 3
+    third = [held["third_scale"]] * 3
+    return {
+        "firstperson_righthand": {"rotation": [0, AIM_TURN, 0], "translation": held["first"], "scale": first},
+        "firstperson_lefthand": {"rotation": [0, -AIM_TURN, 0], "translation": held["first"], "scale": first},
+        "thirdperson_righthand": {"rotation": [0, 90, 90], "translation": held["third"], "scale": third},
+        "thirdperson_lefthand": {"rotation": [0, -90, -90], "translation": held["third"], "scale": third},
+        "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [held["scale"] * 0.6] * 3},
+    }
+
+
+def write_3d_guns() -> None:
+    write_parts_texture()
+    for name in GUNS:
+        write_json(ASSETS / "models" / "item" / f"{name}_3d.json", {
+            "textures": {"parts": f"{NS}:item/gun_parts", "particle": f"{NS}:item/gun_parts"},
+            "elements": GUN_ELEMENTS[name],
+            "display": held_display(name),
+        })
+        # The inventory keeps the crisp flat icon; everywhere else the gun is solid.
+        write_json(ASSETS / "items" / f"{name}.json", {"model": {
+            "type": "minecraft:select",
+            "property": "minecraft:display_context",
+            "cases": [{"when": ["gui", "fixed"], "model": {"type": "minecraft:model", "model": f"{NS}:item/{name}"}}],
+            "fallback": {"type": "minecraft:model", "model": f"{NS}:item/{name}_3d"},
+        }})
+
+
 def write_items() -> None:
     for name in GUNS + AMMO:
         write_png(ASSETS / "textures" / "item" / f"{name}.png", ART[name])
@@ -334,6 +456,7 @@ def write_lang() -> None:
 
 def main() -> None:
     write_items()
+    write_3d_guns()
     write_recipes()
     write_damage()
     write_lang()

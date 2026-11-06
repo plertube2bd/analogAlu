@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "redstone_transportation:block/car_wheel"
+    }
+  }
+}

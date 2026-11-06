@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#minecraft:creeper_drop_music_discs",
+    "minecraft:snow_block"
+  ],
+  "result": {
+    "id": "modernization_world:music_disc_snowman",
+    "count": 1
+  }
+}

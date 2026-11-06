@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "analog_alu:asphalt_block",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "analog_alu:asphalt_block",
+            "properties": [
+              "color"
+            ]
+          }
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ]
+}

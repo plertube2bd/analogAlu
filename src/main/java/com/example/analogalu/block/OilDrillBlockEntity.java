@@ -4,7 +4,6 @@ import com.example.analogalu.ModBlocks;
 import com.example.analogalu.ModFluids;
 import com.example.analogalu.ModItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -39,9 +38,7 @@ public final class OilDrillBlockEntity extends BlockEntity {
             BlockPos target = pos.below(depth);
             if (!level.getFluidState(target).isSourceOfType(ModFluids.STILL)) continue;
             level.setBlock(target, Blocks.AIR.defaultBlockState(), 3);
-            ItemEntity output = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.05,
-                    pos.getZ() + 0.5, new ItemStack(ModItems.OIL));
-            level.addFreshEntity(output);
+            MachineOutput.emit(level, pos, new ItemStack(ModItems.OIL));
             drill.nextDrillTick = level.getGameTime() + DRILL_INTERVAL;
             drill.setChanged();
             return;

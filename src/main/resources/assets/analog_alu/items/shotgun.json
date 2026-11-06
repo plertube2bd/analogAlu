@@ -1,6 +1,22 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "analog_alu:item/shotgun"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "fixed"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "analog_alu:item/shotgun"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "analog_alu:item/shotgun_3d"
+    }
   }
 }

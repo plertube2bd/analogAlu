@@ -30,13 +30,14 @@ EXISTING_BLOCKS = [
     "vehicle_controller", "alu_train_controller", "redstone_motor", "redstone_motor_2",
     "redstone_motor_3", "redstone_motor_4", "power_cell", "vehicle_station", "signal_relay",
 ]
-CORES = ["elevator_core", "ship_helm", "airship_helm"]
+CORES = ["elevator_core", "ship_helm", "airship_helm", "steering_wheel"]
+CAR_PARTS = ["car_wheel", "car_seat", "car_engine", "fuel_tank"]
 FURNACE_KINDS = ["upgraded_furnace", "upgraded_blast_furnace", "upgraded_smoker"]
 FURNACE_TIERS = [1, 2, 3]
 FURNACES = [f"{kind}_{tier}" for kind in FURNACE_KINDS for tier in FURNACE_TIERS]
 # Not a factory machine, but it wears the same arrow and status colours.
 LEVELER = "land_leveler"
-NEW_BLOCKS = MACHINES + [LEVELER, "factory_controller", "conveyor_belt", "drive_rail"] + CORES + [
+NEW_BLOCKS = MACHINES + CAR_PARTS + [LEVELER, "factory_controller", "conveyor_belt", "drive_rail"] + CORES + [
     "lift_balloon", "elevator_call", "route_beacon"] + FURNACES
 
 
@@ -424,6 +425,7 @@ CORE_COLORS = {
     "elevator_core": ((238, 196, 62), (255, 230, 130)),
     "ship_helm": ((70, 150, 226), (160, 214, 255)),
     "airship_helm": ((226, 92, 72), (255, 170, 150)),
+    "steering_wheel": ((64, 200, 120), (170, 250, 200)),
 }
 CORE_ICONS = {
     "elevator_core": (
@@ -470,6 +472,21 @@ CORE_ICONS = {
             "...oooo...",
         ],
         {"#": (226, 92, 72), "l": (171, 177, 184), "o": (176, 118, 66)},
+    ),
+    "steering_wheel": (
+        [
+            "...####...",
+            ".##....##.",
+            ".#......#.",
+            "#...##...#",
+            "#########.",
+            "#..####..#",
+            "#...##...#",
+            ".#..##..#.",
+            ".##.##.##.",
+            "...####...",
+        ],
+        {"#": (40, 42, 48)},
     ),
 }
 
@@ -915,6 +932,157 @@ def write_structure_core(core: str) -> None:
     write_item_definition(core, model_id(core))
 
 
+TIRE = (34, 34, 38)
+TIRE_LIGHT = (66, 66, 72)
+RIM = (186, 192, 200)
+RIM_DARK = (120, 126, 136)
+
+
+def wheel_face() -> Canvas:
+    canvas = Canvas(16, 16, (*TIRE, 255))
+    for y in range(16):
+        for x in range(16):
+            d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if d > 7.6:
+                canvas.set(x, y, TIRE_LIGHT)
+            elif d < 4.2:
+                canvas.set(x, y, RIM if d > 1.6 else RIM_DARK)
+            elif d < 5.0:
+                canvas.set(x, y, RIM_DARK)
+    for x, y in ((7, 4), (8, 4), (11, 7), (11, 8), (7, 11), (8, 11), (4, 7), (4, 8)):
+        canvas.set(x, y, RIM_DARK)
+    return canvas
+
+
+def wheel_tread() -> Canvas:
+    canvas = Canvas(16, 16, (*TIRE, 255))
+    for y in range(0, 16, 4):
+        canvas.rect(0, y, 15, y, TIRE_LIGHT)
+    for y in range(2, 16, 4):
+        for x in range(0, 16, 4):
+            canvas.rect(x, y, x + 1, y, TIRE_LIGHT)
+    return canvas
+
+
+SEAT = (168, 44, 40)
+SEAT_DARK = (120, 30, 28)
+SEAT_SEAM = (210, 80, 70)
+
+
+def seat_leather() -> Canvas:
+    canvas = Canvas(16, 16, (*SEAT, 255))
+    canvas.frame(0, 0, 15, 15, SEAT_DARK)
+    for x in (5, 10):
+        canvas.rect(x, 1, x, 14, SEAT_SEAM)
+    return canvas
+
+
+def engine_side() -> Canvas:
+    canvas = plate()
+    canvas.rect(2, 3, 13, 12, (52, 56, 64))
+    canvas.frame(2, 3, 13, 12, OUTLINE)
+    for x in range(4, 12, 2):
+        canvas.rect(x, 4, x, 11, (96, 102, 112))
+    canvas.rect(6, 1, 9, 2, (200, 90, 40))
+    return canvas
+
+
+def engine_front() -> Canvas:
+    canvas = plate()
+    canvas.rect(2, 2, 13, 13, (30, 32, 38))
+    for y in range(3, 13, 2):
+        canvas.rect(3, y, 12, y, (150, 156, 164))
+    canvas.rect(6, 6, 9, 9, (226, 120, 40))
+    return canvas
+
+
+def engine_top() -> Canvas:
+    canvas = plate()
+    for x in (3, 7, 11):
+        canvas.rect(x, 3, x + 1, 12, (96, 102, 112))
+        canvas.rect(x, 3, x + 1, 4, (200, 90, 40))
+    return canvas
+
+
+def tank_side() -> Canvas:
+    canvas = Canvas(16, 16, (214, 170, 40, 255))
+    canvas.frame(0, 0, 15, 15, (140, 104, 20))
+    canvas.rect(0, 4, 15, 4, (170, 130, 26))
+    canvas.rect(0, 11, 15, 11, (170, 130, 26))
+    canvas.stamp(["###.", "#..#", "#..#", "#..#", "###."], {"#": (40, 36, 30)}, 6, 5)
+    return canvas
+
+
+def tank_top() -> Canvas:
+    canvas = Canvas(16, 16, (214, 170, 40, 255))
+    canvas.frame(0, 0, 15, 15, (140, 104, 20))
+    canvas.rect(5, 5, 10, 10, (60, 60, 66))
+    canvas.rect(6, 6, 9, 9, (110, 114, 122))
+    return canvas
+
+
+def write_car_parts() -> None:
+    out = ASSETS / "textures" / "block"
+    wheel_face().save(out / "car_wheel_side.png")
+    wheel_tread().save(out / "car_wheel_tread.png")
+    seat_leather().save(out / "car_seat.png")
+    engine_side().save(out / "car_engine_side.png")
+    engine_front().save(out / "car_engine_front.png")
+    engine_top().save(out / "car_engine_top.png")
+    tank_side().save(out / "fuel_tank_side.png")
+    tank_top().save(out / "fuel_tank_top.png")
+
+    write_json(ASSETS / "models" / "block" / "car_wheel.json", {
+        "parent": "minecraft:block/cube_column",
+        "textures": {"end": texture_id("car_wheel_tread"), "side": texture_id("car_wheel_side")},
+    })
+    write_json(ASSETS / "blockstates" / "car_wheel.json", {"variants": {"": {"model": model_id("car_wheel")}}})
+    write_item_definition("car_wheel", model_id("car_wheel"))
+
+    write_json(ASSETS / "models" / "block" / "car_engine.json", {
+        "parent": "minecraft:block/cube",
+        "textures": {
+            "particle": texture_id("car_engine_side"),
+            "down": texture_id("machine_bottom"),
+            "up": texture_id("car_engine_top"),
+            "north": texture_id("car_engine_front"),
+            "south": texture_id("car_engine_side"),
+            "east": texture_id("car_engine_side"),
+            "west": texture_id("car_engine_side"),
+        },
+    })
+    write_json(ASSETS / "blockstates" / "car_engine.json", {"variants": {"": {"model": model_id("car_engine")}}})
+    write_item_definition("car_engine", model_id("car_engine"))
+
+    write_json(ASSETS / "models" / "block" / "fuel_tank.json", {
+        "parent": "minecraft:block/cube_column",
+        "textures": {"end": texture_id("fuel_tank_top"), "side": texture_id("fuel_tank_side")},
+    })
+    write_json(ASSETS / "blockstates" / "fuel_tank.json", {"variants": {"": {"model": model_id("fuel_tank")}}})
+    write_item_definition("fuel_tank", model_id("fuel_tank"))
+
+    # A cushion and a backrest; facing north, the backrest is on the south side, behind whoever sits.
+    leather = texture_id("car_seat")
+    write_json(ASSETS / "models" / "block" / "car_seat.json", {
+        "parent": "minecraft:block/block",
+        "textures": {"seat": leather, "particle": leather},
+        "elements": [
+            {"from": [1, 0, 1], "to": [15, 7, 15], "faces": {
+                face: {"texture": "#seat"} for face in ("north", "south", "east", "west", "up", "down")}},
+            {"from": [1, 7, 13], "to": [15, 16, 15], "faces": {
+                face: {"texture": "#seat"} for face in ("north", "south", "east", "west", "up", "down")}},
+        ],
+    })
+    variants = {}
+    for facing, rotation in FACINGS.items():
+        variant = {"model": model_id("car_seat")}
+        if rotation:
+            variant["y"] = rotation
+        variants[f"facing={facing}"] = variant
+    write_json(ASSETS / "blockstates" / "car_seat.json", {"variants": variants})
+    write_item_definition("car_seat", model_id("car_seat"))
+
+
 def write_balloon() -> None:
     write_json(ASSETS / "models" / "block" / "lift_balloon.json", {
         "parent": "minecraft:block/cube_all",
@@ -1131,6 +1299,8 @@ ADVANCEMENTS = [
      "진수식", "배를 조립하세요", "Launch Day", "Assemble a ship"),
     ("structure/airship", "structure/first", "airship_helm", "event", "goal",
      "하늘을 나는 집", "비행선을 조립하세요", "House in the Sky", "Assemble an airship"),
+    ("structure/car", "structure/first", "steering_wheel", "event", "task",
+     "드라이브", "자동차를 조립하세요", "Road Trip", "Assemble a car"),
     ("structure/route", "structure/ship", "route_beacon", "event", "goal",
      "자동 항해", "배나 비행선이 항로 표지에 도착하게 하세요", "On Autopilot", "Bring a ship or airship in to a Route Beacon"),
     ("structure/repairs", "structure/first", "structure_marker", "event", "task",
@@ -1307,6 +1477,11 @@ def write_recipes() -> None:
     shaped("elevator_call", ["IBI", "IRI"], {"B": "minecraft:stone_button"}, 2)
     shaped("structure_marker", ["  C", " S ", "S  "], {"C": "minecraft:copper_ingot", "S": "minecraft:stick"}, 1)
     shaped("route_beacon", ["IGI", "RMR", "III"], {"G": "minecraft:compass"}, 1)
+    shaped("steering_wheel", ["LIL", "IRI", "LIL"], {"L": "minecraft:leather"}, 1)
+    shaped("car_wheel", ["BBB", "BIB", "BBB"], {"B": "minecraft:black_wool"}, 4)
+    shaped("car_seat", ["L  ", "LLL", "I I"], {"L": "minecraft:leather"}, 1)
+    shaped("car_engine", ["IPI", "PFP", "III"], {"P": "minecraft:piston", "F": "minecraft:furnace"}, 1)
+    shaped("fuel_tank", ["III", "IBI", "III"], {"B": "minecraft:bucket"}, 1)
     shaped(LEVELER, ["SPS", "RMR", "IFI"], {"S": "minecraft:iron_shovel", "P": "minecraft:diamond_pickaxe",
                                              "F": "minecraft:furnace"}, 1)
     upgrades = {
@@ -1772,6 +1947,7 @@ def main() -> None:
     for core in CORES:
         write_structure_core(core)
     write_balloon()
+    write_car_parts()
     write_elevator_call()
     write_route_beacon()
     for furnace in FURNACES:

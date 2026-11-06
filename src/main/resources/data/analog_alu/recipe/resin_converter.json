@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:crafting_table",
+    "minecraft:copper_ingot"
+  ],
+  "result": {
+    "id": "analog_alu:resin_converter",
+    "count": 1
+  }
+}

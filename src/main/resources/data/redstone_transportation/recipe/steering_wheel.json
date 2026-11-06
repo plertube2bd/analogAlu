@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "LIL",
+    "IRI",
+    "LIL"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "redstone_transportation:steering_wheel",
+    "count": 1
+  }
+}

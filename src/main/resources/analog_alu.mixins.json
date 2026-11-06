@@ -5,11 +5,15 @@
   "mixins": [
     "FurnaceResultSlotMixin",
     "ResultSlotMixin",
-    "OilWorldgenMixin"
+    "OilWorldgenMixin",
+    "OilSwimMixin",
+    "SneakersExhaustionMixin",
+    "MobStunMixin"
   ],
   "client": [
     "HudHoverInfoMixin",
-    "OilFogMixin"
+    "OilFogMixin",
+    "AsphaltFovMixin"
   ],
   "injectors": {
     "defaultRequire": 1

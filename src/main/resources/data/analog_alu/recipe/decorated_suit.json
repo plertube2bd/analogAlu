@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "analog_alu:suit",
+    "minecraft:gold_nugget",
+    "analog_alu:nylon_fiber"
+  ],
+  "result": {
+    "id": "analog_alu:decorated_suit",
+    "count": 1
+  }
+}

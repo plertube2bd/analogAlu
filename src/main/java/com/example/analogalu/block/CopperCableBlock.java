@@ -59,6 +59,10 @@ public class CopperCableBlock extends BaseEntityBlock {
         }
     }
 
+    public double insulationRatingVolts() {
+        return insulationRatingVolts;
+    }
+
     private static VoxelShape armShape(Direction direction) {
         return switch (direction) {
             case NORTH -> Block.box(6.0, 6.0, 0.0, 10.0, 10.0, 5.0);
@@ -70,8 +74,16 @@ public class CopperCableBlock extends BaseEntityBlock {
         };
     }
 
+    /** Volts a cable may carry and still be safe to touch; bare copper is 0 and shocks from 3 V up. */
+    private final double insulationRatingVolts;
+
     public CopperCableBlock(BlockBehaviour.Properties properties) {
+        this(properties, 0.0D);
+    }
+
+    public CopperCableBlock(BlockBehaviour.Properties properties, double insulationRatingVolts) {
         super(properties);
+        this.insulationRatingVolts = insulationRatingVolts;
         BlockState state = defaultBlockState().setValue(LOCK, 0).setValue(POWERED, false);
         for (BooleanProperty arm : ARMS.values()) state = state.setValue(arm, false);
         registerDefaultState(state);
@@ -189,7 +201,7 @@ public class CopperCableBlock extends BaseEntityBlock {
     }
 
     private static boolean isConnected(BlockGetter level, BlockPos pos, BlockState state, Direction direction) {
-        if (!state.is(ModBlocks.COPPER_CABLE)) return false;
+        if (!(state.getBlock() instanceof CopperCableBlock)) return false;
         BlockPos neighbor = pos.relative(direction);
         BlockState neighborState = level.getBlockState(neighbor);
         if (!allowsConnection(state, direction)) return false;

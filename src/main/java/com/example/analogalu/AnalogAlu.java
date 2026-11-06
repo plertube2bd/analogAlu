@@ -19,14 +19,23 @@ public class AnalogAlu implements ModInitializer {
     @Override
     public void onInitialize() {
         ModComponents.init();
+        ModEffects.init();
         ModBlocks.init();
         ModItems.init();
+        com.example.analogalu.legacy.ResinConverter.init();
         com.example.analogalu.gun.ModGuns.init();
         com.example.analogalu.fluid.OilDrowning.init();
         com.example.analogalu.fluid.OilBucketing.init();
+        Electrocution.init();
+        StunGunItem.init();
+        net.fabricmc.fabric.api.registry.FlammableBlockRegistry.getDefaultInstance().add(ModBlocks.OIL, 100, 60);
         PayloadTypeRegistry.serverboundPlay().register(SaveWaferCodePayload.TYPE, SaveWaferCodePayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(RunWaferProgramPayload.TYPE, RunWaferProgramPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(CircuitStatusPayload.TYPE, CircuitStatusPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(OpenConverterScreenPayload.TYPE, OpenConverterScreenPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(SetConverterSetpointPayload.TYPE, SetConverterSetpointPayload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(SetConverterSetpointPayload.TYPE, (payload, context) ->
+            context.server().execute(() -> setConverterSetpoint(payload, context.player())));
         ServerPlayNetworking.registerGlobalReceiver(SaveWaferCodePayload.TYPE, (payload, context) ->
             context.server().execute(() -> saveWaferCode(payload, context.player())));
         ServerPlayNetworking.registerGlobalReceiver(RunWaferProgramPayload.TYPE, (payload, context) ->
@@ -36,6 +45,19 @@ public class AnalogAlu implements ModInitializer {
             ModBlocks.ITEMS.forEach(output::accept);
             ModItems.ITEMS.forEach(output::accept);
         });
+    }
+
+    /** A setpoint typed in on a converter's screen, applied if the player may still build there. */
+    private static void setConverterSetpoint(SetConverterSetpointPayload payload, ServerPlayer player) {
+        net.minecraft.core.BlockPos pos = payload.pos();
+        if (!player.getAbilities().mayBuild || player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > 64.0) return;
+        if (!(player.level().getBlockEntity(pos) instanceof com.example.analogalu.block.CircuitDeviceBlockEntity device)
+                || !com.example.analogalu.block.CircuitDeviceBlock.isConverter(device.kindOrNull())) return;
+        double applied = device.setSetpoint(payload.volts());
+        player.sendOverlayMessage(Component.translatable("message.analog_alu.converter_setpoint",
+                com.example.analogalu.block.CircuitDeviceBlock.formatVolts(applied)).withStyle(net.minecraft.ChatFormatting.AQUA));
+        player.level().playSound(null, pos, net.minecraft.sounds.SoundEvents.COMPARATOR_CLICK, net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 0.7F);
+        com.example.analogalu.block.CircuitSolver.recomputeAround(player.level(), pos);
     }
 
     private static void saveWaferCode(SaveWaferCodePayload payload, net.minecraft.server.level.ServerPlayer player) {

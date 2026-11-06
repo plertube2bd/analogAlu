@@ -1,6 +1,9 @@
 package com.example.analogalu.block;
 
 import com.example.analogalu.ModBlocks;
+import com.example.analogalu.OpenConverterScreenPayload;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +36,7 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class CircuitDeviceBlock extends BaseEntityBlock {
-    public enum Kind { BATTERY, RECHARGEABLE_BATTERY, COAL_GENERATOR, DIESEL_GENERATOR, WIND_GENERATOR, SOLAR_GENERATOR, SWITCH, RESISTOR, MINER, STEP_UP, STEP_DOWN }
+    public enum Kind { BATTERY, RECHARGEABLE_BATTERY, COAL_GENERATOR, DIESEL_GENERATOR, WIND_GENERATOR, SOLAR_GENERATOR, SWITCH, RESISTOR, MINER, STEP_UP, STEP_DOWN, CHLORINE_GENERATOR, CHEMICAL_REACTOR }
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty CLOSED = BooleanProperty.create("closed");
@@ -48,11 +51,16 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
     public static final double RECHARGEABLE_CAPACITY_JOULES = 72_000.0;
     /** 다른 전원에 연결되어 충전될 때 충전식 건전지가 갖는 저항. 여기서 소비되는 전력이 그대로 저장된다. */
     public static final double RECHARGE_RESISTANCE = 4.0;
+    public static final double CHLORINE_GENERATOR_RESISTANCE = 6.0;
+    public static final double CHEMICAL_REACTOR_RESISTANCE = 8.0;
     /** 승압기 설정 전압(V). 입력이 설정값보다 높으면 입력 전압을 그대로 내보낸다. */
+    /** The presets of 0.2.1, kept only to read old saves that stored an index into them. */
     private static final double[] STEP_UP_SETPOINTS = {24, 48, 120, 240, 480, 1000, 2000, 3000};
     /** 변압기 설정 전압(V). 입력이 설정값보다 낮으면 입력 전압을 그대로 내보낸다. */
     private static final double[] STEP_DOWN_SETPOINTS = {4, 5, 6, 9, 12, 24, 48, 120, 240, 480, 1000};
-    public static final int STEP_DOWN_DEFAULT_INDEX = 4;
+    public static final double STEP_DOWN_MAX_VOLTAGE = 1000.0;
+    /** The setpoint is typed in on the converter's screen, anywhere from here to the maximum. */
+    public static final double CONVERTER_MIN_SETPOINT = 1.0;
     public static final double STEP_UP_MAX_VOLTAGE = 3000.0;
     public static final double CONVERTER_EFFICIENCY = 0.9;
     public static final double CONVERTER_OUTPUT_RESISTANCE = 0.5;
@@ -153,12 +161,11 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
             if (!player.getAbilities().mayBuild) return InteractionResult.PASS;
             if (level.isClientSide()) return InteractionResult.SUCCESS;
             if (!(level.getBlockEntity(pos) instanceof CircuitDeviceBlockEntity device)) return InteractionResult.PASS;
-            double setpoint = device.cycleSetpoint(!player.isShiftKeyDown());
-            player.sendOverlayMessage(Component.translatable("message.analog_alu.converter_setpoint", formatVolts(setpoint))
-                    .withStyle(ChatFormatting.AQUA));
-            level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS, 0.5F,
-                    player.isShiftKeyDown() ? 0.5F : 0.7F);
-            CircuitSolver.recomputeAround(level, pos);
+            // The setpoint is typed in on a screen; the server applies what comes back (AnalogAlu).
+            if (player instanceof ServerPlayer serverPlayer) {
+                ServerPlayNetworking.send(serverPlayer, new OpenConverterScreenPayload(pos, kind == Kind.STEP_UP,
+                        device.converterSetpoint(), minSetpoint(kind), maxSetpoint(kind)));
+            }
             return InteractionResult.SUCCESS;
         }
         if (kind != Kind.SWITCH) return InteractionResult.PASS;
@@ -257,9 +264,9 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         return lines;
     }
 
-    private static String formatVolts(double value) {
-        return value >= 1000.0 ? String.format(Locale.ROOT, "%.0f kV", value / 1000.0)
-                : String.format(Locale.ROOT, "%.0f V", value);
+    public static String formatVolts(double value) {
+        if (value >= 1000.0) return String.format(Locale.ROOT, "%.2f kV", value / 1000.0);
+        return value == Math.rint(value) ? String.format(Locale.ROOT, "%.0f V", value) : String.format(Locale.ROOT, "%.1f V", value);
     }
 
     private static String volts(double value, int decimals) {
@@ -296,6 +303,31 @@ public class CircuitDeviceBlock extends BaseEntityBlock {
         return kind == Kind.STEP_UP || kind == Kind.STEP_DOWN;
     }
 
+    public static double defaultSetpoint(Kind kind) {
+        return kind == Kind.STEP_UP ? 24.0 : 12.0;
+    }
+
+    public static double minSetpoint(Kind kind) {
+        return CONVERTER_MIN_SETPOINT;
+    }
+
+    public static double maxSetpoint(Kind kind) {
+        return kind == Kind.STEP_UP ? STEP_UP_MAX_VOLTAGE : STEP_DOWN_MAX_VOLTAGE;
+    }
+
+    /** Resistance of a device that is a load in the circuit, or 0 for one that is not. */
+    public static double loadResistance(Kind kind) {
+        return switch (kind) {
+            case RECHARGEABLE_BATTERY -> RECHARGE_RESISTANCE;
+            case RESISTOR -> LOAD_RESISTANCE;
+            case MINER -> MINER_RESISTANCE;
+            case CHLORINE_GENERATOR -> CHLORINE_GENERATOR_RESISTANCE;
+            case CHEMICAL_REACTOR -> CHEMICAL_REACTOR_RESISTANCE;
+            default -> 0.0;
+        };
+    }
+
+    /** Legacy presets: a save from 0.2.1 stores an index into these. */
     public static double[] setpoints(Kind kind) {
         if (kind == Kind.STEP_UP) return STEP_UP_SETPOINTS;
         if (kind == Kind.STEP_DOWN) return STEP_DOWN_SETPOINTS;

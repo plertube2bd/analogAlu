@@ -7,6 +7,13 @@ self-driving rail transport, factories and moving structures.
 This file is the reference for the Analog ALU half. README.md is the overview,
 and docs/transportation/ holds the transportation guides.
 
+The ALU half is Analog ALU 0.2.2: on top of what this file describes, it has
+petrochemistry (naphtha up to plastics, fibres and rubber, in the chemical
+reactor and chlorine generator), electrocution from live bare copper cable
+with PVC (600 V) and PP (1000 V) insulated cable, typed converter setpoints
+(right-click a converter), the stun gun, clothes, sneakers and asphalt. The
+in-game guide book covers them; CHANGELOG_1.0.0_KO.md lists them.
+
 Mod ID          : modernization_world (also provides analog_alu and
                   redstone_transportation, so their block and item IDs and
                   existing worlds keep working)
@@ -319,7 +326,7 @@ Exact patterns are in:
 - Drop oil buckets or oil-filled tank buckets on an oil processor. Heat the block
   directly below it with lava, fire, or a lit furnace/campfire. Processing takes
   400 ticks per container and returns the empty container plus one diesel,
-  plastic resin, and asphalt per oil unit.
+  naphtha (plastic resin before 0.2.2), and asphalt per oil unit.
 - Drop diesel on top of a diesel generator to fuel it. It joins the same wired
   circuit system as the other generators.
 

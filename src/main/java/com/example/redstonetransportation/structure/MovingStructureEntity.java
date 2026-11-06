@@ -62,6 +62,17 @@ public final class MovingStructureEntity extends Entity {
     private static final double SHIP_SPEED = 0.4D;
     private static final double AIRSHIP_SPEED = 0.5D;
     private static final double AIRSHIP_CLIMB = 0.2D;
+    /** About 43 km/h flat out. */
+    private static final double CAR_SPEED = 0.6D;
+    private static final double CAR_ACCELERATION = 0.02D;
+    private static final double CAR_BRAKING = 0.04D;
+    private static final float CAR_TURN_RATE = 3.5F;
+    private static final double GRAVITY = 0.08D;
+    private static final double TERMINAL_FALL = 1.0D;
+    /** A car moving this slowly burns no fuel. */
+    private static final double IDLING = 0.01D;
+    /** The top of a car seat's cushion, where the driver's hips go. */
+    private static final double SEAT_HEIGHT = 7.0D / 16.0D;
     private static final double ACCELERATION = 0.015D;
     private static final double STOPPED = 0.001D;
     private static final float TURN_RATE = 1.5F;
@@ -117,6 +128,7 @@ public final class MovingStructureEntity extends Entity {
 
     private double speed;
     private double climb;
+    private double fall;
     private float turn;
     private double targetY = Double.NaN;
     /** Height of this elevator's call blocks above its core, taken from the floor it was built on. */
@@ -192,7 +204,7 @@ public final class MovingStructureEntity extends Entity {
 
     public boolean isMoving() {
         return route != null || !Double.isNaN(targetY) || Math.abs(speed) > STOPPED
-                || Math.abs(climb) > STOPPED || Math.abs(turn) > STOPPED_TURN;
+                || Math.abs(climb) > STOPPED || Math.abs(turn) > STOPPED_TURN || fall > 0.0D;
     }
 
     @Override
@@ -207,7 +219,112 @@ public final class MovingStructureEntity extends Entity {
             case ELEVATOR -> tickElevator(level);
             case SHIP -> tickVessel(level, SHIP_SPEED, 0.0D);
             case AIRSHIP -> tickVessel(level, AIRSHIP_SPEED, AIRSHIP_CLIMB);
+            case CAR -> tickCar(level);
         }
+    }
+
+    /**
+     * Drives like a car: it falls when nothing holds it up, only accelerates with its wheels on the
+     * ground and fuel in the tank, steers only while rolling, and climbs a step one block high.
+     */
+    private void tickCar(ServerLevel level) {
+        Vec3 position = position();
+        boolean grounded = !fits(position.add(0.0D, -0.05D, 0.0D), getYRot());
+        if (!grounded) {
+            fall = Math.min(fall + GRAVITY, TERMINAL_FALL);
+            Vec3 lower = position.add(0.0D, -fall, 0.0D);
+            if (fits(lower, getYRot()) && !wouldCrush(lower, getYRot())) {
+                position = lower;
+            } else {
+                // Land on the whole block below rather than hovering a fraction above it.
+                Vec3 landed = new Vec3(position.x, Math.floor(position.y + WHOLE_BLOCK), position.z);
+                if (fits(landed, getYRot())) position = landed;
+                fall = 0.0D;
+                grounded = true;
+            }
+        } else {
+            fall = 0.0D;
+        }
+
+        Helm helm = Helm.from(driverInput());
+        boolean fuelled = carFuel() > 0;
+        double wanted = grounded && fuelled ? helm.throttle() * CAR_SPEED : 0.0D;
+        speed = approach(speed, wanted, wanted == 0.0D ? CAR_BRAKING : CAR_ACCELERATION);
+        // Steering turns the wheels, which only turns the car while it rolls, and the other way in reverse.
+        float rolling = (float) Math.clamp(Math.abs(speed) / (CAR_SPEED * 0.3D), 0.0D, 1.0D);
+        turn = helm.steering() * CAR_TURN_RATE * rolling * (speed < 0.0D ? -1.0F : 1.0F);
+        blocked = false;
+
+        float yaw = getYRot() + turn;
+        float radians = yaw * Mth.DEG_TO_RAD;
+        Vec3 ahead = position.add(-Mth.sin(radians) * speed, 0.0D, Mth.cos(radians) * speed);
+        if (Math.abs(speed) <= STOPPED) {
+            place(position, getYRot());
+        } else if (canStand(ahead, yaw)) {
+            place(ahead, yaw);
+        } else if (grounded && canStand(ahead.add(0.0D, 1.0D, 0.0D), yaw)) {
+            place(ahead.add(0.0D, 1.0D, 0.0D), yaw);
+        } else {
+            blocked = true;
+            speed = 0.0D;
+            place(position, canStand(position, yaw) ? yaw : getYRot());
+        }
+        if (Math.abs(speed) > IDLING) burnFuel(1);
+        if (tickCount % 20 == 0 && getFirstPassenger() instanceof ServerPlayer driver) {
+            driver.sendOverlayMessage(Component.translatable("message.redstone_transportation.car_fuel",
+                    (carFuel() + com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL - 1)
+                            / com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL,
+                    String.format("%.0f", Math.abs(speed) * 20.0D * 3.6D)));
+        }
+    }
+
+    /** The fuel tanks on this car, loaded for use. */
+    private List<com.example.redstonetransportation.block.FuelTankBlockEntity> fuelTanks() {
+        List<com.example.redstonetransportation.block.FuelTankBlockEntity> tanks = new ArrayList<>();
+        for (StructureBlocks.Cell cell : blocks().cells()) {
+            if (!cell.state().is(com.example.redstonetransportation.content.ModContent.FUEL_TANK)) continue;
+            if (blockEntityAt(cell.pos()) instanceof com.example.redstonetransportation.block.FuelTankBlockEntity tank) tanks.add(tank);
+        }
+        return tanks;
+    }
+
+    /** Ticks of driving left in all the tanks together. */
+    public int carFuel() {
+        return fuelTanks().stream().mapToInt(com.example.redstonetransportation.block.FuelTankBlockEntity::fuel).sum();
+    }
+
+    private void burnFuel(int ticks) {
+        int left = ticks;
+        for (com.example.redstonetransportation.block.FuelTankBlockEntity tank : fuelTanks()) {
+            left -= tank.drain(left);
+            if (left <= 0) return;
+        }
+    }
+
+    /** Diesel poured into the car goes into the first tank with room for it. */
+    private boolean refuel(Player player, net.minecraft.world.item.ItemStack diesel) {
+        for (com.example.redstonetransportation.block.FuelTankBlockEntity tank : fuelTanks()) {
+            if (tank.fuel() + com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL
+                    > com.example.redstonetransportation.block.FuelTankBlockEntity.CAPACITY) continue;
+            com.example.redstonetransportation.block.FuelTankBlock.fill(tank, diesel, player);
+            return true;
+        }
+        player.sendOverlayMessage(Component.translatable("message.redstone_transportation.fuel_tank_full",
+                com.example.redstonetransportation.block.FuelTankBlockEntity.CAPACITY_DIESEL));
+        return false;
+    }
+
+    /** The driver of a car sits on its first seat rather than on the steering wheel. */
+    @Override
+    public Vec3 getPassengerRidingPosition(Entity passenger) {
+        if (kind() != StructureKind.CAR) return super.getPassengerRidingPosition(passenger);
+        for (StructureBlocks.Cell cell : blocks().cells()) {
+            if (!cell.state().is(com.example.redstonetransportation.content.ModContent.CAR_SEAT)) continue;
+            StructurePose pose = pose();
+            return new Vec3(pose.worldX(cell.pos().getX(), cell.pos().getZ()), getY() + cell.pos().getY() + SEAT_HEIGHT,
+                    pose.worldZ(cell.pos().getX(), cell.pos().getZ()));
+        }
+        return super.getPassengerRidingPosition(passenger);
     }
 
     private Input driverInput() {
@@ -310,7 +427,8 @@ public final class MovingStructureEntity extends Entity {
     /** Sends the nearest ship or airship to this beacon. Returns false when there is none in reach. */
     public static boolean sendTo(ServerLevel level, BlockPos beacon, double speedFraction) {
         AABB area = new AABB(beacon).inflate(ROUTE_RANGE);
-        return level.getEntitiesOfClass(MovingStructureEntity.class, area, structure -> structure.kind() != StructureKind.ELEVATOR).stream()
+        return level.getEntitiesOfClass(MovingStructureEntity.class, area,
+                        structure -> structure.kind() == StructureKind.SHIP || structure.kind() == StructureKind.AIRSHIP).stream()
                 .min(Comparator.comparingDouble(structure -> structure.position().distanceToSqr(Vec3.atCenterOf(beacon))))
                 .map(structure -> {
                     structure.route = beacon.immutable();
@@ -607,6 +725,10 @@ public final class MovingStructureEntity extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (!(level() instanceof ServerLevel level)) return InteractionResult.SUCCESS;
+        if (kind() == StructureKind.CAR && player.getItemInHand(hand).is(com.example.analogalu.ModItems.DIESEL)) {
+            refuel(player, player.getItemInHand(hand));
+            return InteractionResult.SUCCESS;
+        }
         if (player.isShiftKeyDown()) {
             Component result = isMoving()
                     ? Component.translatable("message.redstone_transportation.structure_moving")

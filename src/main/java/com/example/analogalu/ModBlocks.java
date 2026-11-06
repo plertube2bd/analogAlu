@@ -1,6 +1,9 @@
 package com.example.analogalu;
 
 import com.example.analogalu.block.AluBlocks;
+import com.example.analogalu.block.AsphaltBlock;
+import com.example.analogalu.block.ChemicalMachineBlock;
+import com.example.analogalu.block.ChemicalMachineBlockEntity;
 import com.example.analogalu.block.CopperWireBlock;
 import com.example.analogalu.block.CopperCableBlock;
 import com.example.analogalu.block.CopperCableBlockEntity;
@@ -40,6 +43,8 @@ import net.minecraft.world.level.material.PushReaction;
 public final class ModBlocks {
     /** 크리에이티브 탭에 등록할 아이템 (등록 순서대로) */
     public static final List<Item> ITEMS = new ArrayList<>();
+    /** Walking on asphalt is this much faster. */
+    public static final float ASPHALT_SPEED_FACTOR = 1.14F;
 
     public static final CopperWireBlock COPPER_WIRE = registerBlock("copper_wire", CopperWireBlock::new,
             BlockBehaviour.Properties.of().noCollision().instabreak()
@@ -49,7 +54,7 @@ public final class ModBlocks {
         public static final Block OIL = registerBlock("oil",
             properties -> new OilLiquidBlock((net.minecraft.world.level.material.FlowingFluid) ModFluids.STILL,
                 properties),
-            BlockBehaviour.Properties.of().noLootTable().replaceable().strength(100.0F));
+            BlockBehaviour.Properties.of().noLootTable().replaceable().strength(100.0F).ignitedByLava());
             public static final OilProcessorBlock OIL_PROCESSOR = registerBlock("oil_processor", OilProcessorBlock::new,
                 BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
             public static final Item OIL_PROCESSOR_ITEM = registerItem("oil_processor", OIL_PROCESSOR);
@@ -70,10 +75,19 @@ public final class ModBlocks {
                 .sound(SoundType.COPPER).lightLevel(state -> state.getValue(CopperCableBlock.POWERED) ? 8 : 0)
                 .pushReaction(PushReaction.POPPED));
         public static final Item COPPER_CABLE_ITEM = registerItem("copper_cable", COPPER_CABLE);
+        /** Insulated cables carry current like copper cable but are safe to touch up to their rating. */
+        public static final CopperCableBlock PVC_INSULATED_CABLE = registerBlock("pvc_insulated_cable",
+            properties -> new CopperCableBlock(properties, 600.0),
+            BlockBehaviour.Properties.of().noCollision().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.POPPED));
+        public static final Item PVC_INSULATED_CABLE_ITEM = registerItem("pvc_insulated_cable", PVC_INSULATED_CABLE);
+        public static final CopperCableBlock PP_INSULATED_CABLE = registerBlock("pp_insulated_cable",
+            properties -> new CopperCableBlock(properties, 1000.0),
+            BlockBehaviour.Properties.of().noCollision().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.POPPED));
+        public static final Item PP_INSULATED_CABLE_ITEM = registerItem("pp_insulated_cable", PP_INSULATED_CABLE);
         public static final BlockEntityType<CopperCableBlockEntity> COPPER_CABLE_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("copper_cable")),
-            new BlockEntityType<>(CopperCableBlockEntity::new, Set.of(COPPER_CABLE)));
+            new BlockEntityType<>(CopperCableBlockEntity::new, Set.of(COPPER_CABLE, PVC_INSULATED_CABLE, PP_INSULATED_CABLE)));
 
             public static final CircuitDeviceBlock BATTERY = registerBlock("battery",
                 properties -> new CircuitDeviceBlock(properties, CircuitDeviceBlock.Kind.BATTERY),
@@ -127,6 +141,23 @@ public final class ModBlocks {
                 new BlockEntityType<>(CircuitDeviceBlockEntity::new,
                         Set.of(BATTERY, RECHARGEABLE_BATTERY, STEP_UP_CONVERTER, STEP_DOWN_TRANSFORMER, CIRCUIT_SWITCH, RESISTOR_LOAD, COAL_GENERATOR, WIND_GENERATOR,
                                 SOLAR_GENERATOR, MINER, DIESEL_GENERATOR)));
+
+        public static final ChemicalMachineBlock CHLORINE_GENERATOR = registerBlock("chlorine_generator",
+                properties -> new ChemicalMachineBlock(properties, CircuitDeviceBlock.Kind.CHLORINE_GENERATOR),
+                BlockBehaviour.Properties.of().strength(3.0F).sound(SoundType.METAL));
+        public static final Item CHLORINE_GENERATOR_ITEM = registerItem("chlorine_generator", CHLORINE_GENERATOR);
+        public static final ChemicalMachineBlock CHEMICAL_REACTOR = registerBlock("chemical_reactor",
+                properties -> new ChemicalMachineBlock(properties, CircuitDeviceBlock.Kind.CHEMICAL_REACTOR),
+                BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.METAL));
+        public static final Item CHEMICAL_REACTOR_ITEM = registerItem("chemical_reactor", CHEMICAL_REACTOR);
+        public static final BlockEntityType<ChemicalMachineBlockEntity> CHEMICAL_MACHINE_ENTITY = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, id("chemical_machine")),
+                new BlockEntityType<>(ChemicalMachineBlockEntity::new, Set.of(CHLORINE_GENERATOR, CHEMICAL_REACTOR)));
+        public static final AsphaltBlock ASPHALT_BLOCK = registerBlock("asphalt_block", AsphaltBlock::new,
+                BlockBehaviour.Properties.of().mapColor(net.minecraft.world.level.material.MapColor.COLOR_BLACK)
+                        .strength(30.0F, 1200.0F).requiresCorrectToolForDrops().speedFactor(ASPHALT_SPEED_FACTOR).sound(SoundType.STONE));
+        public static final Item ASPHALT_BLOCK_ITEM = registerItem("asphalt_block", ASPHALT_BLOCK);
 
         public static final Block UPWARD_HOPPER = registerBlock("upward_hopper", UpwardHopperBlock::new,
             BlockBehaviour.Properties.of().mapColor(net.minecraft.world.level.material.MapColor.STONE)

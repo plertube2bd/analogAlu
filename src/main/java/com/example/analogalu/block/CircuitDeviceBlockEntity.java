@@ -20,7 +20,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -41,7 +44,8 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
     private double sourceTerminalVoltage;
     private long nextMiningTick;
     // 승압기/변압기 상태
-    private int setpointIndex;
+    /** The converter's target voltage, typed in on its screen. */
+    private double setpointVolts;
     private double converterInputVoltage;
     private double converterInputCurrent;
     /** 입력 회로 전원의 기전력. 권선비(설정 전압 / 기전력)를 정하는 데 쓴다. */
@@ -53,10 +57,16 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
     private long lastConverterOutputTick = -1L;
 
     public CircuitDeviceBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.CIRCUIT_DEVICE_ENTITY, pos, state);
+        this(ModBlocks.CIRCUIT_DEVICE_ENTITY, pos, state);
+    }
+
+    /** For devices with more to them, such as the chemical machines. */
+    protected CircuitDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
         // 일반 건전지는 가득 찬 채로, 충전식 건전지는 빈 채로 시작한다.
         storedEnergyJoules = kind() == CircuitDeviceBlock.Kind.BATTERY ? capacity() : 0.0;
-        if (kind() == CircuitDeviceBlock.Kind.STEP_DOWN) setpointIndex = CircuitDeviceBlock.STEP_DOWN_DEFAULT_INDEX;
+        CircuitDeviceBlock.Kind kind = kind();
+        if (CircuitDeviceBlock.isConverter(kind)) setpointVolts = CircuitDeviceBlock.defaultSetpoint(kind);
     }
 
     public CircuitDeviceBlock.Kind kindOrNull() {
@@ -102,8 +112,12 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
         sourceTerminalVoltage = finiteOr(input.getDoubleOr("SourceTerminalVoltage", 0.0), 0.0);
         nextMiningTick = input.getLongOr("NextMiningTick", 0L);
         if (CircuitDeviceBlock.isConverter(kind())) {
-            setpointIndex = Math.clamp(input.getIntOr("Setpoint", setpointIndex), 0,
-                    CircuitDeviceBlock.setpoints(kind()).length - 1);
+            // 0.2.1 saved an index into the old presets; read that as its voltage.
+            double legacy = setpointVolts;
+            double[] presets = CircuitDeviceBlock.setpoints(kind());
+            int legacyIndex = input.getIntOr("Setpoint", -1);
+            if (legacyIndex >= 0 && presets.length > 0) legacy = presets[Math.clamp(legacyIndex, 0, presets.length - 1)];
+            setpointVolts = clampSetpoint(finiteOr(input.getDoubleOr("SetpointVolts", legacy), legacy));
         }
         converterInputVoltage = finiteOr(input.getDoubleOr("ConverterInputVoltage", 0.0), 0.0);
         converterInputCurrent = finiteOr(input.getDoubleOr("ConverterInputCurrent", 0.0), 0.0);
@@ -121,7 +135,7 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
         output.putDouble("LoadCurrent", loadCurrent);
         output.putDouble("SourceTerminalVoltage", sourceTerminalVoltage);
         output.putLong("NextMiningTick", nextMiningTick);
-        output.putInt("Setpoint", setpointIndex);
+        output.putDouble("SetpointVolts", setpointVolts);
         output.putDouble("ConverterInputVoltage", converterInputVoltage);
         output.putDouble("ConverterInputCurrent", converterInputCurrent);
         output.putDouble("ConverterOutputWatts", converterOutputWatts);
@@ -143,7 +157,7 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
     private void syncIfChanged() {
         int signature = java.util.Objects.hash(Math.round(storedEnergyJoules / 10.0), fuelTicks / 10,
             Math.round(loadVoltage * 100.0), Math.round(loadCurrent * 1000.0),
-            Math.round(sourceTerminalVoltage * 100.0), setpointIndex, Math.round(converterInputVoltage * 100.0),
+            Math.round(sourceTerminalVoltage * 100.0), Math.round(setpointVolts * 10.0), Math.round(converterInputVoltage * 100.0),
             Math.round(converterOutputWatts * 10.0));
         if (signature == lastSyncSignature) return;
         lastSyncSignature = signature;
@@ -234,7 +248,11 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
         if (targetState.isAir() || targetState.getDestroySpeed(level, targetPos) < 0.0F
                 || level.getBlockEntity(targetPos) != null) return;
 
-        if (level.destroyBlock(targetPos, true)) {
+        // What it mines goes into a hopper under or over the miner when there is one.
+        List<ItemStack> drops = level instanceof ServerLevel serverLevel
+                ? Block.getDrops(targetState, serverLevel, targetPos, null) : List.of();
+        if (level.destroyBlock(targetPos, false)) {
+            for (ItemStack drop : drops) MachineOutput.emit(level, pos, drop);
             nextMiningTick = level.getGameTime() + 10L;
             level.playSound(null, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F);
             setChanged();
@@ -271,18 +289,21 @@ public class CircuitDeviceBlockEntity extends BlockEntity implements HoverInfo, 
     // 전원이 약해 입력 전압이 처지면 출력 전압도 같은 비율로 처지므로 에너지가 새로 생기지 않는다.
 
     public double converterSetpoint() {
-        double[] setpoints = CircuitDeviceBlock.setpoints(kind());
-        return setpoints.length == 0 ? 0.0 : setpoints[Math.clamp(setpointIndex, 0, setpoints.length - 1)];
+        return CircuitDeviceBlock.isConverter(kind()) ? setpointVolts : 0.0;
     }
 
-    /** 설정 전압을 한 단계 올리거나 내리고 새 값을 돌려준다. */
-    public double cycleSetpoint(boolean up) {
-        int count = CircuitDeviceBlock.setpoints(kind()).length;
-        if (count == 0) return 0.0;
-        setpointIndex = Math.floorMod(setpointIndex + (up ? 1 : -1), count);
+    /** Sets the target voltage, rounded to 0.1 V and kept in range, and returns what was applied. */
+    public double setSetpoint(double volts) {
+        if (!CircuitDeviceBlock.isConverter(kind())) return 0.0;
+        setpointVolts = clampSetpoint(finiteOr(volts, setpointVolts));
         setChanged();
         syncIfChanged();
-        return converterSetpoint();
+        return setpointVolts;
+    }
+
+    private double clampSetpoint(double volts) {
+        CircuitDeviceBlock.Kind kind = kind();
+        return Math.clamp(Math.round(volts * 10.0) / 10.0, CircuitDeviceBlock.minSetpoint(kind), CircuitDeviceBlock.maxSetpoint(kind));
     }
 
     public double converterInputResistance() {

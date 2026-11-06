@@ -100,6 +100,42 @@
               "translate": "book.analog_alu.guide.page13"
             },
             "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page14"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page15"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page16"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page17"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page18"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.guide.page19"
+            },
+            "filtered": null
           }
         ]
       }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "redstone_transportation:block/fuel_tank_top",
+    "side": "redstone_transportation:block/fuel_tank_side"
+  }
+}

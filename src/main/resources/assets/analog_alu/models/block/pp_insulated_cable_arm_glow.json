@@ -1,0 +1,7 @@
+{
+  "parent": "analog_alu:block/pp_insulated_cable_arm",
+  "textures": {
+    "wire": "analog_alu:block/pp_insulated_cable_glow",
+    "particle": "analog_alu:block/pp_insulated_cable_glow"
+  }
+}

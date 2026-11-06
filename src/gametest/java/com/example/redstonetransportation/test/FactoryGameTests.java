@@ -204,7 +204,7 @@ public final class FactoryGameTests {
         TestWorld.floor(helper, Blocks.GRASS_BLOCK);
         machine(helper, MACHINE, MachineType.AUTO_PLANTER, Direction.SOUTH);
         machineAt(helper, MACHINE).setItem(0, new ItemStack(Items.OAK_SAPLING, 16));
-        helper.setBlock(MACHINE.east(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, MACHINE.east(), FactoryControllerBlock.Mode.RUNNING);
 
         helper.succeedWhen(() -> {
             int planted = 0;
@@ -224,7 +224,7 @@ public final class FactoryGameTests {
         machine(helper, MACHINE, MachineType.CROP_HARVESTER, Direction.SOUTH);
         helper.setBlock(MACHINE.below(), Blocks.STONE);
         helper.setBlock(CHEST, Blocks.CHEST);
-        helper.setBlock(MACHINE.east(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, MACHINE.east(), FactoryControllerBlock.Mode.RUNNING);
 
         CropBlock wheat = (CropBlock) Blocks.WHEAT;
         BlockPos ripe = AREA_CENTER;
@@ -252,7 +252,7 @@ public final class FactoryGameTests {
         helper.setBlock(rail.below(), Blocks.STONE);
         machine(helper, drill, MachineType.QUARRY_DRILL, Direction.SOUTH);
         helper.setBlock(drill.north(), Blocks.CHEST);
-        helper.setBlock(drill.east(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, drill.east(), FactoryControllerBlock.Mode.RUNNING);
         helper.setBlock(rail, Blocks.RAIL);
 
         helper.succeedWhen(() -> {
@@ -267,7 +267,7 @@ public final class FactoryGameTests {
         TestWorld.floor(helper, Blocks.STONE);
         machine(helper, MACHINE, MachineType.ITEM_COLLECTOR, Direction.SOUTH);
         helper.setBlock(CHEST, Blocks.CHEST);
-        helper.setBlock(MACHINE.east(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, MACHINE.east(), FactoryControllerBlock.Mode.RUNNING);
         helper.spawnItem(Items.APPLE, AREA_CENTER.above());
 
         helper.succeedWhen(() -> helper.assertValueEqual(chestCount(helper, CHEST, Items.APPLE), 1, "apples in chest"));
@@ -305,8 +305,7 @@ public final class FactoryGameTests {
         machine(helper, MACHINE, MachineType.TREE_CUTTER, Direction.SOUTH);
         machine(helper, MACHINE.east(), MachineType.AUTO_PLANTER, Direction.SOUTH);
         BlockPos controller = MACHINE.west();
-        helper.setBlock(controller, ModContent.FACTORY_CONTROLLER);
-        helper.setBlock(controller.west(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, controller, FactoryControllerBlock.Mode.STOPPED);
         oakTree(helper, TREE, 4);
 
         helper.runAtTickTime(40, () -> {
@@ -739,9 +738,7 @@ public final class FactoryGameTests {
         machine(helper, cutter.east(), MachineType.AUTO_PLANTER, Direction.SOUTH);
         machine(helper, cutter.west(), MachineType.GROWTH_BOOSTER, Direction.SOUTH);
         helper.setBlock(cutter.north(), Blocks.CHEST);
-        helper.setBlock(cutter.north().east(), ModContent.FACTORY_CONTROLLER.defaultBlockState()
-                .setValue(FactoryControllerBlock.MODE, FactoryControllerBlock.Mode.RUNNING));
-        helper.setBlock(cutter.north(2).east(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, cutter.north().east(), FactoryControllerBlock.Mode.RUNNING);
     }
 
     /**
@@ -783,7 +780,7 @@ public final class FactoryGameTests {
         machine(helper, cutter, MachineType.TREE_CUTTER, Direction.SOUTH);
         machine(helper, planter, MachineType.AUTO_PLANTER, Direction.SOUTH);
         machineAt(helper, planter).setItem(0, new ItemStack(Items.OAK_SAPLING, 8));
-        helper.setBlock(planter.north(), TestContent.SIGNAL);
+        TestWorld.poweredController(helper, planter.north(), FactoryControllerBlock.Mode.RUNNING);
 
         helper.runAtTickTime(60, () -> {
             helper.assertBlockPresent(Blocks.OAK_SAPLING, cutter.south());

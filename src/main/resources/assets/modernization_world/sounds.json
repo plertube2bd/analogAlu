@@ -1,0 +1,18 @@
+{
+  "music_disc.snowman": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/snowman",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.payphone": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/payphone",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -84,6 +84,11 @@ public final class RedstoneTransportation implements ModInitializer {
                     entries.accept(ModContent.SHIP_HELM_ITEM);
                     entries.accept(ModContent.AIRSHIP_HELM_ITEM);
                     entries.accept(ModContent.LIFT_BALLOON_ITEM);
+                    entries.accept(ModContent.STEERING_WHEEL_ITEM);
+                    entries.accept(ModContent.CAR_WHEEL_ITEM);
+                    entries.accept(ModContent.CAR_SEAT_ITEM);
+                    entries.accept(ModContent.CAR_ENGINE_ITEM);
+                    entries.accept(ModContent.FUEL_TANK_ITEM);
                     entries.accept(ModContent.STRUCTURE_MARKER_ITEM);
                     ModContent.UPGRADED_FURNACE_ITEMS.forEach(entries::accept);
                 });

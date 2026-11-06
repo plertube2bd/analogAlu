@@ -70,7 +70,25 @@
       "analog_alu:wafer_cutting_wire",
       "analog_alu:waterproof_semiconductor_block",
       "analog_alu:wind_generator",
-      "analog_alu:xor_gate"
+      "analog_alu:xor_gate",
+      "analog_alu:pvc_insulated_cable",
+      "analog_alu:pp_insulated_cable",
+      "analog_alu:asphalt_block",
+      "analog_alu:chemical_reactor",
+      "analog_alu:chlorine_generator",
+      "analog_alu:polyester_fiber",
+      "analog_alu:nylon_fiber",
+      "analog_alu:acrylic_fiber",
+      "analog_alu:suit",
+      "analog_alu:decorated_suit",
+      "analog_alu:wool_trousers",
+      "analog_alu:cotton_trousers",
+      "analog_alu:skirt",
+      "analog_alu:sneakers",
+      "analog_alu:insulated_boots",
+      "analog_alu:stun_gun",
+      "analog_alu:resin_converter",
+      "analog_alu:petrochemistry_guide"
     ]
   }
 }

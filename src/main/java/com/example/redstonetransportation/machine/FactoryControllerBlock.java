@@ -1,8 +1,8 @@
 package com.example.redstonetransportation.machine;
 
+import com.example.analogalu.ModBlocks;
+import com.example.analogalu.block.ElectricLoad;
 import com.example.redstonetransportation.content.ModAdvancements;
-import com.example.redstonetransportation.integration.analogalu.AnalogAluSignalAdapter;
-import com.example.redstonetransportation.integration.analogalu.ElectricPower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -28,9 +28,13 @@ import java.util.Set;
 
 /**
  * One switch for a whole factory: every machine touching this block, directly or through other
- * machines, runs from its mode. Right-click cycles the mode.
+ * machines, runs from its mode. Right-click cycles the mode; sneaking shows the power it gets.
+ *
+ * <p>It is also where the factory takes its electricity. Wired between two cables on opposite faces,
+ * it is one load standing for every linked machine but the tree cutter: each is 220 V and 200 ohms,
+ * all in parallel. The volts across it set how fast they run, full speed at 220 V.
  */
-public final class FactoryControllerBlock extends Block {
+public final class FactoryControllerBlock extends Block implements ElectricLoad {
     public static final EnumProperty<Mode> MODE = EnumProperty.create("mode", Mode.class);
     private static final int REFRESH_TICKS = 20;
     private static final int FULL_SPEED = 15;
@@ -40,9 +44,9 @@ public final class FactoryControllerBlock extends Block {
     public enum Mode implements StringRepresentable {
         /** Every linked machine stops, whatever signal it receives. */
         STOPPED("stopped"),
-        /** Every linked machine runs at full speed. */
+        /** Every linked machine runs as fast as the volts across this block allow. */
         RUNNING("running"),
-        /** This block's 0..15 input sets the speed of every linked machine. */
+        /** This block's 0..15 redstone input sets the speed, up to what the volts allow. */
         SIGNAL("signal");
 
         private final String name;
@@ -75,6 +79,14 @@ public final class FactoryControllerBlock extends Block {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (player.isShiftKeyDown()) {
+            double volts = ControllerPower.volts(level, pos);
+            double amps = ControllerPower.amps(level, pos);
+            player.sendOverlayMessage(Component.translatable("message.redstone_transportation.factory_power",
+                    String.format("%.0f", volts), String.format("%.2f", amps), String.format("%.0f", volts * amps),
+                    ControllerPower.loads(level, pos)));
+            return InteractionResult.SUCCESS;
+        }
         Mode next = state.getValue(MODE).next();
         level.setBlock(pos, state.setValue(MODE, next), Block.UPDATE_ALL);
         int machines = linkMachines((ServerLevel) level, pos, signalFor(next, level, pos));
@@ -97,17 +109,43 @@ public final class FactoryControllerBlock extends Block {
     }
 
     private static int signalFor(Mode mode, Level level, BlockPos pos) {
+        int power = ControllerPower.signal(ControllerPower.volts(level, pos));
         return switch (mode) {
             case STOPPED -> 0;
-            // Left running, it still has to be getting electricity if there is any to be had.
-            case RUNNING -> ElectricPower.isAvailable() && ElectricPower.input(level, pos) == 0 ? 0 : FULL_SPEED;
-            case SIGNAL -> AnalogAluSignalAdapter.readBestNeighborSignal(level, pos);
+            case RUNNING -> power;
+            case SIGNAL -> Math.min(Math.clamp(level.getBestNeighborSignal(pos), 0, FULL_SPEED), power);
         };
+    }
+
+    /** The first pair of opposite faces with a cable on both: top and bottom, east and west, or north and south. */
+    @Override
+    public BlockPos[] loadTerminals(Level level, BlockPos pos) {
+        for (Direction axis : new Direction[] {Direction.UP, Direction.EAST, Direction.SOUTH}) {
+            BlockPos one = pos.relative(axis);
+            BlockPos other = pos.relative(axis.getOpposite());
+            if (level.getBlockState(one).getBlock() instanceof com.example.analogalu.block.CopperCableBlock
+                    && level.getBlockState(other).getBlock() instanceof com.example.analogalu.block.CopperCableBlock) {
+                return new BlockPos[] {one, other};
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public double loadResistance(Level level, BlockPos pos) {
+        return ControllerPower.resistance(level, pos);
+    }
+
+    @Override
+    public void powered(Level level, BlockPos pos, double volts, double amps) {
+        ControllerPower.record(level, pos, volts, amps);
     }
 
     /** Links the machines connected to this controller and returns how many were reached. */
     private static int linkMachines(ServerLevel level, BlockPos controller, int signal) {
         List<MachineBlockEntity> machines = findMachines(level, controller);
+        ControllerPower.countLoads(level, controller,
+                (int) machines.stream().filter(machine -> machine.type().drawsPower()).count());
         Map<Direction, BlockPos> areas = new EnumMap<>(Direction.class);
         for (MachineBlockEntity machine : machines) {
             BlockPos area = areas.computeIfAbsent(machine.facing(), facing -> WorkArea.sharedCenter(machines, facing));

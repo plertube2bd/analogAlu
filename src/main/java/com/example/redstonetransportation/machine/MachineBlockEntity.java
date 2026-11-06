@@ -96,7 +96,8 @@ public final class MachineBlockEntity extends BaseContainerBlockEntity implement
             linkTicks--;
             return linkedSignal;
         }
-        return AnalogAluSignalAdapter.readBestNeighborSignal(level, worldPosition);
+        // A machine that draws power gets it only through a controller wired into a circuit.
+        return type.drawsPower() ? 0 : AnalogAluSignalAdapter.readBestNeighborSignal(level, worldPosition);
     }
 
     /** Called by a factory controller; its signal and work area replace this machine's own while the link lasts. */

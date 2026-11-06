@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "analog_alu:polyamide"
+  ],
+  "result": {
+    "id": "analog_alu:nylon_fiber",
+    "count": 3
+  }
+}

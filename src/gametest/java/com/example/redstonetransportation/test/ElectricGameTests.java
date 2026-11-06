@@ -157,8 +157,16 @@ public final class ElectricGameTests {
     public void aMachineRunsOnElectricity(GameTestHelper helper) {
         if (noCircuits(helper)) return;
         wired(helper);
-        machineAt(helper, BESIDE);
-        helper.succeedWhen(() -> helper.assertTrue(helper.getBlockState(BESIDE).getValue(MachineBlock.STATUS) != MachineStatus.OFF, "the machine is off"));
+        // The tree cutter runs on any live cable it touches; a collector on the same cable needs a controller.
+        helper.setBlock(BESIDE, ModContent.MACHINES.get(MachineType.TREE_CUTTER).defaultBlockState()
+                .setValue(MachineBlock.FACING, Direction.SOUTH));
+        BlockPos collector = TAP.north().east();
+        machineAt(helper, collector);
+        helper.runAtTickTime(LIVE_TICKS, () -> {
+            helper.assertTrue(helper.getBlockState(BESIDE).getValue(MachineBlock.STATUS) != MachineStatus.OFF, "the cutter is off");
+            helper.assertBlockProperty(collector, MachineBlock.STATUS, MachineStatus.OFF);
+            helper.succeed();
+        });
     }
 
     @GameTest(structure = TestWorld.ARENA, maxTicks = 80)
@@ -173,20 +181,16 @@ public final class ElectricGameTests {
         });
     }
 
-    /** Left on "running", a controller still needs electricity. */
+    /** Left on "running", a controller still needs electricity: touching one live cable is not being wired in. */
     @GameTest(structure = TestWorld.ARENA, maxTicks = 120)
     public void aRunningControllerNeedsElectricity(GameTestHelper helper) {
         if (noCircuits(helper)) return;
-        TestWorld.floor(helper, Blocks.STONE);
+        wired(helper);
         helper.setBlock(BESIDE, ModContent.FACTORY_CONTROLLER.defaultBlockState()
                 .setValue(FactoryControllerBlock.MODE, FactoryControllerBlock.Mode.RUNNING));
         machineAt(helper, BESIDE.east());
-        helper.runAtTickTime(40, () -> {
+        helper.runAtTickTime(LIVE_TICKS, () -> {
             helper.assertBlockProperty(BESIDE.east(), MachineBlock.STATUS, MachineStatus.OFF);
-            TestWorld.circuit(helper.getLevel(), helper.absolutePos(TAP));
-        });
-        helper.runAtTickTime(100, () -> {
-            helper.assertTrue(helper.getBlockState(BESIDE.east()).getValue(MachineBlock.STATUS) != MachineStatus.OFF, "the machine is off");
             helper.succeed();
         });
     }

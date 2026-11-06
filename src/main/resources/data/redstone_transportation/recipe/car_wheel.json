@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "BBB",
+    "BIB",
+    "BBB"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "B": "minecraft:black_wool"
+  },
+  "result": {
+    "id": "redstone_transportation:car_wheel",
+    "count": 4
+  }
+}

@@ -112,6 +112,22 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
             context.runOnClient(client -> client.gui.hud.toggle());
             context.waitTicks(20);
 
+            // RT_SHOTS=guns,car takes only those scenes, for a quick look while working on them.
+            String only = System.getenv("RT_SHOTS");
+            if (only != null && !only.isBlank()) {
+                for (String part : only.split(",")) {
+                    switch (part.trim()) {
+                        case "guns" -> testGuns(context, world);
+                        case "car" -> testCar(context, world);
+                        case "power" -> testPowerMarks(context, world);
+                        case "electric" -> testElectricity(context, world);
+                        case "music" -> testMusicDisc(context, world);
+                        default -> throw new AssertionError("no screenshot scene called " + part);
+                    }
+                }
+                return;
+            }
+
             // The tram stands at x=7, the freight car at x=15, both on the rail at z=12.
             shot(context, world, "tram_side", 7.5, RAIL_Y + 1.0, 17.5, 7.5, RAIL_Y + 1.0, 12.5);
             shot(context, world, "tram_three_quarter", 2.5, RAIL_Y + 2.5, 16.5, 7.5, RAIL_Y + 0.8, 12.5);
@@ -158,6 +174,8 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
             testLandLeveler(context, world);
             testGuns(context, world);
             testPowerMarks(context, world);
+            testCar(context, world);
+            testMusicDisc(context, world);
             if (ElectricPower.isAvailable()) testElectricity(context, world);
             testCouplerClicks(context, world);
             testRecipeBook(context, world);
@@ -672,7 +690,8 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
             BlockState belt = ModContent.CONVEYOR_BELT.defaultBlockState().setValue(ConveyorBeltBlock.FACING, Direction.EAST);
             for (int beltX = x + 5; beltX <= x + 9; beltX++) level.setBlock(new BlockPos(beltX, RAIL_Y, top + 1), belt, Block.UPDATE_ALL);
             level.setBlock(new BlockPos(x + 10, RAIL_Y, top + 1), Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(x + 5, RAIL_Y, top + 2), ModContent.MACHINES.get(MachineType.ITEM_COLLECTOR).defaultBlockState()
+            // The tree cutter runs on any live cable it touches; the other machines take power through a controller.
+            level.setBlock(new BlockPos(x + 5, RAIL_Y, top + 2), ModContent.MACHINES.get(MachineType.TREE_CUTTER).defaultBlockState()
                     .setValue(MachineBlock.FACING, Direction.SOUTH), Block.UPDATE_ALL);
         });
         BlockPos belt = new BlockPos(x + 9, RAIL_Y, top + 1);
@@ -681,7 +700,10 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         if (!isBeltStopped(world, belt)) throw new AssertionError("the belt ran with the switch open");
 
         BlockPos circuitSwitch = new BlockPos(x + 1, RAIL_Y, top);
-        rightClick(context, world, x + 1.5D, RAIL_Y, top + 2.5D - 5.0D, circuitSwitch);
+        BlockPos clickedSwitch = rightClick(context, world, x + 1.5D, RAIL_Y, top + 2.5D - 5.0D, circuitSwitch);
+        boolean closed = world.getServer().computeOnServer(server -> server.overworld().getBlockState(circuitSwitch)
+                .getValue(com.example.analogalu.block.CircuitDeviceBlock.CLOSED));
+        if (!closed) throw new AssertionError("clicking the switch at " + clickedSwitch + " did not close it");
         world.getServer().runCommand("tp @p " + (x + 4.5D) + " " + RAIL_Y + " 0.5");
         context.waitTicks(3);
         world.getServer().runCommand("summon minecraft:item " + (x + 6.5D) + " " + (RAIL_Y + 0.5D) + " " + (top + 1.5D) + " {Item:{id:\"minecraft:diamond\",count:1}}");
@@ -866,18 +888,122 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         context.runOnClient(client -> client.player.getInventory().setSelectedSlot(2));
         context.waitTicks(6);
         context.takeScreenshot(TestScreenshotOptions.of("gun_shotgun"));
-        context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
-        String[] guns = {"revolver", "musket", "shotgun"};
-        for (int slot = 0; slot < guns.length; slot++) {
-            int selected = slot;
-            context.runOnClient(client -> client.player.getInventory().setSelectedSlot(selected));
-            context.waitTicks(6);
-            context.takeScreenshot(TestScreenshotOptions.of("gun_" + guns[slot] + "_third_person"));
-        }
-        context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
         context.runOnClient(client -> client.player.getInventory().setSelectedSlot(0));
         context.runOnClient(client -> client.gui.hud.toggle());
+
+        // Held in the hand as others see it: three armor stands facing east, seen from their right side.
+        String[] guns = {"revolver", "musket", "shotgun"};
+        for (int i = 0; i < guns.length; i++) {
+            world.getServer().runCommand("summon minecraft:armor_stand " + (x - 3.5D + 3 * i) + " " + RAIL_Y + " " + (z + 4.5D)
+                    + " {ShowArms:1b,NoGravity:1b,Rotation:[-90f,0f],equipment:{mainhand:{id:\"analog_alu:" + guns[i] + "\",count:1}}}");
+        }
+        shot(context, world, "gun_third_person", x + 0.5D, RAIL_Y + 1.6D, z + 8.0D, x + 0.5D, RAIL_Y + 1.0D, z + 4.5D);
+        world.getServer().runCommand("kill @e[type=minecraft:armor_stand]");
         world.getServer().runCommand("kill @e[type=minecraft:husk]");
+        world.getServer().runCommand("clear @p");
+    }
+
+    private static final int CAR_X = 230;
+    private static final int CAR_Z = 10;
+    private static final BlockPos CAR_CORE = new BlockPos(CAR_X, RAIL_Y + 1, CAR_Z);
+
+    /**
+     * A car built block by block, assembled with a click on its steering wheel, then driven from
+     * its seat with the player's own keys.
+     */
+    private static void testCar(ClientGameTestContext context, TestSingleplayerContext world) {
+        world.getServer().runOnServer(server -> {
+            ServerLevel level = server.overworld();
+            clearGround(level, CAR_X - 10, CAR_X + 10, CAR_Z - 8, CAR_Z + 44);
+            // The chassis: wheels on the four corners, the engine in the nose, red bodywork between.
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -2; dz <= 1; dz++) {
+                    BlockPos at = new BlockPos(CAR_X + dx, RAIL_Y, CAR_Z + dz);
+                    boolean corner = dx != 0 && (dz == -2 || dz == 1);
+                    Block block = corner ? ModContent.CAR_WHEEL : dx == 0 && dz == 1 ? ModContent.CAR_ENGINE : BuiltInRegistries.BLOCK.getValue(Identifier.withDefaultNamespace("red_concrete"));
+                    level.setBlock(at, block.defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+            level.setBlock(CAR_CORE, ModContent.STEERING_WHEEL.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+            level.setBlock(CAR_CORE.north(), ModContent.CAR_SEAT.defaultBlockState()
+                    .setValue(com.example.redstonetransportation.block.CarSeatBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+            BlockPos tank = CAR_CORE.north(2);
+            level.setBlock(tank, ModContent.FUEL_TANK.defaultBlockState(), Block.UPDATE_CLIENTS);
+            if (level.getBlockEntity(tank) instanceof com.example.redstonetransportation.block.FuelTankBlockEntity fuel) {
+                for (int i = 0; i < 4; i++) fuel.addDiesel();
+            }
+        });
+        context.waitTicks(10);
+        shot(context, world, "car_built", CAR_X + 4.5, RAIL_Y + 3.0, CAR_Z + 5.5, CAR_X + 0.5, RAIL_Y + 0.8, CAR_Z);
+
+        world.getServer().runCommand("clear @p");
+        world.getServer().runCommand("gamemode survival @p");
+        assemble(context, world, CAR_CORE);
+        boolean car = world.getServer().computeOnServer(server -> MovingStructures.in(server.overworld()).stream()
+                .anyMatch(structure -> structure.kind() == StructureKind.CAR));
+        if (!car) throw new AssertionError("clicking the steering wheel made no car");
+
+        // Into the driver's seat and away down the road.
+        world.getServer().runCommand("tp @p " + (CAR_X + 0.5) + " " + (RAIL_Y + 2.0) + " " + (CAR_Z - 0.5) + " 0 10");
+        world.getServer().runCommand("execute as @p at @s run ride @s mount @e[type=redstone_transportation:moving_structure,limit=1,sort=nearest]");
+        context.waitTicks(10);
+        boolean riding = context.computeOnClient(client -> client.player.getVehicle() instanceof MovingStructureEntity);
+        if (!riding) throw new AssertionError("the player is not sitting in the car");
+        // A sitting player's hips are 0.6 above their feet; they belong on the cushion, 7/16 up the seat.
+        double hips = context.computeOnClient(client -> client.player.getY()) + 0.6 - (RAIL_Y + 1);
+        if (Math.abs(hips - 0.45) > 0.1) throw new AssertionError("the driver sits " + hips + " up the seat, not on its cushion");
+        double startZ = context.computeOnClient(client -> client.player.getZ());
+        context.runOnClient(client -> client.player.setYRot(0.0F));
+        context.getInput().holdKeyFor(options -> options.keyUp, 40);
+        double driven = context.computeOnClient(client -> client.player.getZ()) - startZ;
+        if (driven < 6.0) throw new AssertionError("the car went only " + driven + " blocks");
+        context.takeScreenshot(TestScreenshotOptions.of("car_driver_view"));
+        context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+        context.getInput().holdKeyFor(options -> options.keyUp, 10);
+        context.takeScreenshot(TestScreenshotOptions.of("car_driving"));
+        context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+        context.waitTicks(40);
+        world.getServer().runCommand("ride @p dismount");
+        Vec3 parked = world.getServer().computeOnServer(server -> MovingStructures.in(server.overworld()).stream()
+                .filter(structure -> structure.kind() == StructureKind.CAR).findFirst().orElseThrow().position());
+        shot(context, world, "car_parked", parked.x + 4.5, parked.y + 2.5, parked.z + 5.5, parked.x, parked.y + 0.5, parked.z);
+        world.getServer().runCommand("gamemode creative @p");
+    }
+
+    /**
+     * A disc put in a jukebox with a real click, which starts the song on the client, and an armor stand
+     * in sneakers beside it.
+     */
+    private static void testMusicDisc(ClientGameTestContext context, TestSingleplayerContext world) {
+        int x = 260;
+        int z = 10;
+        BlockPos jukebox = new BlockPos(x, RAIL_Y, z);
+        world.getServer().runOnServer(server -> {
+            clearGround(server.overworld(), x - 6, x + 6, z - 6, z + 8);
+            server.overworld().setBlock(jukebox, Blocks.JUKEBOX.defaultBlockState(), Block.UPDATE_ALL);
+        });
+        world.getServer().runCommand("summon minecraft:armor_stand " + (x + 1.5D) + " " + RAIL_Y + " " + (z + 0.5D)
+                + " {ShowArms:1b,NoGravity:1b,Rotation:[180f,0f],equipment:{feet:{id:\"analog_alu:sneakers\",count:1}}}");
+        world.getServer().runCommand("clear @p");
+        world.getServer().runCommand("item replace entity @p hotbar.0 with modernization_world:music_disc_snowman");
+        context.runOnClient(client -> client.player.getInventory().setSelectedSlot(0));
+        context.runOnClient(client -> client.gui.hud.toggle());
+        rightClick(context, world, x + 0.5D, RAIL_Y, z + 3.5D, jukebox);
+        context.waitTicks(10);
+        boolean playing = world.getServer().computeOnServer(server -> server.overworld().getBlockEntity(jukebox)
+                instanceof net.minecraft.world.level.block.entity.JukeboxBlockEntity box && box.getSongPlayer().isPlaying());
+        if (!playing) throw new AssertionError("clicking the jukebox with the Snowman disc played nothing");
+        // The client has the song: its sound event resolves and its audio file is in the resources.
+        boolean known = context.computeOnClient(client -> client.getSoundManager().getSoundEvent(
+                Identifier.fromNamespaceAndPath("modernization_world", "music_disc.snowman")) != null);
+        if (!known) throw new AssertionError("the client does not know the Snowman sound");
+        boolean audio = context.computeOnClient(client -> client.getResourceManager().getResource(
+                Identifier.fromNamespaceAndPath("modernization_world", "sounds/records/snowman.ogg")).isPresent());
+        if (!audio) throw new AssertionError("the Snowman audio is not in the resources");
+        context.takeScreenshot(TestScreenshotOptions.of("music_disc_playing"));
+        context.runOnClient(client -> client.gui.hud.toggle());
+        world.getServer().runCommand("kill @e[type=minecraft:armor_stand]");
+        world.getServer().runOnServer(server -> server.overworld().setBlock(jukebox, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL));
         world.getServer().runCommand("clear @p");
     }
 
@@ -1086,9 +1212,13 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
                                        double x, double y, double z, BlockPos target) {
         world.getServer().runCommand("tp @p " + x + " " + y + " " + z);
         context.waitTicks(3);
-        context.getInput().lookAt(target);
-        context.waitTicks(3);
-        BlockPos hit = context.computeOnClient(client -> ((BlockHitResult) client.hitResult).getBlockPos().immutable());
+        // A rotation sent with the teleport can land after the first look; look again until aimed at the target.
+        BlockPos hit = null;
+        for (int attempt = 0; attempt < 5 && !target.equals(hit); attempt++) {
+            context.getInput().lookAt(target);
+            context.waitTicks(3);
+            hit = context.computeOnClient(client -> client.hitResult instanceof BlockHitResult block ? block.getBlockPos().immutable() : null);
+        }
         context.getInput().pressKey(options -> options.keyUse);
         context.waitTicks(6);
         return hit;
@@ -1180,6 +1310,8 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         level.setBlock(cutter.north(), Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(cutter.north().west(), ModContent.FACTORY_CONTROLLER.defaultBlockState()
                 .setValue(FactoryControllerBlock.MODE, FactoryControllerBlock.Mode.RUNNING), Block.UPDATE_ALL);
+        // The display factory is not wired; it gets its 220 V the way the game tests give it.
+        com.example.redstonetransportation.machine.ControllerPower.feedForTest(level, cutter.north().west(), 220.0D);
     }
 
     private static void placeMachine(ServerLevel level, BlockPos pos, MachineType type) {

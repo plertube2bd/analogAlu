@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "analog_alu:block/chemical_reactor_front",
+    "side": "analog_alu:block/chemical_reactor_side",
+    "top": "analog_alu:block/chemical_reactor_top",
+    "particle": "analog_alu:block/chemical_reactor_side"
+  }
+}

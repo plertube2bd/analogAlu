@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "N N",
+    "R R"
+  ],
+  "key": {
+    "N": "analog_alu:nylon_fiber",
+    "R": "analog_alu:synthetic_rubber"
+  },
+  "result": {
+    "id": "analog_alu:sneakers",
+    "count": 1
+  }
+}

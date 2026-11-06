@@ -59,6 +59,10 @@
     "redstone_transportation:crop_harvester",
     "redstone_transportation:quarry_drill",
     "redstone_transportation:item_collector",
+    "redstone_transportation:car_wheel",
+    "redstone_transportation:car_seat",
+    "redstone_transportation:car_engine",
+    "redstone_transportation:fuel_tank",
     "redstone_transportation:land_leveler",
     "redstone_transportation:factory_controller",
     "redstone_transportation:conveyor_belt",
@@ -66,6 +70,7 @@
     "redstone_transportation:elevator_core",
     "redstone_transportation:ship_helm",
     "redstone_transportation:airship_helm",
+    "redstone_transportation:steering_wheel",
     "redstone_transportation:lift_balloon",
     "redstone_transportation:elevator_call",
     "redstone_transportation:route_beacon",
@@ -77,6 +82,9 @@
     "redstone_transportation:upgraded_blast_furnace_3",
     "redstone_transportation:upgraded_smoker_1",
     "redstone_transportation:upgraded_smoker_2",
-    "redstone_transportation:upgraded_smoker_3"
+    "redstone_transportation:upgraded_smoker_3",
+    "analog_alu:asphalt_block",
+    "analog_alu:chemical_reactor",
+    "analog_alu:chlorine_generator"
   ]
 }

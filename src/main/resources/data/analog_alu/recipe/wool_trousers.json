@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "FFF",
+    "F F",
+    "F F"
+  ],
+  "key": {
+    "F": "analog_alu:acrylic_fiber"
+  },
+  "result": {
+    "id": "analog_alu:wool_trousers",
+    "count": 1
+  }
+}

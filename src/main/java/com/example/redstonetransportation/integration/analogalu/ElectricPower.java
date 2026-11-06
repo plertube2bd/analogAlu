@@ -78,7 +78,8 @@ public final class ElectricPower {
     }
 
     private static double voltageAt(Level level, BlockPos pos) {
-        if (!level.getBlockState(pos).is(cable)) return 0.0D;
+        // Bare copper and the insulated cables (all one block class) carry power alike.
+        if (!(level.getBlockState(pos).getBlock() instanceof com.example.analogalu.block.CopperCableBlock)) return 0.0D;
         BlockEntity entity = level.getBlockEntity(pos);
         if (entity == null) return 0.0D;
         try {

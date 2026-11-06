@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AGA",
+    "GSG",
+    "AGA"
+  ],
+  "key": {
+    "A": "analog_alu:asphalt",
+    "G": "minecraft:gravel",
+    "S": "minecraft:sand"
+  },
+  "result": {
+    "id": "analog_alu:asphalt_block",
+    "count": 8
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "L  ",
+    "LLL",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "redstone_transportation:car_seat",
+    "count": 1
+  }
+}

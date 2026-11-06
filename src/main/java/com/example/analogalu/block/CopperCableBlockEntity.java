@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -122,7 +123,8 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
 
         if (cable.damage >= MAX_DAMAGE) {
             level.playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.8F, 1.2F);
-            level.removeBlock(pos, false);
+            // A burnt-out cable catches fire rather than just vanishing.
+            level.setBlock(pos, net.minecraft.world.level.block.BaseFireBlock.getState(level, pos), Block.UPDATE_ALL);
             return;
         }
         if (level.getGameTime() % 20L == 0L) cable.setChanged();
@@ -164,7 +166,7 @@ public class CopperCableBlockEntity extends BlockEntity implements HoverInfo {
         if (level != null && !level.isClientSide()) {
             BlockState state = level.getBlockState(worldPosition);
             boolean powered = Math.abs(this.current) > 1.0e-6;
-            if (state.is(ModBlocks.COPPER_CABLE) && state.getValue(CopperCableBlock.POWERED) != powered) {
+            if (state.getBlock() instanceof CopperCableBlock && state.getValue(CopperCableBlock.POWERED) != powered) {
                 level.setBlock(worldPosition, state.setValue(CopperCableBlock.POWERED, powered),
                         net.minecraft.world.level.block.Block.UPDATE_ALL);
             }

@@ -18,6 +18,7 @@ public final class ModAdvancements {
     public static final String ELEVATOR = "structure/elevator";
     public static final String SHIP = "structure/ship";
     public static final String AIRSHIP = "structure/airship";
+    public static final String CAR = "structure/car";
     public static final String ROUTE = "structure/route";
     public static final String REPAIRS = "structure/repairs";
     public static final String GIANT = "structure/giant";

@@ -1,0 +1,108 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "analog_alu:oil"
+  ],
+  "result": {
+    "id": "minecraft:written_book",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "translate": "item.analog_alu.petrochemistry_guide",
+        "italic": false,
+        "color": "gold"
+      },
+      "minecraft:written_book_content": {
+        "title": {
+          "raw": "Petrochemistry Guide",
+          "filtered": null
+        },
+        "author": "Analog ALU",
+        "generation": 0,
+        "resolved": false,
+        "pages": [
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page1"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page2"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page3"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page4"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page5"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page6"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page7"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page8"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page9"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page10"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page11"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page12"
+            },
+            "filtered": null
+          },
+          {
+            "raw": {
+              "translate": "book.analog_alu.petro.page13"
+            },
+            "filtered": null
+          }
+        ]
+      }
+    }
+  }
+}

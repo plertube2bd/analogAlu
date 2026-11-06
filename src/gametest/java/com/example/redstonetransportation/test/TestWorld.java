@@ -56,6 +56,17 @@ final class TestWorld {
         return aluBlock(name).defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST);
     }
 
+    /**
+     * A factory controller getting a steady 220 V, as if wired into a circuit: machines other than the
+     * tree cutter only run through one.
+     */
+    static void poweredController(GameTestHelper helper, BlockPos pos,
+                                  com.example.redstonetransportation.machine.FactoryControllerBlock.Mode mode) {
+        helper.setBlock(pos, com.example.redstonetransportation.content.ModContent.FACTORY_CONTROLLER.defaultBlockState()
+                .setValue(com.example.redstonetransportation.machine.FactoryControllerBlock.MODE, mode));
+        com.example.redstonetransportation.machine.ControllerPower.feedForTest(helper.getLevel(), helper.absolutePos(pos), 220.0D);
+    }
+
     static Block aluBlock(String name) {
         return BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath("analog_alu", name));
     }

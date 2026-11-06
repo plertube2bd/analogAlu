@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "analog_alu:block/chlorine_generator_front_active",
+    "side": "analog_alu:block/chlorine_generator_side",
+    "top": "analog_alu:block/chlorine_generator_top",
+    "particle": "analog_alu:block/chlorine_generator_side"
+  }
+}

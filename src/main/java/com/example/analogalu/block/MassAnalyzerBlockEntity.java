@@ -178,9 +178,7 @@ public class MassAnalyzerBlockEntity extends BlockEntity implements WorldlyConta
     private void completeProcessing() {
         ItemStack outputStack = new ItemStack(ModItems.MASS_SELECTED_SILICON);
         applyProgram(outputStack);
-        ItemEntity output = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.05,
-                worldPosition.getZ() + 0.5, outputStack);
-        level.addFreshEntity(output);
+        MachineOutput.emit(level, worldPosition, outputStack);
         hasInput = false;
         progress = 0;
         setChanged();

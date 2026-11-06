@@ -5,7 +5,10 @@ import com.example.redstonetransportation.block.ConveyorBeltBlock;
 import com.example.redstonetransportation.block.DirectionalSignalBlock;
 import com.example.redstonetransportation.block.AluTrainControllerBlock;
 import com.example.redstonetransportation.block.DriveRailBlock;
+import com.example.redstonetransportation.block.CarSeatBlock;
 import com.example.redstonetransportation.block.ElevatorCallBlock;
+import com.example.redstonetransportation.block.FuelTankBlock;
+import com.example.redstonetransportation.block.FuelTankBlockEntity;
 import com.example.redstonetransportation.block.PowerCellBlock;
 import com.example.redstonetransportation.block.RailMotorBlock;
 import com.example.redstonetransportation.block.RouteBeaconBlock;
@@ -103,6 +106,18 @@ public final class ModContent {
                     .sound(SoundType.WOOL)
                     .ignitedByLava()
                     .setId(blockKey("lift_balloon"))));
+    /** The car's core, and its steering. */
+    public static final Block STEERING_WHEEL = registerBlock(
+            "steering_wheel", new StructureCoreBlock(baseProperties("steering_wheel"), StructureKind.CAR));
+    public static final Block CAR_WHEEL = registerBlock("car_wheel", new Block(baseProperties("car_wheel")));
+    public static final Block CAR_SEAT = registerBlock("car_seat", new CarSeatBlock(baseProperties("car_seat").noOcclusion()));
+    public static final Block CAR_ENGINE = registerBlock("car_engine", new Block(baseProperties("car_engine")));
+    public static final Block FUEL_TANK = registerBlock("fuel_tank", new FuelTankBlock(baseProperties("fuel_tank")));
+    public static final BlockEntityType<FuelTankBlockEntity> FUEL_TANK_ENTITY = Registry.register(
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            id("fuel_tank"),
+            FabricBlockEntityTypeBuilder.create(FuelTankBlockEntity::new, FUEL_TANK).build()
+    );
     public static final Block ELEVATOR_CALL = registerBlock(
             "elevator_call", new ElevatorCallBlock(baseProperties("elevator_call")));
 
@@ -163,6 +178,11 @@ public final class ModContent {
     public static final Item AIRSHIP_HELM_ITEM = blockItem("airship_helm", AIRSHIP_HELM);
     public static final Item LIFT_BALLOON_ITEM = blockItem("lift_balloon", LIFT_BALLOON);
     public static final Item ELEVATOR_CALL_ITEM = blockItem("elevator_call", ELEVATOR_CALL);
+    public static final Item STEERING_WHEEL_ITEM = blockItem("steering_wheel", STEERING_WHEEL);
+    public static final Item CAR_WHEEL_ITEM = blockItem("car_wheel", CAR_WHEEL);
+    public static final Item CAR_SEAT_ITEM = blockItem("car_seat", CAR_SEAT);
+    public static final Item CAR_ENGINE_ITEM = blockItem("car_engine", CAR_ENGINE);
+    public static final Item FUEL_TANK_ITEM = blockItem("fuel_tank", FUEL_TANK);
     public static final Item ROUTE_BEACON_ITEM = blockItem("route_beacon", ROUTE_BEACON);
     public static final List<Item> UPGRADED_FURNACE_ITEMS = UPGRADED_FURNACES.stream()
             .map(block -> blockItem(BuiltInRegistries.BLOCK.getKey(block).getPath(), block))

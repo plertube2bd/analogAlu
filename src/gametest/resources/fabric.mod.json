@@ -19,7 +19,9 @@
       "com.example.redstonetransportation.test.LevelerGameTests",
       "com.example.redstonetransportation.test.PowerGameTests",
       "com.example.redstonetransportation.test.GunGameTests",
-      "com.example.redstonetransportation.test.OilGameTests"
+      "com.example.redstonetransportation.test.OilGameTests",
+      "com.example.redstonetransportation.test.CarGameTests",
+      "com.example.redstonetransportation.test.ModernGameTests"
     ],
     "fabric-client-gametest": [
       "com.example.redstonetransportation.test.ScreenshotClientTest",

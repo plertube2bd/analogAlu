@@ -1,0 +1,64 @@
+{
+  "multipart": [
+    {
+      "when": { "powered": "false" },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_core" }
+    },
+    {
+      "when": { "powered": "true" },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_node_glow" }
+    },
+    {
+      "when": { "AND": [{ "north": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm" }
+    },
+    {
+      "when": { "AND": [{ "north": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm_glow" }
+    },
+    {
+      "when": { "AND": [{ "east": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm", "y": 90 }
+    },
+    {
+      "when": { "AND": [{ "east": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm_glow", "y": 90 }
+    },
+    {
+      "when": { "AND": [{ "south": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm", "y": 180 }
+    },
+    {
+      "when": { "AND": [{ "south": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm_glow", "y": 180 }
+    },
+    {
+      "when": { "AND": [{ "west": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm", "y": 270 }
+    },
+    {
+      "when": { "AND": [{ "west": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_arm_glow", "y": 270 }
+    },
+    {
+      "when": { "AND": [{ "up": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_up" }
+    },
+    {
+      "when": { "AND": [{ "up": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_up_glow" }
+    },
+    {
+      "when": { "AND": [{ "down": "true" }, { "powered": "false" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_down" }
+    },
+    {
+      "when": { "AND": [{ "down": "true" }, { "powered": "true" }] },
+      "apply": { "model": "analog_alu:block/pp_insulated_cable_down_glow" }
+    },
+    {
+      "when": { "lock": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60|61|62|63|64" },
+      "apply": { "model": "analog_alu:block/copper_cable_lock" }
+    }
+  ]
+}

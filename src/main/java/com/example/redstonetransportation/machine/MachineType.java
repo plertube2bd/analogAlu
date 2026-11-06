@@ -47,6 +47,14 @@ public enum MachineType {
         return id;
     }
 
+    /**
+     * True for the machines that are 220 V, 200 ohm loads and so only run through a factory controller
+     * wired into a circuit. The tree cutter draws nothing and still runs on any power touching it.
+     */
+    public boolean drawsPower() {
+        return this != TREE_CUTTER;
+    }
+
     public Role role() {
         return role;
     }

@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "analog_alu:bullet"
+    "analog_alu:bullet",
+    "analog_alu:electrocution",
+    "analog_alu:stun_gun"
   ]
 }

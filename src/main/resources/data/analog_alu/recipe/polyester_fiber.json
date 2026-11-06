@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "analog_alu:polyethylene_terephthalate"
+  ],
+  "result": {
+    "id": "analog_alu:polyester_fiber",
+    "count": 3
+  }
+}

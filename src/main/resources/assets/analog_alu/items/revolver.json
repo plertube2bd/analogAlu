@@ -1,6 +1,22 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "analog_alu:item/revolver"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "fixed"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "analog_alu:item/revolver"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "analog_alu:item/revolver_3d"
+    }
   }
 }

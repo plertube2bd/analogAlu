@@ -196,7 +196,7 @@ public final class CircuitSolver {
             for (Direction direction : Direction.values()) {
                 BlockPos neighbor = cablePos.relative(direction);
                 BlockState neighborState = level.getBlockState(neighbor);
-                if (neighborState.is(ModBlocks.COPPER_CABLE)) {
+                if (neighborState.getBlock() instanceof CopperCableBlock) {
                     BlockState cableState = level.getBlockState(cablePos);
                     if (!CopperCableBlock.allowsConnection(cableState, direction)
                             || !CopperCableBlock.allowsConnection(neighborState, direction.getOpposite())) {
@@ -205,6 +205,10 @@ public final class CircuitSolver {
                     addBranch(branches, branchKeys, Branch.wire(cablePos, neighbor,
                             wireResistance(level, cablePos, neighbor)));
                     queue.addLast(neighbor);
+                    continue;
+                }
+                if (neighborState.getBlock() instanceof ElectricLoad load) {
+                    addLoad(level, branches, branchKeys, devices, queue, cablePos, direction, neighbor, load);
                     continue;
                 }
                 if (!(neighborState.getBlock() instanceof CircuitDeviceBlock device)
@@ -224,13 +228,9 @@ public final class CircuitSolver {
                 }
                 // 승압기/변압기: 앞뒤 단자는 입력(부하), 위아래 단자는 출력(전원). 두 쪽은 서로 다른 회로다.
                 boolean converterOutput = CircuitDeviceBlock.isConverter(kind) && positive.equals(neighbor.above());
-                double resistance = switch (kind) {
-                    case RESISTOR -> CircuitDeviceBlock.LOAD_RESISTANCE;
-                    case MINER -> CircuitDeviceBlock.MINER_RESISTANCE;
-                    case RECHARGEABLE_BATTERY -> CircuitDeviceBlock.RECHARGE_RESISTANCE;
-                    case STEP_UP, STEP_DOWN -> converterInputResistance(level, neighbor);
-                    default -> 0.0;
-                };
+                double resistance = CircuitDeviceBlock.isConverter(kind)
+                        ? converterInputResistance(level, neighbor)
+                        : CircuitDeviceBlock.loadResistance(kind);
                 if (kind != CircuitDeviceBlock.Kind.BATTERY) {
                     resistance += wireResistance(level, positive, neighbor)
                             + wireResistance(level, negative, neighbor);
@@ -247,6 +247,20 @@ public final class CircuitSolver {
         BlockPos root = cables.stream().min(Comparator.comparingLong(BlockPos::asLong)).orElse(start);
         boolean overflow = queue.stream().anyMatch(pos -> !cables.contains(pos));
         return new Network(cables, branches, root, overflow);
+    }
+
+    /** A block from outside ALU wired in as a resistance between two cables. */
+    private static void addLoad(Level level, List<Branch> branches, Set<String> branchKeys, Set<BlockPos> devices,
+            ArrayDeque<BlockPos> queue, BlockPos cablePos, Direction direction, BlockPos pos, ElectricLoad load) {
+        BlockPos[] ports = load.loadTerminals(level, pos);
+        if (ports == null || !(ports[0].equals(cablePos) || ports[1].equals(cablePos))) return;
+        if (!CopperCableBlock.allowsConnection(level.getBlockState(cablePos), direction)) return;
+        if (!isCable(level, ports[0]) || !isCable(level, ports[1]) || !devices.add(pos)) return;
+        double resistance = load.loadResistance(level, pos)
+                + wireResistance(level, ports[0], pos) + wireResistance(level, ports[1], pos);
+        addBranch(branches, branchKeys, Branch.passive(pos, ports[0], ports[1], Math.max(resistance, 1.0e-9)));
+        queue.addLast(ports[0]);
+        queue.addLast(ports[1]);
     }
 
     private static double converterInputResistance(Level level, BlockPos pos) {
@@ -311,7 +325,7 @@ public final class CircuitSolver {
     }
 
     private static boolean isCable(Level level, BlockPos pos) {
-        return level.getBlockState(pos).is(ModBlocks.COPPER_CABLE);
+        return level.getBlockState(pos).getBlock() instanceof CopperCableBlock;
     }
 
     private static double wireResistance(Level level, BlockPos cablePos, BlockPos otherPos) {
@@ -397,6 +411,11 @@ public final class CircuitSolver {
                     - voltages.getOrDefault(branch.second, 0.0)) / branch.resistance);
             currents.merge(branch.first, branchCurrent, Math::max);
             currents.merge(branch.second, branchCurrent, Math::max);
+            if (applyLoads && branch.devicePos != null
+                    && level.getBlockState(branch.devicePos).getBlock() instanceof ElectricLoad load) {
+                load.powered(level, branch.devicePos, branchCurrent * load.loadResistance(level, branch.devicePos), branchCurrent);
+                continue;
+            }
             if (!applyLoads || branch.devicePos == null
                     || !(level.getBlockEntity(branch.devicePos) instanceof CircuitDeviceBlockEntity device)) continue;
             CircuitDeviceBlock.Kind kind = ((CircuitDeviceBlock) level.getBlockState(branch.devicePos).getBlock())
@@ -407,12 +426,7 @@ public final class CircuitSolver {
                         level.getGameTime(), openCircuitVoltage(level, network, supplies, branch));
                 continue;
             }
-            double deviceResistance = switch (kind) {
-                case MINER -> CircuitDeviceBlock.MINER_RESISTANCE;
-                case RESISTOR -> CircuitDeviceBlock.LOAD_RESISTANCE;
-                case RECHARGEABLE_BATTERY -> CircuitDeviceBlock.RECHARGE_RESISTANCE;
-                default -> 0.0;
-            };
+            double deviceResistance = CircuitDeviceBlock.loadResistance(kind);
             device.setLoadState(branchCurrent * deviceResistance, branchCurrent);
         }
         return new Solution(voltages, currents, sourceCurrents, terminalVoltages);
@@ -489,6 +503,10 @@ public final class CircuitSolver {
             }
         }
         for (Branch branch : network.branches) {
+            if (branch.devicePos != null && level.getBlockState(branch.devicePos).getBlock() instanceof ElectricLoad load) {
+                load.powered(level, branch.devicePos, 0.0, 0.0);
+                continue;
+            }
             if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
                     instanceof CircuitDeviceBlockEntity device) {
                 if (branch.kind == BranchKind.SOURCE) {

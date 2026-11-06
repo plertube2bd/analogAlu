@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "ICI",
+    "GBG",
+    "IFI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "analog_alu:copper_cable",
+    "G": "minecraft:glass",
+    "B": "minecraft:cauldron",
+    "F": "minecraft:furnace"
+  },
+  "result": {
+    "id": "analog_alu:chemical_reactor",
+    "count": 1
+  }
+}

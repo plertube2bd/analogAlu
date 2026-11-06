@@ -164,4 +164,107 @@ public final class PowerGameTests {
             helper.succeed();
         });
     }
+    private static void collector(GameTestHelper helper, int x, int y, int z) {
+        helper.setBlock(new BlockPos(x, y, z), com.example.redstonetransportation.content.ModContent.MACHINES
+                .get(com.example.redstonetransportation.machine.MachineType.ITEM_COLLECTOR).defaultBlockState()
+                .setValue(com.example.redstonetransportation.machine.MachineBlock.FACING, Direction.SOUTH));
+    }
+
+    private static void controller(GameTestHelper helper, BlockPos pos) {
+        helper.setBlock(pos, com.example.redstonetransportation.content.ModContent.FACTORY_CONTROLLER.defaultBlockState()
+                .setValue(com.example.redstonetransportation.machine.FactoryControllerBlock.MODE,
+                        com.example.redstonetransportation.machine.FactoryControllerBlock.Mode.RUNNING));
+    }
+
+    private static boolean running(GameTestHelper helper, BlockPos machine) {
+        return helper.getBlockState(machine).getValue(com.example.redstonetransportation.machine.MachineBlock.STATUS)
+                != com.example.redstonetransportation.machine.MachineStatus.OFF;
+    }
+
+    /**
+     * A factory controller wired across a battery is one 200 ohm load per machine it feeds, all in
+     * parallel: two machines draw twice the current of one. On 9 V they barely turn over.
+     * <pre>
+     *  z=2  C  K  C      K: controller between its east and west cables
+     *  z=1  C     C      machines south of it, at z=3 and z=4
+     *  z=0  C  B> C
+     *      x=2 3  4
+     * </pre>
+     */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 200)
+    public void aFactoryControllerIsTwoHundredOhmsPerMachine(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        for (int z = 0; z <= 2; z++) {
+            cable(helper, 2, z);
+            cable(helper, 4, z);
+        }
+        device(helper, ModBlocks.BATTERY, 3, 0);
+        BlockPos controller = new BlockPos(3, 1, 2);
+        controller(helper, controller);
+        collector(helper, 3, 1, 3);
+        net.minecraft.world.level.Level level = helper.getLevel();
+        BlockPos at = helper.absolutePos(controller);
+        double[] one = new double[2];
+        helper.runAtTickTime(SOLVE_TICKS + 20, () -> {
+            helper.assertValueEqual(com.example.redstonetransportation.machine.ControllerPower.loads(level, at), 1, "machines fed");
+            one[0] = com.example.redstonetransportation.machine.ControllerPower.volts(level, at);
+            one[1] = com.example.redstonetransportation.machine.ControllerPower.amps(level, at);
+            helper.assertTrue(one[0] > 8.8D && one[0] < 9.0D, "volts across the controller: " + one[0]);
+            helper.assertTrue(Math.abs(one[1] - one[0] / 200.0D) < 1.0E-4D, "amps through one machine: " + one[1]);
+            helper.assertTrue(running(helper, new BlockPos(3, 1, 3)), "the machine is off on 9 V");
+            collector(helper, 3, 1, 4);
+        });
+        helper.runAtTickTime(SOLVE_TICKS + 80, () -> {
+            helper.assertValueEqual(com.example.redstonetransportation.machine.ControllerPower.loads(level, at), 2, "machines fed");
+            double amps = com.example.redstonetransportation.machine.ControllerPower.amps(level, at);
+            double volts = com.example.redstonetransportation.machine.ControllerPower.volts(level, at);
+            helper.assertTrue(Math.abs(amps - volts / 100.0D) < 1.0E-4D, "amps through two machines: " + amps + " at " + volts + " V");
+            helper.succeed();
+        });
+    }
+
+    /**
+     * The real thing: a step-up converter set to 220 V, fed by two batteries in parallel, runs a factory
+     * of two machines through its controller.
+     * <pre>
+     *  input, at y=2:            output, from the converter's top and bottom:
+     *   z=8  C  B> C              cable on top (6,3,6) -> (6,3,5) -> (6,3,4) above the controller
+     *   z=7  C  B> C              cable below (6,1,6) -> (6,1,5) -> (6,1,4) under the controller
+     *   z=6  C  U> C              controller at (6,2,4), machines at (6,2,3) and (6,2,2)
+     *       x=5 6  7
+     * </pre>
+     */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 200)
+    public void aStepUpConverterRunsAFactoryAt220Volts(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        for (int z = 6; z <= 8; z++) {
+            helper.setBlock(new BlockPos(5, 2, z), ModBlocks.COPPER_CABLE);
+            helper.setBlock(new BlockPos(7, 2, z), ModBlocks.COPPER_CABLE);
+        }
+        BlockPos converter = new BlockPos(6, 2, 6);
+        helper.setBlock(converter, ModBlocks.STEP_UP_CONVERTER.defaultBlockState().setValue(CircuitDeviceBlock.FACING, Direction.EAST));
+        helper.setBlock(new BlockPos(6, 2, 7), ModBlocks.BATTERY.defaultBlockState().setValue(CircuitDeviceBlock.FACING, Direction.EAST));
+        helper.setBlock(new BlockPos(6, 2, 8), ModBlocks.BATTERY.defaultBlockState().setValue(CircuitDeviceBlock.FACING, Direction.EAST));
+        CircuitDeviceBlockEntity step = helper.getBlockEntity(converter, CircuitDeviceBlockEntity.class);
+        step.setSetpoint(220.0D);
+        for (int z = 4; z <= 6; z++) {
+            helper.setBlock(new BlockPos(6, 3, z), ModBlocks.COPPER_CABLE);
+            helper.setBlock(new BlockPos(6, 1, z), ModBlocks.COPPER_CABLE);
+        }
+        BlockPos controller = new BlockPos(6, 2, 4);
+        controller(helper, controller);
+        collector(helper, 6, 2, 3);
+        collector(helper, 6, 2, 2);
+        net.minecraft.world.level.Level level = helper.getLevel();
+        BlockPos at = helper.absolutePos(controller);
+        helper.runAtTickTime(SOLVE_TICKS + 100, () -> {
+            double volts = com.example.redstonetransportation.machine.ControllerPower.volts(level, at);
+            double amps = com.example.redstonetransportation.machine.ControllerPower.amps(level, at);
+            helper.assertValueEqual(com.example.redstonetransportation.machine.ControllerPower.loads(level, at), 2, "machines fed");
+            helper.assertTrue(volts > 100.0D && volts <= 221.0D, "the converter put " + volts + " V across the controller");
+            helper.assertTrue(Math.abs(amps - volts / 100.0D) < 0.01D, "amps " + amps + " at " + volts + " V");
+            helper.assertTrue(running(helper, new BlockPos(6, 2, 3)) && running(helper, new BlockPos(6, 2, 2)), "the machines are off");
+            helper.succeed();
+        });
+    }
 }

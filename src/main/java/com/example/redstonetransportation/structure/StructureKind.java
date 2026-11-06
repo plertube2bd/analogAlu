@@ -7,5 +7,7 @@ public enum StructureKind {
     /** Stays at its waterline and sails wherever there is water under it. */
     SHIP,
     /** Flies freely, as long as its balloons can lift it. */
-    AIRSHIP
+    AIRSHIP,
+    /** Drives on land on diesel, falls when nothing holds it up and climbs one block at a time. */
+    CAR
 }

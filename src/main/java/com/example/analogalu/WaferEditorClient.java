@@ -35,6 +35,27 @@ public final class WaferEditorClient implements ClientModInitializer {
         FluidRenderingRegistry.register(ModFluids.STILL, oilModel);
         FluidRenderingRegistry.register(ModFluids.FLOWING, oilModel);
         net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            net.minecraft.ChatFormatting gray = net.minecraft.ChatFormatting.GRAY;
+            if (stack.getItem() instanceof net.minecraft.world.item.BlockItem blockItem
+                    && blockItem.getBlock() instanceof com.example.analogalu.block.CopperCableBlock cable) {
+                double rating = cable.insulationRatingVolts();
+                lines.add(1, rating > 0.0
+                        ? Component.translatable("tooltip.analog_alu.insulated_cable", String.format(java.util.Locale.ROOT, "%.0f", rating)).withStyle(gray)
+                        : Component.translatable("tooltip.analog_alu.bare_cable").withStyle(net.minecraft.ChatFormatting.RED));
+            } else if (stack.is(ModItems.STUN_GUN)) {
+                lines.add(1, Component.translatable("tooltip.analog_alu.stun_gun_charges", StunGunItem.charges(stack), StunGunItem.MAX_CHARGES)
+                        .withStyle(net.minecraft.ChatFormatting.AQUA));
+                lines.add(2, Component.translatable("tooltip.analog_alu.stun_gun").withStyle(gray));
+            } else if (stack.is(ModItems.SNEAKERS)) {
+                lines.add(1, Component.translatable("tooltip.analog_alu.sneakers").withStyle(gray));
+            } else if (stack.is(ModItems.INSULATED_BOOTS)) {
+                lines.add(1, Component.translatable("tooltip.analog_alu.insulated_boots").withStyle(gray));
+            } else if (stack.is(ModItems.SUIT) || stack.is(ModItems.DECORATED_SUIT) || stack.is(ModItems.WOOL_TROUSERS)
+                    || stack.is(ModItems.COTTON_TROUSERS) || stack.is(ModItems.SKIRT)) {
+                lines.add(1, Component.translatable("tooltip.analog_alu.clothing").withStyle(gray));
+            } else if (stack.is(ModBlocks.ASPHALT_BLOCK_ITEM)) {
+                lines.add(1, Component.translatable("tooltip.analog_alu.asphalt").withStyle(gray));
+            }
             Double stored = stack.get(ModComponents.STORED_ENERGY);
             double capacity = stack.is(ModBlocks.BATTERY_ITEM)
                     ? com.example.analogalu.block.CircuitDeviceBlock.BATTERY_CAPACITY_JOULES
@@ -72,6 +93,8 @@ public final class WaferEditorClient implements ClientModInitializer {
             return net.minecraft.world.InteractionResult.SUCCESS;
         });
         CircuitStatusTooltips.init();
+        ClientPlayNetworking.registerGlobalReceiver(OpenConverterScreenPayload.TYPE, (payload, context) ->
+            context.client().execute(() -> Minecraft.getInstance().setScreenAndShow(new ConverterScreen(payload))));
         ClientPlayNetworking.registerGlobalReceiver(CircuitStatusPayload.TYPE, (payload, context) ->
             context.client().execute(() -> CircuitStatusTooltips.update(payload.itemId(), payload.text())));
         UseBlockCallback.EVENT.register((player, level, hand, hit) -> {
