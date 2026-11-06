@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "minecraft:gunpowder",
-    "minecraft:charcoal"
+    "#minecraft:coals"
   ],
   "result": {
     "id": "analog_alu:black_powder",

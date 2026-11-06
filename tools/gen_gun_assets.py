@@ -349,7 +349,15 @@ def write_recipes() -> None:
             "result": {"id": f"{NS}:{name}", "count": 1},
         })
 
-    shapeless("black_powder", ["minecraft:gunpowder", "minecraft:charcoal"], 1, "misc")
+    # Any coal will do, coal or charcoal (the minecraft:coals tag).
+    shapeless("black_powder", ["minecraft:gunpowder", "#minecraft:coals"], 1, "misc")
+    # Gunpowder itself, which vanilla cannot craft: bone meal stands in for saltpetre, then coal and flint.
+    write_json(DATA / "recipe" / "gunpowder.json", {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": ["minecraft:bone_meal", "#minecraft:coals", "minecraft:flint"],
+        "result": {"id": "minecraft:gunpowder", "count": 1},
+    })
     shapeless("bullet_9mm", [f"{NS}:black_powder", "minecraft:iron_ingot"], 4)
     shapeless("musket_ball", [f"{NS}:black_powder", "minecraft:iron_ingot", "minecraft:iron_ingot"], 4)
     shapeless("shotgun_shell", [f"{NS}:black_powder"] + ["minecraft:iron_nugget"] * 8, 1)
@@ -362,6 +370,12 @@ def write_recipes() -> None:
             "L": "#minecraft:logs"})
 
 
+def add_to_tag(path: Path, values: list[str]) -> None:
+    """Adds to a tag file other code also writes to (ALU's electrocution and stun gun), keeping what is there."""
+    existing = json.loads(path.read_text(encoding="utf-8")).get("values", []) if path.exists() else []
+    write_json(path, {"replace": False, "values": existing + [v for v in values if v not in existing]})
+
+
 def write_damage() -> None:
     write_json(DATA / "damage_type" / "bullet.json", {
         "exhaustion": 0.1,
@@ -369,11 +383,9 @@ def write_damage() -> None:
         "scaling": "when_caused_by_living_non_player",
     })
     # Projectile Protection counts against bullets, as it does against arrows.
-    write_json(RES / "data" / "minecraft" / "tags" / "damage_type" / "is_projectile.json",
-               {"replace": False, "values": [f"{NS}:bullet"]})
+    add_to_tag(RES / "data" / "minecraft" / "tags" / "damage_type" / "is_projectile.json", [f"{NS}:bullet"])
     # Every bullet lands in full, even a second shot straight after the first or pellets of the next blast.
-    write_json(RES / "data" / "minecraft" / "tags" / "damage_type" / "bypasses_cooldown.json",
-               {"replace": False, "values": [f"{NS}:bullet"]})
+    add_to_tag(RES / "data" / "minecraft" / "tags" / "damage_type" / "bypasses_cooldown.json", [f"{NS}:bullet"])
 
 
 LANG = {

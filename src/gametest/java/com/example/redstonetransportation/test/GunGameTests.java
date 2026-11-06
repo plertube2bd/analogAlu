@@ -263,13 +263,17 @@ public final class GunGameTests {
     @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
     public void blackPowderAndAmmunitionRecipes(GameTestHelper helper) {
         assertMakes(helper, craft(helper, 2, 1, Items.GUNPOWDER, Items.CHARCOAL), ModGuns.BLACK_POWDER, 1, "gunpowder + charcoal");
+        assertMakes(helper, craft(helper, 2, 1, Items.GUNPOWDER, Items.COAL), ModGuns.BLACK_POWDER, 1, "gunpowder + coal");
+        assertMakes(helper, craft(helper, 3, 1, Items.BONE_MEAL, Items.COAL, Items.FLINT), Items.GUNPOWDER, 1, "bone meal + coal + flint");
+        assertMakes(helper, craft(helper, 3, 1, Items.FLINT, Items.CHARCOAL, Items.BONE_MEAL), Items.GUNPOWDER, 1, "flint + charcoal + bone meal");
+        helper.assertTrue(craft(helper, 2, 1, Items.BONE_MEAL, Items.COAL).isEmpty(), "bone meal and coal alone made gunpowder");
         assertMakes(helper, craft(helper, 2, 1, ModGuns.BLACK_POWDER, Items.IRON_INGOT), ModGuns.BULLET_9MM, 4, "black powder + iron");
         assertMakes(helper, craft(helper, 3, 1, ModGuns.BLACK_POWDER, Items.IRON_INGOT, Items.IRON_INGOT), ModGuns.MUSKET_BALL, 4,
                 "black powder + two iron");
         Item n = Items.IRON_NUGGET;
         assertMakes(helper, craft(helper, 3, 3, ModGuns.BLACK_POWDER, n, n, n, n, n, n, n, n), ModGuns.SHOTGUN_SHELL, 1,
                 "black powder + eight nuggets");
-        helper.assertTrue(craft(helper, 2, 1, Items.GUNPOWDER, Items.COAL).isEmpty(), "coal made black powder");
+        helper.assertTrue(craft(helper, 2, 1, Items.GUNPOWDER, Items.DIAMOND).isEmpty(), "a diamond made black powder");
         helper.succeed();
     }
 

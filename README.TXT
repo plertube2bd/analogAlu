@@ -452,7 +452,8 @@ Electrical circuit blocks (copper cable, battery, switch, resistor, generators):
 10. FIREARMS AND BLACK POWDER (1.0.0)
 ================================================================================
 
-Black powder : gunpowder + charcoal (shapeless) -> 1
+Black powder : gunpowder + coal or charcoal (shapeless) -> 1
+Gunpowder    : bone meal + coal or charcoal + flint (shapeless) -> 1
 9mm round    : black powder + iron ingot -> 4
 Musket ball  : black powder + 2 iron ingots -> 4
 45 gauge     : black powder + 8 iron nuggets -> 1
