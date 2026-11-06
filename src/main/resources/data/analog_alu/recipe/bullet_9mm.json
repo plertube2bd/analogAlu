@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "analog_alu:black_powder",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "id": "analog_alu:bullet_9mm",
+    "count": 4
+  }
+}

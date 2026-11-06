@@ -21,6 +21,7 @@ public class AnalogAlu implements ModInitializer {
         ModComponents.init();
         ModBlocks.init();
         ModItems.init();
+        com.example.analogalu.gun.ModGuns.init();
         com.example.analogalu.fluid.OilDrowning.init();
         com.example.analogalu.fluid.OilBucketing.init();
         PayloadTypeRegistry.serverboundPlay().register(SaveWaferCodePayload.TYPE, SaveWaferCodePayload.CODEC);

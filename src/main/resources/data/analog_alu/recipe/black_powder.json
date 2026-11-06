@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gunpowder",
+    "minecraft:charcoal"
+  ],
+  "result": {
+    "id": "analog_alu:black_powder",
+    "count": 1
+  }
+}

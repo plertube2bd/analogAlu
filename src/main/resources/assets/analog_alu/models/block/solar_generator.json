@@ -2,31 +2,73 @@
   "textures": {
     "side": "analog_alu:block/solar_generator_side",
     "panel": "analog_alu:block/solar_generator_panel",
-    "particle": "analog_alu:block/solar_generator_side"
+    "particle": "analog_alu:block/solar_generator_side",
+    "positive": "analog_alu:block/solar_generator_positive",
+    "negative": "analog_alu:block/solar_generator_negative"
   },
   "elements": [
     {
-      "from": [0, 0, 0],
-      "to": [16, 5, 16],
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        5,
+        16
+      ],
       "faces": {
-        "down": { "texture": "#side" },
-        "up": { "texture": "#side" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
+        "down": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#positive"
+        },
+        "south": {
+          "texture": "#negative"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
       }
     },
     {
-      "from": [1, 5, 1],
-      "to": [15, 7, 15],
+      "from": [
+        1,
+        5,
+        1
+      ],
+      "to": [
+        15,
+        7,
+        15
+      ],
       "faces": {
-        "down": { "texture": "#side" },
-        "up": { "texture": "#panel" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
+        "down": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#panel"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
       }
     }
   ]

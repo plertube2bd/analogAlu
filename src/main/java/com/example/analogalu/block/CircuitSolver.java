@@ -58,68 +58,87 @@ public final class CircuitSolver {
             return;
         }
 
-        // 전원 선택: 발전기/일반 건전지는 회로당 하나만 허용한다. 그런 전원이 있으면 충전식 건전지는 충전 부하가 되고,
-        // 없으면 에너지가 가장 많은 충전식 건전지 하나가 전원이 된다(나머지는 회로에서 빠진다).
+        // 전원 고르기: 발전기, 일반 건전지, 승압기/변압기 출력은 모두 전원이 된다. 직렬로 이으면 전압이 더해지고
+        // 병렬로 이으면 전류를 나눠 낸다(병렬은 같은 전압끼리 잇는 것이 좋다). 그런 전원이 하나라도 있으면 충전식
+        // 건전지는 충전 부하가 되고(가득 차면 회로에서 빠진다), 없으면 충전식 건전지들이 전원이 된다.
         List<Branch> sources = network.branches.stream().filter(branch -> branch.kind == BranchKind.SOURCE).toList();
         List<Branch> fixedSources = sources.stream().filter(branch -> !isRechargeable(level, branch)).toList();
         List<Branch> rechargeables = sources.stream().filter(branch -> isRechargeable(level, branch)).toList();
-        Branch source;
-        if (fixedSources.size() > 1) {
-            clearState(level, network);
-            return;
-        } else if (fixedSources.size() == 1) {
-            source = fixedSources.getFirst();
+        List<Branch> active;
+        List<Branch> chargers = new ArrayList<>();
+        if (!fixedSources.isEmpty()) {
+            active = fixedSources;
+            if (!rechargeables.isEmpty()) {
+                List<Branch> branches = new ArrayList<>(network.branches);
+                for (Branch battery : rechargeables) {
+                    branches.remove(battery);
+                    CircuitDeviceBlockEntity entity = blockEntity(level, battery.devicePos);
+                    if (entity == null) continue;
+                    entity.setSourceTerminalVoltage(0.0);
+                    entity.setLoadState(0.0, 0.0);
+                    if (entity.isFullyCharged()) continue;
+                    Branch charger = Branch.passive(battery.devicePos, battery.positive, battery.negative,
+                            battery.resistance);
+                    branches.add(charger);
+                    chargers.add(charger);
+                }
+                network = new Network(network.cables, branches, network.root, network.overflow);
+            }
         } else if (!rechargeables.isEmpty()) {
-            source = rechargeables.stream().max(Comparator
-                    .comparingDouble((Branch branch) -> storedEnergy(level, branch))
-                    .thenComparingLong(branch -> -branch.devicePos.asLong())).orElseThrow();
+            active = rechargeables;
         } else {
             clearState(level, network);
             return;
         }
-        List<Branch> chargers = new ArrayList<>();
-        if (rechargeables.size() > (source.kind == BranchKind.SOURCE && isRechargeable(level, source) ? 1 : 0)) {
-            List<Branch> branches = new ArrayList<>(network.branches);
-            for (Branch battery : rechargeables) {
-                if (battery == source) continue;
-                branches.remove(battery);
-                CircuitDeviceBlockEntity entity = blockEntity(level, battery.devicePos);
-                if (entity == null) continue;
-                entity.setSourceTerminalVoltage(0.0);
-                entity.setLoadState(0.0, 0.0);
-                if (fixedSources.isEmpty() || entity.isFullyCharged()) continue;
-                Branch charger = Branch.passive(battery.devicePos, battery.positive, battery.negative,
-                        battery.resistance);
-                branches.add(charger);
-                chargers.add(charger);
+
+        // 쓸 수 없는 전원(빈 건전지, 연료 없는 발전기, 바람·햇빛 없는 발전기)은 회로에서 끊긴 것으로 본다.
+        List<Supply> supplies = new ArrayList<>();
+        List<Branch> idle = new ArrayList<>();
+        for (Branch branch : active) {
+            CircuitDeviceBlock.Kind kind = ((CircuitDeviceBlock) level.getBlockState(branch.devicePos).getBlock()).kind();
+            CircuitDeviceBlockEntity entity = blockEntity(level, branch.devicePos);
+            boolean available = entity != null && switch (kind) {
+                case BATTERY, RECHARGEABLE_BATTERY -> entity.getStoredEnergyJoules() > 0.0;
+                case STEP_UP, STEP_DOWN -> entity.converterAvailable(gameTime);
+                case COAL_GENERATOR, DIESEL_GENERATOR -> entity.hasFuel();
+                case WIND_GENERATOR, SOLAR_GENERATOR -> CircuitDeviceBlock.hasNaturalInput(level, branch.devicePos, kind);
+                default -> false;
+            };
+            double emf = !available ? 0.0 : CircuitDeviceBlock.isConverter(kind)
+                    ? entity.converterOutputVoltage() : CircuitDeviceBlock.sourceVoltage(level, branch.devicePos, kind);
+            if (!(emf > 0.0)) {
+                idle.add(branch);
+                if (entity != null) {
+                    entity.setSourceTerminalVoltage(0.0);
+                    entity.setLoadState(0.0, 0.0);
+                    if (!CircuitDeviceBlock.isConverter(kind)) entity.accountSourcePower(0.0, gameTime, kind);
+                }
+                continue;
             }
-            network = new Network(network.cables, branches, network.root, network.overflow);
+            double resistance = CircuitDeviceBlock.sourceResistance(kind)
+                    + wireResistance(level, branch.positive, branch.devicePos)
+                    + wireResistance(level, branch.negative, branch.devicePos);
+            supplies.add(new Supply(branch, kind, entity, emf, resistance));
         }
-        CircuitDeviceBlock.Kind sourceKind = ((CircuitDeviceBlock) level.getBlockState(source.devicePos).getBlock()).kind();
-        CircuitDeviceBlockEntity sourceEntity = blockEntity(level, source.devicePos);
-        boolean available = sourceEntity != null && switch (sourceKind) {
-            case BATTERY, RECHARGEABLE_BATTERY -> sourceEntity.getStoredEnergyJoules() > 0.0;
-            case STEP_UP, STEP_DOWN -> sourceEntity.converterAvailable(gameTime);
-            case COAL_GENERATOR -> sourceEntity.hasFuel();
-            case DIESEL_GENERATOR -> sourceEntity.hasFuel();
-            case WIND_GENERATOR, SOLAR_GENERATOR ->
-                    CircuitDeviceBlock.hasNaturalInput(level, source.devicePos, sourceKind);
-            default -> false;
-        };
-        if (!available || !hasPassivePath(network, source.positive, source.negative)) {
-            if (sourceEntity != null) sourceEntity.accountSourcePower(0.0, gameTime, sourceKind);
+        if (supplies.isEmpty()) {
             clearState(level, network);
             return;
         }
+        if (!idle.isEmpty()) {
+            List<Branch> branches = new ArrayList<>(network.branches);
+            branches.removeAll(idle);
+            network = new Network(network.cables, branches, network.root, network.overflow);
+        }
 
-        double sourceVoltage = CircuitDeviceBlock.isConverter(sourceKind)
-                ? sourceEntity.converterOutputVoltage()
-                : CircuitDeviceBlock.sourceVoltage(level, source.devicePos, sourceKind);
-        Solution solution = solveNetwork(level, network, source, sourceVoltage,
-                CircuitDeviceBlock.sourceResistance(sourceKind));
-        if (solution == null) {
+        Solution solution = solveNetwork(level, network, supplies, true);
+        // 고리가 닫히지 않아 어느 전원에서도 전류가 나오지 않으면, 지금까지처럼 회로 전체에 전기가 없는 것으로 본다.
+        boolean flowing = solution != null
+                && java.util.Arrays.stream(solution.sourceCurrents).anyMatch(current -> Math.abs(current) > 1.0e-6);
+        if (!flowing) {
             clearState(level, network);
-            sourceEntity.accountSourcePower(0.0, gameTime, sourceKind);
+            for (Supply supply : supplies) {
+                if (!CircuitDeviceBlock.isConverter(supply.kind)) supply.entity.accountSourcePower(0.0, gameTime, supply.kind);
+            }
             return;
         }
 
@@ -129,12 +148,17 @@ public final class CircuitSolver {
                         solution.currents.getOrDefault(cablePos, 0.0));
             }
         }
-        sourceEntity.setSourceTerminalVoltage(solution.sourceTerminalVoltage);
-        sourceEntity.setLoadState(0.0, 0.0);
-        if (CircuitDeviceBlock.isConverter(sourceKind)) {
-            sourceEntity.setConverterOutput(sourceVoltage, solution.sourceWatts, gameTime);
-        } else {
-            sourceEntity.accountSourcePower(solution.sourceWatts, gameTime, sourceKind);
+        for (int index = 0; index < supplies.size(); index++) {
+            Supply supply = supplies.get(index);
+            // 거꾸로 밀려 들어오는 전류(전압이 다른 전원을 병렬로 이었을 때)는 에너지를 쓰지 않는다.
+            double watts = Math.max(0.0, solution.sourceCurrents[index] * supply.emf);
+            supply.entity.setSourceTerminalVoltage(solution.terminalVoltages[index]);
+            supply.entity.setLoadState(0.0, 0.0);
+            if (CircuitDeviceBlock.isConverter(supply.kind)) {
+                supply.entity.setConverterOutput(supply.emf, watts, gameTime);
+            } else {
+                supply.entity.accountSourcePower(watts, gameTime, supply.kind);
+            }
         }
         for (Branch charger : chargers) {
             CircuitDeviceBlockEntity battery = blockEntity(level, charger.devicePos);
@@ -143,6 +167,10 @@ public final class CircuitSolver {
             battery.accountCharge(current * current * CircuitDeviceBlock.RECHARGE_RESISTANCE, gameTime);
         }
     }
+
+    /** 전원 하나: 기전력과 내부 저항(단자 쪽 전선 저항 포함). */
+    private record Supply(Branch branch, CircuitDeviceBlock.Kind kind, CircuitDeviceBlockEntity entity, double emf,
+            double resistance) {}
 
     private static boolean isRechargeable(Level level, Branch branch) {
         return level.getBlockState(branch.devicePos).getBlock() instanceof CircuitDeviceBlock device
@@ -301,47 +329,44 @@ public final class CircuitSolver {
         if (keys.add(branch.key())) branches.add(branch);
     }
 
-    private static boolean hasPassivePath(Network network, BlockPos start, BlockPos target) {
-        Set<BlockPos> visited = new HashSet<>();
-        ArrayDeque<BlockPos> queue = new ArrayDeque<>();
-        queue.add(start);
-        visited.add(start);
-        while (!queue.isEmpty()) {
-            BlockPos node = queue.removeFirst();
-            if (node.equals(target)) return true;
-            for (Branch branch : network.branches) {
-                if (branch.kind == BranchKind.SOURCE) continue;
-                BlockPos next = branch.otherEnd(node);
-                if (next != null && visited.add(next)) queue.addLast(next);
-            }
-        }
-        return false;
-    }
-
-    private static Solution solveNetwork(Level level, Network network, Branch source,
-            double sourceVoltage, double internalResistance) {
+    /**
+     * 수정 절점 해석(MNA)으로 모든 케이블의 전압을 구한다. 전원마다 내부 절점 하나와 전류 미지수 하나를 두고,
+     * 내부 저항 뒤에 이상적인 전압원을 놓는다. 직렬·병렬은 따로 다루지 않아도 회로 그대로 풀린다.
+     */
+    private static Solution solveNetwork(Level level, Network network, List<Supply> supplies, boolean applyLoads) {
         List<BlockPos> nodes = new ArrayList<>(network.cables);
         nodes.sort(Comparator.comparingLong(BlockPos::asLong));
-        BlockPos ground = source.negative;
+        BlockPos ground = supplies.getFirst().branch.negative;
         Map<BlockPos, Integer> variables = new HashMap<>();
         int nextVariable = 0;
         for (BlockPos node : nodes) {
             if (!node.equals(ground)) variables.put(node, nextVariable++);
         }
-        int sourcePositive = nextVariable++;
-        int sourceCurrent = nextVariable++;
+        int[] internal = new int[supplies.size()];
+        int[] current = new int[supplies.size()];
+        for (int index = 0; index < supplies.size(); index++) {
+            internal[index] = nextVariable++;
+            current[index] = nextVariable++;
+        }
         double[][] matrix = new double[nextVariable][nextVariable + 1];
 
         for (Branch branch : network.branches) {
             if (branch.kind == BranchKind.SOURCE) continue;
             stampResistor(matrix, variables, ground, branch.first, branch.second, branch.resistance);
         }
-        stampResistorToVariable(matrix, variables, ground, source.positive, sourcePositive,
-                internalResistance + wireResistance(level, source.positive, source.devicePos)
-                        + wireResistance(level, source.negative, source.devicePos));
-        matrix[sourcePositive][sourceCurrent] += 1.0;
-        matrix[sourceCurrent][sourcePositive] += 1.0;
-        matrix[sourceCurrent][nextVariable] = sourceVoltage;
+        for (int index = 0; index < supplies.size(); index++) {
+            Supply supply = supplies.get(index);
+            stampResistorToVariable(matrix, variables, ground, supply.branch.positive, internal[index],
+                    supply.resistance);
+            Integer negative = supply.branch.negative.equals(ground) ? null : variables.get(supply.branch.negative);
+            matrix[internal[index]][current[index]] += 1.0;
+            matrix[current[index]][internal[index]] += 1.0;
+            if (negative != null) {
+                matrix[negative][current[index]] -= 1.0;
+                matrix[current[index]][negative] -= 1.0;
+            }
+            matrix[current[index]][nextVariable] = supply.emf;
+        }
 
         double[] values = gaussianSolve(matrix);
         if (values == null) return null;
@@ -352,19 +377,34 @@ public final class CircuitSolver {
             int variable = variables.getOrDefault(node, -1);
             voltages.put(node, variable < 0 ? 0.0 : values[variable]);
         }
+        // 회로에서 가장 낮은 곳을 0V로 잡는다. 전원이 하나면 그 - 단자이고, 직렬이면 맨 끝 - 단자다.
+        double lowest = voltages.values().stream().mapToDouble(Double::doubleValue).min().orElse(0.0);
+        voltages.replaceAll((node, voltage) -> voltage - lowest);
+        double[] sourceCurrents = new double[supplies.size()];
+        double[] terminalVoltages = new double[supplies.size()];
+        for (int index = 0; index < supplies.size(); index++) {
+            Supply supply = supplies.get(index);
+            // 전류 미지수는 + 쪽에서 전원 안으로 들어가는 방향이라, 밖으로 내보내는 전류는 부호를 뒤집는다.
+            sourceCurrents[index] = -values[current[index]];
+            terminalVoltages[index] = voltages.getOrDefault(supply.branch.positive, 0.0)
+                    - voltages.getOrDefault(supply.branch.negative, 0.0);
+            currents.merge(supply.branch.positive, Math.abs(sourceCurrents[index]), Math::max);
+            currents.merge(supply.branch.negative, Math.abs(sourceCurrents[index]), Math::max);
+        }
         for (Branch branch : network.branches) {
             if (branch.kind == BranchKind.SOURCE) continue;
-            double current = Math.abs((voltages.getOrDefault(branch.first, 0.0)
+            double branchCurrent = Math.abs((voltages.getOrDefault(branch.first, 0.0)
                     - voltages.getOrDefault(branch.second, 0.0)) / branch.resistance);
-            currents.merge(branch.first, current, Math::max);
-            currents.merge(branch.second, current, Math::max);
-            if (branch.devicePos != null && level.getBlockEntity(branch.devicePos)
-                instanceof CircuitDeviceBlockEntity device) {
+            currents.merge(branch.first, branchCurrent, Math::max);
+            currents.merge(branch.second, branchCurrent, Math::max);
+            if (!applyLoads || branch.devicePos == null
+                    || !(level.getBlockEntity(branch.devicePos) instanceof CircuitDeviceBlockEntity device)) continue;
             CircuitDeviceBlock.Kind kind = ((CircuitDeviceBlock) level.getBlockState(branch.devicePos).getBlock())
-                .kind();
+                    .kind();
             if (CircuitDeviceBlock.isConverter(kind)) {
-                device.setConverterInput(current * device.converterInputResistance(), current, level.getGameTime(),
-                        sourceVoltage);
+                // 승압비는 입력 단자에 걸리는 개방 전압을 기준으로 한다. 전원이 하나면 그 전원의 기전력과 같다.
+                device.setConverterInput(branchCurrent * device.converterInputResistance(), branchCurrent,
+                        level.getGameTime(), openCircuitVoltage(level, network, supplies, branch));
                 continue;
             }
             double deviceResistance = switch (kind) {
@@ -373,13 +413,19 @@ public final class CircuitSolver {
                 case RECHARGEABLE_BATTERY -> CircuitDeviceBlock.RECHARGE_RESISTANCE;
                 default -> 0.0;
             };
-            device.setLoadState(current * deviceResistance, current);
-            }
+            device.setLoadState(branchCurrent * deviceResistance, branchCurrent);
         }
-        double sourceCurrentValue = Math.abs(values[sourceCurrent]);
-        double terminalVoltage = voltages.getOrDefault(source.positive, 0.0)
-            - voltages.getOrDefault(source.negative, 0.0);
-        return new Solution(voltages, currents, sourceCurrentValue * sourceVoltage, terminalVoltage);
+        return new Solution(voltages, currents, sourceCurrents, terminalVoltages);
+    }
+
+    /** 이 부하를 떼어 냈을 때 두 단자 사이에 걸리는 전압. */
+    private static double openCircuitVoltage(Level level, Network network, List<Supply> supplies, Branch load) {
+        List<Branch> branches = new ArrayList<>(network.branches);
+        branches.remove(load);
+        Solution open = solveNetwork(level, new Network(network.cables, branches, network.root, network.overflow),
+                supplies, false);
+        if (open == null) return 0.0;
+        return Math.abs(open.voltages.getOrDefault(load.first, 0.0) - open.voltages.getOrDefault(load.second, 0.0));
     }
 
     private static void stampResistor(double[][] matrix, Map<BlockPos, Integer> variables, BlockPos ground,
@@ -492,6 +538,6 @@ public final class CircuitSolver {
 
     private record Network(Set<BlockPos> cables, List<Branch> branches, BlockPos root, boolean overflow) {}
     private record PortPair(BlockPos positive, BlockPos negative) {}
-    private record Solution(Map<BlockPos, Double> voltages, Map<BlockPos, Double> currents, double sourceWatts,
-            double sourceTerminalVoltage) {}
+    private record Solution(Map<BlockPos, Double> voltages, Map<BlockPos, Double> currents, double[] sourceCurrents,
+            double[] terminalVoltages) {}
 }

@@ -1,3 +1,43 @@
 {
-  "parent": "analog_alu:block/oil_processor"
+  "textures": {
+    "side": "analog_alu:block/oil_processor_side",
+    "front": "analog_alu:block/diesel_generator_front",
+    "back": "analog_alu:block/diesel_generator_back",
+    "top": "analog_alu:block/oil_processor_top",
+    "particle": "analog_alu:block/oil_processor_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#back"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    }
+  ]
 }

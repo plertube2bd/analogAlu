@@ -3,19 +3,40 @@
     "front": "analog_alu:block/coal_generator_front",
     "side": "analog_alu:block/coal_generator_side",
     "top": "analog_alu:block/coal_generator_top",
-    "particle": "analog_alu:block/coal_generator_side"
+    "particle": "analog_alu:block/coal_generator_side",
+    "back": "analog_alu:block/coal_generator_back"
   },
   "elements": [
     {
-      "from": [0, 0, 0],
-      "to": [16, 16, 16],
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
       "faces": {
-        "down": { "texture": "#side" },
-        "up": { "texture": "#top" },
-        "north": { "texture": "#front" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
+        "down": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#back"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
       }
     }
   ]

@@ -27,6 +27,7 @@ public final class WaferEditorClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        com.example.analogalu.gun.GunClient.init();
         var oilMaterial = new Material(Identifier.fromNamespaceAndPath(AnalogAlu.MOD_ID, "block/oil_still"));
         var flowingOilMaterial = new Material(Identifier.fromNamespaceAndPath(AnalogAlu.MOD_ID, "block/oil_flow"));
         var oilModel = new FluidModel.Unbaked(oilMaterial, flowingOilMaterial, flowingOilMaterial,
