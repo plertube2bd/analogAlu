@@ -113,11 +113,11 @@
   "tooltip.redstone_transportation.elevator_core.detail1": "Right-click: assemble · Seated: Space/W up, Ctrl/S down",
   "tooltip.redstone_transportation.elevator_core.detail2": "Call blocks bring it to their floor",
   "tooltip.redstone_transportation.ship_helm": "Turns every block joined to it into a ship.",
-  "tooltip.redstone_transportation.ship_helm.detail1": "Right-click on water: assemble · The top arrow is the bow",
-  "tooltip.redstone_transportation.ship_helm.detail2": "Seated: steer with WASD · Stops at land",
+  "tooltip.redstone_transportation.ship_helm.detail1": "Right-click on water: assemble · Needs a Fuel Tank · The top arrow is the bow",
+  "tooltip.redstone_transportation.ship_helm.detail2": "Seated: steer with WASD · Runs on diesel · Stops at land",
   "tooltip.redstone_transportation.airship_helm": "Turns every block joined to it into an airship.",
-  "tooltip.redstone_transportation.airship_helm.detail1": "Right-click: assemble · Needs 1 Lift Balloon per 16 blocks",
-  "tooltip.redstone_transportation.airship_helm.detail2": "Seated: steer with WASD · Space climbs, Ctrl descends",
+  "tooltip.redstone_transportation.airship_helm.detail1": "Right-click: assemble · Needs 1 Lift Balloon per 16 blocks and a Fuel Tank",
+  "tooltip.redstone_transportation.airship_helm.detail2": "Seated: steer with WASD · Space climbs, Ctrl descends · Runs on diesel",
   "tooltip.redstone_transportation.lift_balloon": "Keeps an airship in the air.",
   "tooltip.redstone_transportation.lift_balloon.detail1": "Each one lifts 16 blocks",
   "tooltip.redstone_transportation.elevator_call": "Marks a floor and calls the elevator.",
@@ -273,7 +273,7 @@
   "tooltip.redstone_transportation.car_engine": "The diesel engine that drives a car.",
   "tooltip.redstone_transportation.car_engine.detail1": "A car needs at least one",
   "tooltip.redstone_transportation.fuel_tank": "Right-click with diesel to fill. One diesel drives for two minutes.",
-  "tooltip.redstone_transportation.fuel_tank.detail1": "Holds 16 diesel. A car needs at least one",
+  "tooltip.redstone_transportation.fuel_tank.detail1": "Holds 16 diesel. Cars, ships and airships need at least one",
   "message.redstone_transportation.car_missing": "The car is missing: %s",
   "message.redstone_transportation.car_part.seat": "a seat",
   "message.redstone_transportation.car_part.wheels": "%s more wheels on the bottom layer",
@@ -281,5 +281,7 @@
   "message.redstone_transportation.car_part.tank": "a fuel tank",
   "message.redstone_transportation.fuel_tank": "Fuel: %s/%s diesel",
   "message.redstone_transportation.fuel_tank_full": "The tank is full (%s diesel)",
-  "message.redstone_transportation.car_fuel": "Fuel: %s diesel · %s km/h"
+  "message.redstone_transportation.car_fuel": "Fuel: %s diesel · %s km/h",
+  "message.redstone_transportation.structure_no_fuel_tank": "Needs a Fuel Tank. Ships and airships run on the diesel in it.",
+  "message.redstone_transportation.no_fuel": "Out of fuel. Right-click with diesel to fill up."
 }

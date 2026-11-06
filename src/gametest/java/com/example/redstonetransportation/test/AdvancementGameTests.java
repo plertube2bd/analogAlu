@@ -57,6 +57,8 @@ public final class AdvancementGameTests {
 
     private static void core(GameTestHelper helper, BlockPos pos, Block block) {
         helper.setBlock(pos, block.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.NORTH));
+        // Ships and airships carry their diesel in a fuel tank.
+        if (block == ModContent.SHIP_HELM || block == ModContent.AIRSHIP_HELM) StructureGameTests.fuelTank(helper, pos, Direction.NORTH, 4);
     }
 
     /** Every name the code grants has to exist, or the grant fails without a word. */

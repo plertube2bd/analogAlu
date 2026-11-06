@@ -51,6 +51,23 @@ public final class StructureGameTests {
 
     private static void core(GameTestHelper helper, BlockPos pos, Block block, Direction facing) {
         helper.setBlock(pos, block.defaultBlockState().setValue(StructureCoreBlock.FACING, facing));
+        if (block == ModContent.SHIP_HELM || block == ModContent.AIRSHIP_HELM) fuelTank(helper, pos, facing, 4);
+    }
+
+    /**
+     * Ships and airships run on diesel: a tank with some in it takes the place of the deck block under the
+     * helm, or goes right behind the helm where there is no deck under it.
+     */
+    static BlockPos fuelTank(GameTestHelper helper, BlockPos helm, Direction facing, int diesel) {
+        BlockState under = helper.getBlockState(helm.below());
+        boolean deck = !under.isAir() && !under.is(Blocks.STONE) && !under.is(ModContent.LIFT_BALLOON)
+                && under.getFluidState().isEmpty();
+        BlockPos tank = deck ? helm.below() : helm.relative(facing.getOpposite());
+        helper.setBlock(tank, ModContent.FUEL_TANK);
+        com.example.redstonetransportation.block.FuelTankBlockEntity fuel =
+                helper.getBlockEntity(tank, com.example.redstonetransportation.block.FuelTankBlockEntity.class);
+        for (int i = 0; i < diesel; i++) fuel.addDiesel();
+        return tank;
     }
 
     private static void plate(GameTestHelper helper, int x0, int z0, int x1, int z1, int y, Block block) {
@@ -705,6 +722,195 @@ public final class StructureGameTests {
         StructureAssembler.restore(helper.getLevel(), loaded);
         Container chest = helper.getBlockEntity(new BlockPos(9, 2, 10), net.minecraft.world.level.block.entity.ChestBlockEntity.class);
         helper.assertTrue(chest.getItem(3).is(Items.APPLE) && chest.getItem(3).getCount() == 2, "chest contents were lost in saving");
+        helper.succeed();
+    }
+
+    // ---- Diesel for ships and airships ----------------------------------------------------------
+
+    private static com.example.redstonetransportation.block.FuelTankBlockEntity tank(GameTestHelper helper, BlockPos pos) {
+        return helper.getBlockEntity(pos, com.example.redstonetransportation.block.FuelTankBlockEntity.class);
+    }
+
+    private static String messageKey(StructureAssembler.Result result) {
+        return result.message().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents contents
+                ? contents.getKey() : "";
+    }
+
+    /** With no fuel tank aboard, a ship or an airship is not assembled, and says what it needs. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
+    public void shipsAndAirshipsNeedAFuelTank(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        water(helper, 1);
+        BlockPos shipAt = new BlockPos(5, 3, 15);
+        plate(helper, 4, 14, 6, 16, 2, Blocks.OAK_PLANKS);
+        helper.setBlock(shipAt, ModContent.SHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.EAST));
+        StructureAssembler.Result ship = assemble(helper, shipAt);
+        helper.assertTrue(ship.structure() == null, "a ship with no fuel tank was assembled");
+        helper.assertValueEqual(messageKey(ship), "message.redstone_transportation.structure_no_fuel_tank", "the ship's message");
+
+        BlockPos airshipAt = new BlockPos(20, 4, 5);
+        helper.setBlock(airshipAt, ModContent.AIRSHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.EAST));
+        helper.setBlock(airshipAt.above(), ModContent.LIFT_BALLOON);
+        StructureAssembler.Result airship = assemble(helper, airshipAt);
+        helper.assertTrue(airship.structure() == null, "an airship with no fuel tank was assembled");
+        helper.assertValueEqual(messageKey(airship), "message.redstone_transportation.structure_no_fuel_tank", "the airship's message");
+
+        // An empty tank is enough to assemble; it is the diesel in it that moves the vessel.
+        fuelTank(helper, airshipAt, Direction.EAST, 0);
+        helper.assertTrue(assemble(helper, airshipAt).structure() != null, "an airship with a fuel tank was refused");
+        fuelTank(helper, shipAt, Direction.EAST, 0);
+        helper.assertTrue(assemble(helper, shipAt).structure() != null, "a ship with a fuel tank was refused");
+        helper.succeed();
+    }
+
+    /** Sailing burns a tick of diesel per tick; when the tank runs dry the ship slows to a stop. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 220)
+    public void aShipRunsOutOfDieselAndStops(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        water(helper, 1);
+        BlockPos coreAt = new BlockPos(5, 3, 15);
+        plate(helper, 4, 14, 6, 16, 2, Blocks.OAK_PLANKS);
+        core(helper, coreAt, ModContent.SHIP_HELM, Direction.EAST);
+        var fuel = tank(helper, coreAt.below());
+        fuel.drain(fuel.fuel() - 40);
+        MovingStructureEntity ship = assembled(helper, coreAt);
+        double startX = ship.getX();
+        driver(helper, ship, FORWARD);
+        double[] stoppedAt = new double[1];
+        helper.runAtTickTime(20, () -> helper.assertTrue(ship.fuel() < 40 && ship.fuel() > 0, "fuel after 20 ticks: " + ship.fuel()));
+        helper.runAtTickTime(140, () -> {
+            helper.assertValueEqual(ship.fuel(), 0, "fuel left");
+            helper.assertTrue(ship.getX() - startX > 2.0D, "the ship only went " + (ship.getX() - startX));
+            stoppedAt[0] = ship.getX();
+        });
+        helper.runAtTickTime(200, () -> {
+            helper.assertTrue(Math.abs(ship.getX() - stoppedAt[0]) < 1.0E-6D, "the ship kept going with no diesel");
+            helper.assertFalse(ship.isMoving(), "the ship still counts as moving");
+            helper.succeed();
+        });
+    }
+
+    /** Out of diesel an airship hangs where its balloons hold it; diesel poured in gets it going again. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 160)
+    public void anAirshipWithNoDieselHangsUntilRefuelled(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        BlockPos coreAt = new BlockPos(5, 4, 15);
+        core(helper, coreAt, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(coreAt.above(), ModContent.LIFT_BALLOON);
+        var fuel = tank(helper, coreAt.west());
+        fuel.drain(fuel.fuel());
+        MovingStructureEntity airship = assembled(helper, coreAt);
+        Vec3 start = airship.position();
+        driver(helper, airship, new Input(true, false, false, false, true, false, false));
+        helper.runAtTickTime(60, () -> {
+            helper.assertTrue(airship.position().distanceTo(start) < 1.0E-6D, "an airship with no diesel moved");
+            ServerPlayer crew = helper.makeMockServerPlayerInLevel();
+            crew.setGameMode(GameType.SURVIVAL);
+            crew.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(com.example.analogalu.ModItems.DIESEL, 2));
+            airship.interact(crew, InteractionHand.MAIN_HAND, airship.position());
+            helper.assertValueEqual(airship.fuel(), com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL,
+                    "fuel after one diesel");
+            helper.assertValueEqual(crew.getMainHandItem().getCount(), 1, "diesel left in hand");
+        });
+        helper.runAtTickTime(140, () -> {
+            Vec3 moved = airship.position().subtract(start);
+            helper.assertTrue(moved.x > 1.0D && moved.y > 0.5D, "the refuelled airship went only " + moved);
+            helper.succeed();
+        });
+    }
+
+    /** A route beacon only calls a vessel that can make the trip. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 40)
+    public void aBeaconDoesNotCallAVesselWithNoDiesel(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        water(helper, 1);
+        BlockPos coreAt = new BlockPos(5, 3, 15);
+        plate(helper, 4, 14, 6, 16, 2, Blocks.OAK_PLANKS);
+        core(helper, coreAt, ModContent.SHIP_HELM, Direction.EAST);
+        var fuel = tank(helper, coreAt.below());
+        fuel.drain(fuel.fuel());
+        BlockPos beacon = new BlockPos(20, 1, 15);
+        helper.setBlock(beacon, ModContent.ROUTE_BEACON);
+        MovingStructureEntity ship = assembled(helper, coreAt);
+        // Other tests' vessels may be in reach of the beacon, so watch this ship rather than the answer.
+        MovingStructureEntity.sendTo(helper.getLevel(), helper.absolutePos(beacon), 1.0D);
+        helper.assertFalse(ship.isMoving(), "the beacon called a ship with an empty tank");
+        ServerPlayer crew = helper.makeMockServerPlayerInLevel();
+        crew.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(com.example.analogalu.ModItems.DIESEL));
+        ship.interact(crew, InteractionHand.MAIN_HAND, ship.position());
+        MovingStructureEntity.sendTo(helper.getLevel(), helper.absolutePos(beacon), 1.0D);
+        helper.assertTrue(ship.isMoving(), "the beacon did not call the refuelled ship");
+        helper.succeed();
+    }
+
+    // ---- Setting down against blocks that were already there -----------------------------------
+
+    /**
+     * Set down touching a wall that was already there, an airship leaves the wall behind the next time it
+     * is assembled, even after the world is saved and loaded; a block put against it afterwards joins it.
+     */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
+    public void aSetDownAirshipLeavesBehindTheWallItLandedAgainst(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        BlockPos coreAt = new BlockPos(10, 3, 10);
+        plate(helper, 9, 9, 11, 11, 2, Blocks.OAK_PLANKS);
+        core(helper, coreAt, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(coreAt.above(), ModContent.LIFT_BALLOON);
+        MovingStructureEntity airship = assembled(helper, coreAt);
+        int size = airship.blocks().size();
+
+        // While it is away, a wall goes up right where it comes back to, touching its deck.
+        for (int y = 2; y <= 4; y++) helper.setBlock(new BlockPos(12, y, 10), Blocks.BRICKS);
+        StructureAssembler.restore(helper.getLevel(), airship);
+        helper.assertBlockPresent(ModContent.AIRSHIP_HELM, coreAt);
+
+        // What it was set down against is kept with the world.
+        var parked = com.example.redstonetransportation.structure.ParkedStructures.in(helper.getLevel());
+        var saved = com.example.redstonetransportation.structure.ParkedStructures.TYPE.codec()
+                .encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, parked).getOrThrow();
+        var loaded = com.example.redstonetransportation.structure.ParkedStructures.TYPE.codec()
+                .parse(net.minecraft.nbt.NbtOps.INSTANCE, saved).getOrThrow();
+        helper.assertTrue(loaded.wasThere(helper.absolutePos(coreAt), helper.absolutePos(new BlockPos(12, 2, 10)),
+                Blocks.BRICKS.defaultBlockState()), "the wall it landed against was not saved");
+
+        // A block a player adds to the parked airship does belong to it.
+        helper.setBlock(new BlockPos(10, 2, 8), Blocks.OAK_PLANKS);
+        MovingStructureEntity again = assembled(helper, coreAt);
+        helper.assertValueEqual(again.blocks().size(), size + 1, "blocks in the airship assembled again");
+        for (int y = 2; y <= 4; y++) helper.assertBlockPresent(Blocks.BRICKS, new BlockPos(12, y, 10));
+        helper.assertBlockPresent(Blocks.AIR, new BlockPos(10, 2, 8));
+
+        // Set down where nothing touches it, and assembled again, it is just itself.
+        StructureAssembler.restore(helper.getLevel(), again);
+        helper.assertValueEqual(assembled(helper, coreAt).blocks().size(), size + 1, "blocks the third time");
+        helper.succeed();
+    }
+
+    /** Two vessels set down side by side stay two vessels. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
+    public void twoVesselsSetDownSideBySideStaySeparate(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        BlockPos first = new BlockPos(6, 3, 10);
+        BlockPos second = new BlockPos(9, 3, 10);
+        plate(helper, 5, 9, 7, 11, 2, Blocks.OAK_PLANKS);
+        core(helper, first, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(first.above(), ModContent.LIFT_BALLOON);
+        MovingStructureEntity one = assembled(helper, first);
+        int oneSize = one.blocks().size();
+        // The second is built where it ends up right against the first once that is set down.
+        plate(helper, 8, 9, 10, 11, 2, Blocks.SPRUCE_PLANKS);
+        core(helper, second, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(second.above(), ModContent.LIFT_BALLOON);
+        MovingStructureEntity two = assembled(helper, second);
+        int twoSize = two.blocks().size();
+        StructureAssembler.restore(helper.getLevel(), one);
+        StructureAssembler.restore(helper.getLevel(), two);
+
+        StructureAssembler.Result again = assemble(helper, first);
+        helper.assertTrue(again.structure() != null, "the first would not assemble beside the second: " + again.message().getString());
+        helper.assertValueEqual(again.structure().blocks().size(), oneSize, "blocks in the first");
+        helper.assertBlockPresent(ModContent.AIRSHIP_HELM, second);
+        helper.assertValueEqual(assembled(helper, second).blocks().size(), twoSize, "blocks in the second");
         helper.succeed();
     }
 }

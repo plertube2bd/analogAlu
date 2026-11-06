@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "#minecraft:creeper_drop_music_discs",
+    "#c:music_discs",
     "minecraft:snow_block"
   ],
   "result": {

@@ -93,14 +93,18 @@ def main() -> None:
             "length_in_seconds": seconds,
             "sound_event": f"{NS}:music_disc.{name}",
         })
-        # Any disc a creeper can drop, plus something that suits the song.
+        # Any music disc at all (the c:music_discs convention tag: every vanilla disc and other mods'),
+        # plus something that suits the song.
         write_json(DATA / "recipe" / f"{item}.json", {
             "type": "minecraft:crafting_shapeless",
             "category": "misc",
-            "ingredients": ["#minecraft:creeper_drop_music_discs", extra],
+            "ingredients": ["#c:music_discs", extra],
             "result": {"id": f"{NS}:{item}", "count": 1},
         })
     write_json(ASSETS / "sounds.json", sounds)
+    # They are music discs like any other, for this mod's recipes and other mods alike.
+    write_json(RES / "data" / "c" / "tags" / "item" / "music_discs.json",
+               {"replace": False, "values": [f"{NS}:music_disc_{name}" for name in DISCS]})
     # Creepers killed by skeletons drop these too, like the vanilla discs.
     write_json(RES / "data" / "minecraft" / "tags" / "item" / "creeper_drop_music_discs.json",
                {"replace": False, "values": [f"{NS}:music_disc_{name}" for name in DISCS]})

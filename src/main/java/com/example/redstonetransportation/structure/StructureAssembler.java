@@ -67,6 +67,8 @@ public final class StructureAssembler {
         if (!(coreState.getBlock() instanceof StructureCoreBlock coreBlock)) return failed("structure_no_core");
         if (limit != null && !limit.isInside(core)) return failed("structure_core_outside");
 
+        // Blocks it was set down against last time stay where they are, unless the player marked an area.
+        ParkedStructures parked = limit == null ? ParkedStructures.in(level) : null;
         List<BlockPos> found = new ArrayList<>();
         LongOpenHashSet seen = new LongOpenHashSet();
         ArrayDeque<BlockPos> open = new ArrayDeque<>();
@@ -81,6 +83,7 @@ public final class StructureAssembler {
             for (Direction side : Direction.values()) {
                 BlockPos next = pos.relative(side);
                 if (!seen.add(next.asLong()) || !belongs(level, next, limit)) continue;
+                if (parked != null && parked.keepsOut(level, core, next, level.getBlockState(next))) continue;
                 if (level.getBlockState(next).getBlock() instanceof StructureCoreBlock) {
                     return new Result(null, Component.translatable("message.redstone_transportation.structure_two_cores",
                             next.getX(), next.getY(), next.getZ()));
@@ -104,6 +107,7 @@ public final class StructureAssembler {
         for (BlockPos pos : found) level.setBlock(pos, Blocks.AIR.defaultBlockState(), QUIET);
         for (BlockPos pos : found) level.updateNeighborsAt(pos, Blocks.AIR);
         level.addFreshEntity(structure);
+        ParkedStructures.in(level).forget(core);
         return new Result(structure, Component.translatable("message.redstone_transportation.structure_assembled", cells.size()));
     }
 
@@ -132,15 +136,23 @@ public final class StructureAssembler {
     private static @Nullable Component refusal(ServerLevel level, StructureKind kind, List<BlockPos> blocks) {
         return switch (kind) {
             case ELEVATOR -> null;
-            case SHIP -> isOnWater(level, blocks) ? null : Component.translatable("message.redstone_transportation.structure_no_water");
+            case SHIP -> !isOnWater(level, blocks) ? Component.translatable("message.redstone_transportation.structure_no_water")
+                    : missingFuelTank(level, blocks);
             case AIRSHIP -> {
                 long balloons = blocks.stream().filter(pos -> level.getBlockState(pos).is(ModContent.LIFT_BALLOON)).count();
                 long needed = Mth.positiveCeilDiv(blocks.size(), BLOCKS_PER_BALLOON);
-                yield balloons >= needed ? null
-                        : Component.translatable("message.redstone_transportation.structure_no_lift", needed - balloons, BLOCKS_PER_BALLOON);
+                yield balloons < needed
+                        ? Component.translatable("message.redstone_transportation.structure_no_lift", needed - balloons, BLOCKS_PER_BALLOON)
+                        : missingFuelTank(level, blocks);
             }
             case CAR -> missingCarParts(level, blocks);
         };
+    }
+
+    /** Ships and airships carry their diesel in at least one fuel tank. */
+    private static @Nullable Component missingFuelTank(ServerLevel level, List<BlockPos> blocks) {
+        boolean tank = blocks.stream().anyMatch(pos -> level.getBlockState(pos).is(ModContent.FUEL_TANK));
+        return tank ? null : Component.translatable("message.redstone_transportation.structure_no_fuel_tank");
     }
 
     /** A car needs a seat, four wheels on its bottom layer, an engine and a fuel tank; the wheel is its core. */
@@ -229,10 +241,24 @@ public final class StructureAssembler {
             });
         }
         if (structure.kind() == StructureKind.SHIP) drainHull(level, targets);
+        ParkedStructures.in(level).remember(origin, targets.keySet(), alreadyThere(level, targets.keySet()), level);
         for (BlockPos pos : targets.keySet()) level.updateNeighborsAt(pos, level.getBlockState(pos).getBlock());
 
         structure.discard();
         return Component.translatable("message.redstone_transportation.structure_restored", targets.size());
+    }
+
+    /** The blocks touching a structure just set down that assembly would take, but that were not part of it. */
+    private static Map<BlockPos, BlockState> alreadyThere(ServerLevel level, java.util.Set<BlockPos> structure) {
+        Map<BlockPos, BlockState> neighbours = new HashMap<>();
+        for (BlockPos pos : structure) {
+            for (Direction side : Direction.values()) {
+                BlockPos next = pos.relative(side);
+                if (structure.contains(next) || neighbours.containsKey(next) || !belongs(level, next, null)) continue;
+                neighbours.put(next.immutable(), level.getBlockState(next));
+            }
+        }
+        return neighbours;
     }
 
     /** Water that flowed in under the deck while the ship sailed would otherwise stay in its hold. */

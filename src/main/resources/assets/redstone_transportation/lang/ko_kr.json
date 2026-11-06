@@ -113,11 +113,11 @@
   "tooltip.redstone_transportation.elevator_core.detail1": "우클릭: 조립 · 앉아서 스페이스/W 위, Ctrl/S 아래",
   "tooltip.redstone_transportation.elevator_core.detail2": "호출기를 쓰면 그 층으로 옵니다",
   "tooltip.redstone_transportation.ship_helm": "붙어 있는 블록 전체를 배로 만듭니다.",
-  "tooltip.redstone_transportation.ship_helm.detail1": "물 위에서 우클릭: 조립 · 윗면 화살표가 뱃머리",
-  "tooltip.redstone_transportation.ship_helm.detail2": "앉아서 WASD로 조종 · 땅에 닿으면 멈춤",
+  "tooltip.redstone_transportation.ship_helm.detail1": "물 위에서 우클릭: 조립 · 연료통 1개 이상 필요 · 윗면 화살표가 뱃머리",
+  "tooltip.redstone_transportation.ship_helm.detail2": "앉아서 WASD로 조종 · 디젤로 움직임 · 땅에 닿으면 멈춤",
   "tooltip.redstone_transportation.airship_helm": "붙어 있는 블록 전체를 비행선으로 만듭니다.",
-  "tooltip.redstone_transportation.airship_helm.detail1": "우클릭: 조립 · 블록 16개마다 부양 풍선 1개 필요",
-  "tooltip.redstone_transportation.airship_helm.detail2": "앉아서 WASD로 조종 · 스페이스 상승, Ctrl 하강",
+  "tooltip.redstone_transportation.airship_helm.detail1": "우클릭: 조립 · 블록 16개마다 부양 풍선 1개, 연료통 1개 이상 필요",
+  "tooltip.redstone_transportation.airship_helm.detail2": "앉아서 WASD로 조종 · 스페이스 상승, Ctrl 하강 · 디젤로 움직임",
   "tooltip.redstone_transportation.lift_balloon": "비행선을 띄웁니다.",
   "tooltip.redstone_transportation.lift_balloon.detail1": "1개가 블록 16개를 띄웁니다",
   "tooltip.redstone_transportation.elevator_call": "층을 표시하고 엘리베이터를 부릅니다.",
@@ -273,7 +273,7 @@
   "tooltip.redstone_transportation.car_engine": "자동차를 움직이는 디젤 엔진입니다.",
   "tooltip.redstone_transportation.car_engine.detail1": "자동차에 1개 이상 필요합니다",
   "tooltip.redstone_transportation.fuel_tank": "디젤을 들고 우클릭해 채웁니다. 디젤 1개로 2분을 달립니다.",
-  "tooltip.redstone_transportation.fuel_tank.detail1": "디젤 16개까지 들어갑니다. 자동차에 1개 이상 필요합니다",
+  "tooltip.redstone_transportation.fuel_tank.detail1": "디젤 16개까지 들어갑니다. 자동차·배·비행선에 1개 이상 필요합니다",
   "message.redstone_transportation.car_missing": "자동차 부품이 모자랍니다: %s",
   "message.redstone_transportation.car_part.seat": "좌석",
   "message.redstone_transportation.car_part.wheels": "바퀴 %s개 더(맨 아래층)",
@@ -281,5 +281,7 @@
   "message.redstone_transportation.car_part.tank": "연료통",
   "message.redstone_transportation.fuel_tank": "연료: 디젤 %s/%s",
   "message.redstone_transportation.fuel_tank_full": "연료통이 가득 찼습니다 (디젤 %s개)",
-  "message.redstone_transportation.car_fuel": "연료: 디젤 %s개 · 속도 %s km/h"
+  "message.redstone_transportation.car_fuel": "연료: 디젤 %s개 · 속도 %s km/h",
+  "message.redstone_transportation.structure_no_fuel_tank": "연료통이 필요합니다. 배와 비행선은 연료통의 디젤로 움직입니다.",
+  "message.redstone_transportation.no_fuel": "연료가 없습니다. 디젤을 들고 우클릭해 넣으세요."
 }

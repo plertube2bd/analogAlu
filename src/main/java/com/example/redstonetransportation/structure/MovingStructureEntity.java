@@ -247,7 +247,8 @@ public final class MovingStructureEntity extends Entity {
         }
 
         Helm helm = Helm.from(driverInput());
-        boolean fuelled = carFuel() > 0;
+        boolean fuelled = fuel() > 0;
+        if (!fuelled && !helm.isIdle()) warnNoFuel();
         double wanted = grounded && fuelled ? helm.throttle() * CAR_SPEED : 0.0D;
         speed = approach(speed, wanted, wanted == 0.0D ? CAR_BRAKING : CAR_ACCELERATION);
         // Steering turns the wheels, which only turns the car while it rolls, and the other way in reverse.
@@ -270,15 +271,25 @@ public final class MovingStructureEntity extends Entity {
             place(position, canStand(position, yaw) ? yaw : getYRot());
         }
         if (Math.abs(speed) > IDLING) burnFuel(1);
+        reportFuel(fuelled);
+    }
+
+    /** Every 20 ticks, the driver sees the diesel left and the speed; with an empty tank, that it is empty. */
+    private void reportFuel(boolean fuelled) {
+        if (tickCount % 20 != 0 || !fuelled || !(getFirstPassenger() instanceof ServerPlayer driver)) return;
+        driver.sendOverlayMessage(Component.translatable("message.redstone_transportation.car_fuel",
+                (fuel() + com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL - 1)
+                        / com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL,
+                String.format("%.0f", Math.abs(speed) * 20.0D * 3.6D)));
+    }
+
+    private void warnNoFuel() {
         if (tickCount % 20 == 0 && getFirstPassenger() instanceof ServerPlayer driver) {
-            driver.sendOverlayMessage(Component.translatable("message.redstone_transportation.car_fuel",
-                    (carFuel() + com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL - 1)
-                            / com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL,
-                    String.format("%.0f", Math.abs(speed) * 20.0D * 3.6D)));
+            driver.sendOverlayMessage(Component.translatable("message.redstone_transportation.no_fuel"));
         }
     }
 
-    /** The fuel tanks on this car, loaded for use. */
+    /** The fuel tanks aboard (a car, ship or airship), loaded for use. */
     private List<com.example.redstonetransportation.block.FuelTankBlockEntity> fuelTanks() {
         List<com.example.redstonetransportation.block.FuelTankBlockEntity> tanks = new ArrayList<>();
         for (StructureBlocks.Cell cell : blocks().cells()) {
@@ -288,8 +299,8 @@ public final class MovingStructureEntity extends Entity {
         return tanks;
     }
 
-    /** Ticks of driving left in all the tanks together. */
-    public int carFuel() {
+    /** Ticks of driving left in all the tanks aboard together. */
+    public int fuel() {
         return fuelTanks().stream().mapToInt(com.example.redstonetransportation.block.FuelTankBlockEntity::fuel).sum();
     }
 
@@ -301,7 +312,7 @@ public final class MovingStructureEntity extends Entity {
         }
     }
 
-    /** Diesel poured into the car goes into the first tank with room for it. */
+    /** Diesel poured into a car, ship or airship goes into the first tank with room for it. */
     private boolean refuel(Player player, net.minecraft.world.item.ItemStack diesel) {
         for (com.example.redstonetransportation.block.FuelTankBlockEntity tank : fuelTanks()) {
             if (tank.fuel() + com.example.redstonetransportation.block.FuelTankBlockEntity.TICKS_PER_DIESEL
@@ -337,13 +348,25 @@ public final class MovingStructureEntity extends Entity {
         testInput = input;
     }
 
+    /**
+     * Ships and airships run on diesel from the fuel tanks aboard. With none left the engines stop: a ship
+     * slows to a halt, an airship hangs where its balloons hold it, and a route it was on is dropped.
+     */
     private void tickVessel(ServerLevel level, double topSpeed, double topClimb) {
         Helm helm = helm(level);
+        boolean fuelled = fuel() > 0;
+        if (!fuelled) {
+            if (!helm.isIdle()) warnNoFuel();
+            route = null;
+            helm = Helm.IDLE;
+        }
         speed = approach(speed, helm.throttle() * topSpeed, ACCELERATION);
         climb = approach(climb, helm.lift() * topClimb, ACCELERATION);
         turn = (float) approach(turn, helm.steering() * TURN_RATE, TURN_ACCELERATION);
         blocked = false;
+        reportFuel(fuelled);
         if (!isMoving()) return;
+        if (Math.abs(speed) > IDLING || Math.abs(climb) > IDLING || Math.abs(turn) > STOPPED_TURN) burnFuel(1);
 
         Vec3 position = position();
         if (climb != 0.0D) {
@@ -428,7 +451,8 @@ public final class MovingStructureEntity extends Entity {
     public static boolean sendTo(ServerLevel level, BlockPos beacon, double speedFraction) {
         AABB area = new AABB(beacon).inflate(ROUTE_RANGE);
         return level.getEntitiesOfClass(MovingStructureEntity.class, area,
-                        structure -> structure.kind() == StructureKind.SHIP || structure.kind() == StructureKind.AIRSHIP).stream()
+                        structure -> (structure.kind() == StructureKind.SHIP || structure.kind() == StructureKind.AIRSHIP)
+                                && structure.fuel() > 0).stream()
                 .min(Comparator.comparingDouble(structure -> structure.position().distanceToSqr(Vec3.atCenterOf(beacon))))
                 .map(structure -> {
                     structure.route = beacon.immutable();
@@ -725,7 +749,7 @@ public final class MovingStructureEntity extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (!(level() instanceof ServerLevel level)) return InteractionResult.SUCCESS;
-        if (kind() == StructureKind.CAR && player.getItemInHand(hand).is(com.example.analogalu.ModItems.DIESEL)) {
+        if (kind() != StructureKind.ELEVATOR && player.getItemInHand(hand).is(com.example.analogalu.ModItems.DIESEL)) {
             refuel(player, player.getItemInHand(hand));
             return InteractionResult.SUCCESS;
         }

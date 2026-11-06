@@ -24,8 +24,9 @@ Fabric · Minecraft 26.3 · Java 25 · Fabric API 필요
 | +/− 표시 | 모든 전원의 + 면과 − 면에 크게 표시 | [전기 가이드](docs/transportation/ELECTRIC_GUIDE_KO.md) |
 | 자동화 기계 220V | 벌목기를 뺀 기계는 220V 200Ω. 공장 제어기가 기계 n대를 200/n Ω 부하로 대표하고, 전압에 비례해 속도가 정해짐. 승압기 화면에 220 입력, 선은 PVC 피복 전선으로 | [전기 가이드](docs/transportation/ELECTRIC_GUIDE_KO.md) |
 | 자동차 | 운전대·좌석·바퀴 4개·디젤 엔진·연료통을 붙여 조립. 디젤로 최고 약 43km/h, 한 칸 턱을 넘음 | [자동차 가이드](docs/transportation/CAR_GUIDE_KO.md) |
+| 배·비행선 연료 | 배와 비행선도 연료통이 있어야 조립되고 디젤로 움직임. 다 떨어지면 배는 멈추고 비행선은 떠 있음 | [구조물 가이드](docs/transportation/STRUCTURE_GUIDE_KO.md) "연료" |
 | 운동화 | 내구도 무한, 인챈트 가능, 속도 +20%, 걷기·달리기·점프에 허기 없음, 1.8칸을 계단처럼 오름. 제작법 그대로 | [CHANGELOG](CHANGELOG_1.0.0_KO.md) 7장 |
-| 음반 | Sia - Snowman, Maroon 5 - Payphone. 주크박스에서 재생, 크리퍼 드롭, 음반 + 눈 블록/종으로 제작 | [CHANGELOG](CHANGELOG_1.0.0_KO.md) 9장 |
+| 음반 | Sia - Snowman, Maroon 5 - Payphone. 주크박스에서 재생, 크리퍼 드롭, 아무 음반 + 눈 블록/종으로 제작 | [CHANGELOG](CHANGELOG_1.0.0_KO.md) 9장 |
 | ALU 0.2.2 | 석유화학(나프타 → 플라스틱·섬유·고무), 감전과 PVC·PP 피복 전선, 승압기 전압 직접 입력, 전기충격기, 옷, 아스팔트 | [CHANGELOG](CHANGELOG_1.0.0_KO.md) 8장 |
 | 두 모드 합치기 | Analog ALU + Redstone Transportation → Modernization World | 아래 |
 
@@ -62,7 +63,7 @@ gradle build
 gradle runGameTest
 ```
 
-서버 게임 테스트 208개(운송 172, 전원 7, 총기 12, 석유 3, 자동차 6, 운동화·음반·피복 전선 8)를 돌립니다.
+서버 게임 테스트 214개(운송 172, 전원 7, 총기 12, 석유 3, 자동차 6, 배·비행선 연료 4, 정박 2, 운동화·음반·피복 전선 8)를 돌립니다.
 
 ```bash
 gradle runClientGameTest

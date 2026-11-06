@@ -159,10 +159,17 @@ public final class ModernGameTests {
 
     @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
     public void musicDiscRecipes(GameTestHelper helper) {
-        ItemStack snowman = craft(helper, 2, 1, Items.MUSIC_DISC_CAT, Items.SNOW_BLOCK);
-        helper.assertTrue(snowman.is(MusicDiscs.MUSIC_DISC_SNOWMAN), "a disc and a snow block made " + snowman);
-        ItemStack payphone = craft(helper, 2, 1, Items.MUSIC_DISC_13, Items.BELL);
-        helper.assertTrue(payphone.is(MusicDiscs.MUSIC_DISC_PAYPHONE), "a disc and a bell made " + payphone);
+        // Any disc will do, not only the ones creepers drop.
+        for (Item disc : List.of(Items.MUSIC_DISC_CAT, Items.MUSIC_DISC_PIGSTEP, Items.MUSIC_DISC_OTHERSIDE, Items.MUSIC_DISC_RELIC,
+                Items.MUSIC_DISC_CREATOR, MusicDiscs.MUSIC_DISC_PAYPHONE)) {
+            ItemStack snowman = craft(helper, 2, 1, disc, Items.SNOW_BLOCK);
+            helper.assertTrue(snowman.is(MusicDiscs.MUSIC_DISC_SNOWMAN), disc + " and a snow block made " + snowman);
+        }
+        for (Item disc : List.of(Items.MUSIC_DISC_13, Items.MUSIC_DISC_5, Items.MUSIC_DISC_PRECIPICE, MusicDiscs.MUSIC_DISC_SNOWMAN)) {
+            ItemStack payphone = craft(helper, 2, 1, disc, Items.BELL);
+            helper.assertTrue(payphone.is(MusicDiscs.MUSIC_DISC_PAYPHONE), disc + " and a bell made " + payphone);
+        }
+        helper.assertTrue(craft(helper, 2, 1, Items.DIAMOND, Items.SNOW_BLOCK).isEmpty(), "a diamond made a disc");
         helper.assertTrue(new ItemStack(MusicDiscs.MUSIC_DISC_SNOWMAN).is(net.minecraft.tags.ItemTags.CREEPER_DROP_MUSIC_DISCS),
                 "creepers do not drop the new discs");
         helper.succeed();

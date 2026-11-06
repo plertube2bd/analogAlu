@@ -332,6 +332,7 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
                 }
             }
             level.setBlock(core, ModContent.AIRSHIP_HELM.defaultBlockState(), Block.UPDATE_CLIENTS);
+            fuelTank(level, core.west(), 8);
             MovingStructureEntity big = StructureAssembler.assemble(level, core, null).structure();
             if (big == null) throw new AssertionError("the big structure did not assemble");
             big.steerForTest(new Input(true, false, false, true, false, false, false));
@@ -452,6 +453,7 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
             }
         }
         level.setBlock(HULL_CORE, ModContent.SHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.WEST), Block.UPDATE_CLIENTS);
+        fuelTank(level, HULL_CORE.east(), 8);
 
         BlockPos s = SHIP_HELM;
         for (int x = -3; x <= 3; x++) {
@@ -464,6 +466,7 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         level.setBlock(s.offset(-2, 1, 2), Blocks.CHEST.defaultBlockState(), Block.UPDATE_CLIENTS);
         level.setBlock(s.offset(-2, 1, -2), Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), Block.UPDATE_CLIENTS);
         level.setBlock(s, ModContent.SHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.EAST), Block.UPDATE_CLIENTS);
+        fuelTank(level, s.west(), 8);
 
         // A small airship standing on legs above the grass.
         BlockPos a = AIRSHIP_HELM;
@@ -480,6 +483,15 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
             level.setBlock(a.offset(-2, y, -2), Blocks.OAK_FENCE.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
         level.setBlock(a, ModContent.AIRSHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+        fuelTank(level, a.below(), 8);
+    }
+
+    /** Ships and airships run on diesel: a filled tank in place of a deck block. */
+    private static void fuelTank(ServerLevel level, BlockPos pos, int diesel) {
+        level.setBlock(pos, ModContent.FUEL_TANK.defaultBlockState(), Block.UPDATE_CLIENTS);
+        if (level.getBlockEntity(pos) instanceof com.example.redstonetransportation.block.FuelTankBlockEntity tank) {
+            for (int i = 0; i < diesel; i++) tank.addDiesel();
+        }
     }
 
     private static void putDriverOnShip(MinecraftServer server) {

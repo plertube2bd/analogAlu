@@ -143,5 +143,11 @@ public final class DedicatedServerClientTest implements FabricClientGameTest {
         }
         level.setBlock(core.offset(0, 0, 3), Blocks.CHEST.defaultBlockState(), Block.UPDATE_CLIENTS);
         level.setBlock(core, ModContent.AIRSHIP_HELM.defaultBlockState().setValue(StructureCoreBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+        // Airships run on diesel from a tank aboard.
+        BlockPos tank = core.below();
+        level.setBlock(tank, ModContent.FUEL_TANK.defaultBlockState(), Block.UPDATE_CLIENTS);
+        if (level.getBlockEntity(tank) instanceof com.example.redstonetransportation.block.FuelTankBlockEntity fuel) {
+            for (int i = 0; i < 8; i++) fuel.addDiesel();
+        }
     }
 }

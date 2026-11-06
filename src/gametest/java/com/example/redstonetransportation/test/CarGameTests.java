@@ -101,12 +101,12 @@ public final class CarGameTests {
     public void aCarDrivesOnDiesel(GameTestHelper helper) {
         TestWorld.floor(helper, Blocks.STONE);
         MovingStructureEntity car = build(helper, 0, 1);
-        int fuel = car.carFuel();
+        int fuel = car.fuel();
         double startZ = car.getZ();
         car.steerForTest(FORWARD);
         helper.runAfterDelay(30, () -> {
             helper.assertTrue(car.getZ() - startZ > 4.0D, "the car went only " + (car.getZ() - startZ) + " blocks");
-            helper.assertTrue(car.carFuel() < fuel, "driving burned no fuel");
+            helper.assertTrue(car.fuel() < fuel, "driving burned no fuel");
             helper.assertTrue(Math.abs(car.getX() - helper.absolutePos(CORE).getX() - 0.5D) < 1.0E-6D, "the car drifted sideways");
             car.steerForTest(Input.EMPTY);
             helper.succeed();
@@ -169,13 +169,13 @@ public final class CarGameTests {
         player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.DIESEL, 3));
         car.interact(player, InteractionHand.MAIN_HAND, car.position());
-        helper.assertValueEqual(car.carFuel(), FuelTankBlockEntity.TICKS_PER_DIESEL, "fuel after one diesel");
+        helper.assertValueEqual(car.fuel(), FuelTankBlockEntity.TICKS_PER_DIESEL, "fuel after one diesel");
         helper.assertValueEqual(player.getMainHandItem().getCount(), 2, "diesel left in hand");
         car.steerForTest(FORWARD);
         helper.runAfterDelay(20, () -> {
             car.steerForTest(Input.EMPTY);
             helper.runAfterDelay(40, () -> {
-                int left = car.carFuel();
+                int left = car.fuel();
                 helper.assertTrue(left < FuelTankBlockEntity.TICKS_PER_DIESEL, "no fuel was used");
                 StructureAssembler.restore(helper.getLevel(), car);
                 BlockPos tank = BlockPos.containing(car.getX(), car.getY(), car.getZ()).offset(-1, 0, -2);
