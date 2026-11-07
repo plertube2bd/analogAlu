@@ -1,0 +1,8 @@
+{
+  "comparator_output": 11,
+  "description": {
+    "translate": "jukebox_song.modernization_world.stay_at_your_house"
+  },
+  "length_in_seconds": 247.0,
+  "sound_event": "modernization_world:music_disc.stay_at_your_house"
+}

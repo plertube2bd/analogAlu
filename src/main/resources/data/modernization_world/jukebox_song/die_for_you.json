@@ -1,0 +1,8 @@
+{
+  "comparator_output": 9,
+  "description": {
+    "translate": "jukebox_song.modernization_world.die_for_you"
+  },
+  "length_in_seconds": 219.0,
+  "sound_event": "modernization_world:music_disc.die_for_you"
+}

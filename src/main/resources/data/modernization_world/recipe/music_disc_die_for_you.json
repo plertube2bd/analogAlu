@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:music_discs",
+    "analog_alu:bullet_9mm"
+  ],
+  "result": {
+    "id": "modernization_world:music_disc_die_for_you",
+    "count": 1
+  }
+}

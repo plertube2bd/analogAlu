@@ -2,6 +2,11 @@
   "replace": false,
   "values": [
     "modernization_world:music_disc_snowman",
-    "modernization_world:music_disc_payphone"
+    "modernization_world:music_disc_payphone",
+    "modernization_world:music_disc_die_for_you",
+    "modernization_world:music_disc_mice_on_venus",
+    "modernization_world:music_disc_stay_at_your_house",
+    "modernization_world:music_disc_hai_yorokonde",
+    "modernization_world:music_disc_digital_circus"
   ]
 }

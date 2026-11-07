@@ -1,0 +1,8 @@
+{
+  "comparator_output": 10,
+  "description": {
+    "translate": "jukebox_song.modernization_world.mice_on_venus"
+  },
+  "length_in_seconds": 157.0,
+  "sound_event": "modernization_world:music_disc.mice_on_venus"
+}

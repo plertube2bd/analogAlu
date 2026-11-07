@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "jukebox_song.modernization_world.digital_circus"
+  },
+  "length_in_seconds": 195.0,
+  "sound_event": "modernization_world:music_disc.digital_circus"
+}

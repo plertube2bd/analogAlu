@@ -14,5 +14,45 @@
         "stream": true
       }
     ]
+  },
+  "music_disc.die_for_you": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/die_for_you",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.mice_on_venus": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/mice_on_venus",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.stay_at_your_house": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/stay_at_your_house",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.hai_yorokonde": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/hai_yorokonde",
+        "stream": true
+      }
+    ]
+  },
+  "music_disc.digital_circus": {
+    "sounds": [
+      {
+        "name": "modernization_world:records/digital_circus",
+        "stream": true
+      }
+    ]
   }
 }

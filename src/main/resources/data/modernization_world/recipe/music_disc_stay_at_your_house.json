@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:music_discs",
+    "#minecraft:beds"
+  ],
+  "result": {
+    "id": "modernization_world:music_disc_stay_at_your_house",
+    "count": 1
+  }
+}

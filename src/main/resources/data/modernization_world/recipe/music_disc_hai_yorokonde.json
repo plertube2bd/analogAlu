@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:music_discs",
+    "minecraft:note_block"
+  ],
+  "result": {
+    "id": "modernization_world:music_disc_hai_yorokonde",
+    "count": 1
+  }
+}

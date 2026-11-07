@@ -23,6 +23,16 @@ DATA = RES / "data" / NS
 DISCS = {
     "snowman": ("Sia - Snowman", 166.0, 13, (150, 214, 245), (236, 248, 255), "minecraft:snow_block"),
     "payphone": ("Maroon 5 - Payphone (feat. Wiz Khalifa)", 233.0, 14, (214, 52, 52), (255, 196, 70), "minecraft:bell"),
+    # A shooter's anthem: a disc and a 9mm round.
+    "die_for_you": ("VALORANT - Die For You (feat. Grabbitz)", 219.0, 9, (255, 70, 85), (236, 232, 225), "analog_alu:bullet_9mm"),
+    # C418, made nostalgic: a disc and a grass block.
+    "mice_on_venus": ("C418 - Mice On Venus (EMBRR ver.)", 157.0, 10, (96, 168, 72), (170, 220, 120), "minecraft:grass_block"),
+    # Somewhere to stay: a disc and any bed.
+    "stay_at_your_house": ("Rosa Walton - I Really Want to Stay at Your House", 247.0, 11, (250, 228, 40), (60, 220, 230), "#minecraft:beds"),
+    # A song to dance to: a disc and a note block.
+    "hai_yorokonde": ("こっちのけんと - はいよろこんで", 162.0, 12, (240, 140, 40), (255, 220, 150), "minecraft:note_block"),
+    # A circus: a disc and a cake.
+    "digital_circus": ("Carameii - The Amazing Digital Circus", 195.0, 15, (200, 40, 60), (60, 90, 210), "minecraft:cake"),
 }
 
 KO_NAME = "음반"
@@ -114,7 +124,11 @@ def main() -> None:
         for name, (title, *_rest) in DISCS.items():
             entries[f"item.{NS}.music_disc_{name}"] = disc_name
             entries[f"jukebox_song.{NS}.{name}"] = title
-        write_json(ASSETS / "lang" / f"{language}.json", entries)
+        # Added to what is there, since other features of this namespace have names in the same file.
+        path = ASSETS / "lang" / f"{language}.json"
+        existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        existing.update(entries)
+        write_json(path, existing)
     print("music discs generated")
 
 
