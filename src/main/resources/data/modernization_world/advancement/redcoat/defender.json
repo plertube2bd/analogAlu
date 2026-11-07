@@ -1,4 +1,5 @@
 {
+  "parent": "minecraft:adventure/root",
   "criteria": {
     "won_raid": {
       "trigger": "minecraft:impossible"

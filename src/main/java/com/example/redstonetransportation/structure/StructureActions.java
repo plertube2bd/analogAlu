@@ -282,10 +282,12 @@ public final class StructureActions {
             if (blockEntity instanceof Container container) {
                 for (int slot = 0; slot < container.getContainerSize(); slot++) give(player, container.removeItemNoUpdate(slot));
             }
-            if (player.hasCorrectToolForDrops(state)) {
-                List<ItemStack> drops = Block.getDrops(state, level, world, blockEntity, player, player.getMainHandItem());
-                drops.forEach(stack -> give(player, stack));
-            }
+            // A block aboard comes off in one click whatever is in hand, so it always comes back as an item:
+            // without the right tool it would otherwise just vanish. The right tool wears as it would mining.
+            ItemStack tool = player.getMainHandItem();
+            List<ItemStack> drops = Block.getDrops(state, level, world, blockEntity, player, tool);
+            drops.forEach(stack -> give(player, stack));
+            if (player.hasCorrectToolForDrops(state)) tool.mineBlock(level, state, world, player);
         }
         structure.setCell(cell, null);
         level.playSound(null, world, state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, 0.8F);

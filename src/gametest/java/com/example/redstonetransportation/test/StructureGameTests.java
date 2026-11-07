@@ -976,4 +976,30 @@ public final class StructureGameTests {
         helper.assertTrue(Math.abs(airship.motorBoost() - 1.5D) < 1.0E-9D, "two motors give " + airship.motorBoost());
         helper.succeed();
     }
+
+    /**
+     * A block taken off a vessel comes back as an item even without the tool it needs (a fuel tank or iron
+     * block bare-handed), since aboard it comes off in one click; in creative nothing drops, as anywhere.
+     */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
+    public void blocksTakenOffAnAirshipComeBackAsItems(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        BlockPos helm = new BlockPos(10, 4, 10);
+        core(helper, helm, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(helm.above(), ModContent.LIFT_BALLOON);
+        helper.setBlock(helm.north(), Blocks.IRON_BLOCK);
+        helper.setBlock(helm.south(), Blocks.OAK_PLANKS);
+        MovingStructureEntity airship = assembled(helper, helm);
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.setGameMode(GameType.SURVIVAL);
+        player.setPos(airship.position());
+        for (Block block : new Block[] {ModContent.FUEL_TANK, Blocks.IRON_BLOCK, Blocks.OAK_PLANKS}) {
+            BlockPos cell = airship.blocks().cells().stream().filter(c -> c.state().is(block)).findFirst()
+                    .orElseThrow(() -> new AssertionError(block + " is not aboard")).pos();
+            StructureActions.breakCell(player, airship, cell);
+            helper.assertTrue(airship.blocks().cell(cell) == null, block + " is still aboard");
+            helper.assertTrue(player.getInventory().contains(new ItemStack(block.asItem())), "breaking " + block + " bare-handed gave nothing");
+        }
+        helper.succeed();
+    }
 }
