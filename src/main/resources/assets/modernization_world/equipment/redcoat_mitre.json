@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "modernization_world:redcoat_mitre"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "modernization_world:redcoat_mitre"
+      }
+    ]
+  }
+}

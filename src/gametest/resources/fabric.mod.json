@@ -21,7 +21,8 @@
       "com.example.redstonetransportation.test.GunGameTests",
       "com.example.redstonetransportation.test.OilGameTests",
       "com.example.redstonetransportation.test.CarGameTests",
-      "com.example.redstonetransportation.test.ModernGameTests"
+      "com.example.redstonetransportation.test.ModernGameTests",
+      "com.example.modernizationworld.test.RedcoatGameTests"
     ],
     "fabric-client-gametest": [
       "com.example.redstonetransportation.test.ScreenshotClientTest",

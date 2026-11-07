@@ -29,7 +29,7 @@ import java.util.Set;
 public final class RedstoneTransportation implements ModInitializer {
     public static final String MOD_ID = "redstone_transportation";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    private static final Set<String> RECIPE_BOOK_NAMESPACES = Set.of(MOD_ID, "analog_alu");
+    private static final Set<String> RECIPE_BOOK_NAMESPACES = Set.of(MOD_ID, "analog_alu", "modernization_world");
 
     private static VehicleCatalog vehicleCatalog;
     private static VehicleBehaviorRegistry behaviorRegistry;

@@ -57,3 +57,15 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 25
     options.encoding = 'UTF-8'
 }
+
+// Keep a convenient copy at the project root as well as Gradle's standard build/libs output.
+tasks.register('copyJarToLibs', Copy) {
+    dependsOn tasks.named('jar')
+    from(tasks.named('jar'))
+    into(layout.projectDirectory.dir('libs'))
+    rename { "${project.archives_base_name}-${project.version}.jar" }
+}
+
+tasks.named('build') {
+    finalizedBy(tasks.named('copyJarToLibs'))
+}

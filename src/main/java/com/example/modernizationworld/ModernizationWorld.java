@@ -9,5 +9,7 @@ public final class ModernizationWorld implements ModInitializer {
     @Override
     public void onInitialize() {
         MusicDiscs.init();
+        com.example.modernizationworld.redcoat.RedcoatContent.init();
+        com.example.modernizationworld.redcoat.RedcoatRaidManager.init();
     }
 }

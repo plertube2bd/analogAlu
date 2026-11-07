@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
+import com.example.modernizationworld.redcoat.client.RedcoatRenderer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,13 @@ public final class RedstoneTransportationClient implements ClientModInitializer 
     @Override
     public void onInitializeClient() {
         RedstoneTramRenderer.TRAM.registerLayers();
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.MUSKETEER, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.GRENADIER, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.SERGEANT, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.OFFICER, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.RIFLEMAN, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.DRUMMER, RedcoatRenderer::new);
+        EntityRenderers.register(com.example.modernizationworld.redcoat.RedcoatEntities.DRAGOON, RedcoatRenderer::new);
         RedstoneTramRenderer.CARGO.registerLayers();
         EntityRenderers.register(ModEntityTypes.REDSTONE_TRAM, context -> new RedstoneTramRenderer<>(context, RedstoneTramRenderer.TRAM));
         EntityRenderers.register(ModEntityTypes.CARGO_TRAM, context -> new RedstoneTramRenderer<>(context, RedstoneTramRenderer.CARGO));

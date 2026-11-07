@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    " B ",
+    "   "
+  ],
+  "key": {
+    "D": "minecraft:red_dye",
+    "B": "minecraft:ominous_bottle"
+  },
+  "result": {
+    "id": "modernization_world:redcoat_omen_bottle",
+    "count": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "won_raid": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "won_raid"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.modernization_world.redcoat.defender.title"
+    },
+    "description": {
+      "translate": "advancements.modernization_world.redcoat.defender.description"
+    },
+    "icon": {
+      "id": "minecraft:diamond"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

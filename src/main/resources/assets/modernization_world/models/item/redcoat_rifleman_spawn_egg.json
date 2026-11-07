@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "modernization_world:item/redcoat_rifleman_spawn_egg"
+  }
+}
