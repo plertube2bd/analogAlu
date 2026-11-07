@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.bossmode.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"BossHealthOverlayAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

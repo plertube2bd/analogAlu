@@ -48,7 +48,11 @@ public final class ModGuns {
                 context.server().execute(() -> {
                     ServerPlayer player = context.player();
                     ItemStack held = player.getMainHandItem();
-                    if (held.getItem() instanceof GunItem gun) gun.action(player, held);
+                    if (!(held.getItem() instanceof GunItem gun)) return;
+                    switch (payload.action()) {
+                        case FIRE -> gun.fire(player, held);
+                        case COCK_OR_RELOAD -> gun.action(player, held);
+                    }
                 }));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {
             output.accept(REVOLVER);

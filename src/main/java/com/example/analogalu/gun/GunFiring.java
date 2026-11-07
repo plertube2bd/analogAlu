@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Bullets travel instantly along a straight line from the eye, stop at the first solid block, and hit
@@ -32,19 +33,33 @@ import java.util.Map;
 public final class GunFiring {
     private GunFiring() {}
 
-    public static void fire(ServerLevel level, Player shooter, GunType type) {
-        Vec3 eye = shooter.getEyePosition();
+    /** Aiming down the sights narrows a shotgun's cone to this share of its width. */
+    public static final double AIMED_SPREAD = 0.6D;
+
+    /** A player's shot, where they are looking. */
+    public static void fire(ServerLevel level, Player shooter, GunType type, boolean aiming) {
         // The body's rotation is what the client sends with every move; the head's can lag behind it.
         Vec3 look = Vec3.directionFromRotation(shooter.getXRot(), shooter.getYRot());
+        double spread = type.spreadDegrees() * (aiming ? AIMED_SPREAD : 1.0D);
+        fire(level, shooter, type, look, spread, type.range(), target -> canHit(shooter, target));
+    }
+
+    /**
+     * One shot from any shooter along {@code look}: a player's, or a soldier's aimed at its target.
+     * {@code hittable} says what the bullet can strike, so soldiers do not shoot each other.
+     */
+    public static void fire(ServerLevel level, LivingEntity shooter, GunType type, Vec3 look, double spreadDegrees,
+                            double range, Predicate<Entity> hittable) {
+        Vec3 eye = shooter.getEyePosition();
         RandomSource random = shooter.getRandom();
         Map<Entity, Float> hits = new LinkedHashMap<>();
         for (int pellet = 0; pellet < type.pellets(); pellet++) {
-            Vec3 direction = type.spreadDegrees() > 0.0D ? spread(look, random, type.spreadDegrees()) : look;
-            Vec3 end = eye.add(direction.scale(type.range()));
+            Vec3 direction = spreadDegrees > 0.0D ? spread(look, random, spreadDegrees) : look;
+            Vec3 end = eye.add(direction.scale(range));
             BlockHitResult block = level.clip(new ClipContext(eye, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, shooter));
             Vec3 stop = block.getType() == HitResult.Type.MISS ? end : block.getLocation();
             EntityHitResult entity = ProjectileUtil.getEntityHitResult(level, shooter, eye, stop,
-                    new AABB(eye, stop).inflate(1.0D), target -> canHit(shooter, target), 0.0F);
+                    new AABB(eye, stop).inflate(1.0D), hittable, 0.0F);
             if (entity != null) {
                 hits.merge(entity.getEntity(), type.damage(), Float::sum);
                 stop = entity.getLocation();
@@ -61,7 +76,8 @@ public final class GunFiring {
         muzzle(level, eye, look, type);
     }
 
-    private static boolean canHit(Player shooter, Entity target) {
+    /** Also what a soldier's shot may strike, before its own side is taken out. */
+    public static boolean canHit(LivingEntity shooter, Entity target) {
         return target != shooter && target.isPickable() && !target.isSpectator() && !shooter.isPassengerOfSameVehicle(target);
     }
 

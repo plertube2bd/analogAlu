@@ -15,8 +15,16 @@
       }
     ],
     "fallback": {
-      "type": "minecraft:model",
-      "model": "analog_alu:item/revolver_3d"
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "analog_alu:item/revolver_aim"
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "analog_alu:item/revolver_3d"
+      }
     }
   }
 }

@@ -1,0 +1,290 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_base"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "heart": "false",
+        "eye": "false",
+        "core": "false"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_dormant"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "south",
+            "heart": "true"
+          },
+          {
+            "facing": "south",
+            "eye": "true"
+          },
+          {
+            "facing": "south",
+            "core": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_active"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "heart": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_heart"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "eye": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_eye"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "core": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_core"
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_base",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "heart": "false",
+        "eye": "false",
+        "core": "false"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_dormant",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "west",
+            "heart": "true"
+          },
+          {
+            "facing": "west",
+            "eye": "true"
+          },
+          {
+            "facing": "west",
+            "core": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_active",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "heart": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_heart",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "eye": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_eye",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "core": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_core",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_base",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "heart": "false",
+        "eye": "false",
+        "core": "false"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_dormant",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "north",
+            "heart": "true"
+          },
+          {
+            "facing": "north",
+            "eye": "true"
+          },
+          {
+            "facing": "north",
+            "core": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_active",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "heart": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_heart",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "eye": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_eye",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "core": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_core",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_base",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "heart": "false",
+        "eye": "false",
+        "core": "false"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_dormant",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "east",
+            "heart": "true"
+          },
+          {
+            "facing": "east",
+            "eye": "true"
+          },
+          {
+            "facing": "east",
+            "core": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_core_active",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "heart": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_heart",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "eye": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_eye",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "core": "true"
+      },
+      "apply": {
+        "model": "boss_mode:block/void_altar_trophy_core",
+        "y": 270
+      }
+    }
+  ]
+}

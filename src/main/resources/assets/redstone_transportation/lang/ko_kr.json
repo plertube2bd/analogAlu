@@ -283,5 +283,11 @@
   "message.redstone_transportation.fuel_tank_full": "연료통이 가득 찼습니다 (디젤 %s개)",
   "message.redstone_transportation.car_fuel": "연료: 디젤 %s개 · 속도 %s km/h",
   "message.redstone_transportation.structure_no_fuel_tank": "연료통이 필요합니다. 배와 비행선은 연료통의 디젤로 움직입니다.",
-  "message.redstone_transportation.no_fuel": "연료가 없습니다. 디젤을 들고 우클릭해 넣으세요."
+  "message.redstone_transportation.no_fuel": "연료가 없습니다. 디젤을 들고 우클릭해 넣으세요.",
+  "block.redstone_transportation.ship_motor": "선박 모터",
+  "block.redstone_transportation.airship_motor": "비행선 모터",
+  "tooltip.redstone_transportation.ship_motor": "배에 붙이면 1개마다 최고 속도 +25% (최대 4개, 2배)",
+  "tooltip.redstone_transportation.ship_motor.detail1": "1개마다 디젤도 25% 더 씁니다 · 비행선에는 효과 없음",
+  "tooltip.redstone_transportation.airship_motor": "비행선에 붙이면 1개마다 속도와 상승 속도 +25% (최대 4개, 2배)",
+  "tooltip.redstone_transportation.airship_motor.detail1": "1개마다 디젤도 25% 더 씁니다 · 배에는 효과 없음"
 }

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#minecraft:is_mountain",
+    "#minecraft:is_hill",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_forest",
+    "minecraft:stony_shore",
+    "minecraft:meadow",
+    "minecraft:plains",
+    "minecraft:snowy_plains"
+  ]
+}

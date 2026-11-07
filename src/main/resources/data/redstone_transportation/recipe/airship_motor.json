@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IEI",
+    "SPS",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "E": "redstone_transportation:car_engine",
+    "P": "minecraft:piston",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "redstone_transportation:airship_motor",
+    "count": 1
+  }
+}

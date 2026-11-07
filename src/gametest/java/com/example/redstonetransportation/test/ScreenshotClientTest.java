@@ -122,6 +122,7 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
                         case "power" -> testPowerMarks(context, world);
                         case "electric" -> testElectricity(context, world);
                         case "music" -> testMusicDisc(context, world);
+                        case "none" -> { }
                         default -> throw new AssertionError("no screenshot scene called " + part);
                     }
                 }
@@ -887,9 +888,17 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         context.waitTicks(4);
         boolean cocked = context.computeOnClient(client -> com.example.analogalu.gun.GunItem.isCocked(client.player.getMainHandItem()));
         if (!cocked) throw new AssertionError("pressing R did not cock the revolver");
-        context.getInput().pressKey(options -> options.keyUse);
+        // Right-click held: aim down the sights, which zooms the view in.
+        context.getInput().holdKey(options -> options.keyUse);
+        context.waitTicks(6);
+        boolean aiming = context.computeOnClient(client -> com.example.analogalu.gun.GunItem.isAiming(client.player, client.player.getMainHandItem()));
+        if (!aiming) throw new AssertionError("holding right-click did not aim the revolver");
+        context.takeScreenshot(TestScreenshotOptions.of("gun_revolver_aiming"));
+        // Left-click: fire.
+        context.getInput().pressKey(options -> options.keyAttack);
         context.waitTicks(2);
         context.takeScreenshot(TestScreenshotOptions.of("gun_revolver_fired"));
+        context.getInput().releaseKey(options -> options.keyUse);
         context.waitTicks(4);
         float after = world.getServer().computeOnServer(server -> healthOfHusk(server.overworld()));
         if (!(before - after > 20.0F)) throw new AssertionError("the revolver shot took " + (before - after) + " off the husk");
@@ -897,6 +906,11 @@ public final class ScreenshotClientTest implements FabricClientGameTest {
         context.runOnClient(client -> client.player.getInventory().setSelectedSlot(1));
         context.waitTicks(6);
         context.takeScreenshot(TestScreenshotOptions.of("gun_musket"));
+        context.getInput().holdKey(options -> options.keyUse);
+        context.waitTicks(6);
+        context.takeScreenshot(TestScreenshotOptions.of("gun_musket_aiming"));
+        context.getInput().releaseKey(options -> options.keyUse);
+        context.waitTicks(2);
         context.runOnClient(client -> client.player.getInventory().setSelectedSlot(2));
         context.waitTicks(6);
         context.takeScreenshot(TestScreenshotOptions.of("gun_shotgun"));

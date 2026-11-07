@@ -8,8 +8,19 @@ version = project.mod_version
 base { archivesName = project.archives_base_name }
 
 repositories {
+    // GeckoLib, for the BOSS Mode bosses: a copy laid out in libs/maven builds offline; its own maven serves everyone else.
+    maven {
+        name = 'LocalGeckoLib'
+        url = uri('libs/maven')
+        content { includeGroup('com.geckolib') }
+    }
     maven { url = 'https://maven.fabricmc.net/' }
     mavenCentral()
+    maven {
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content { includeGroup('com.geckolib') }
+    }
 }
 
 dependencies {
@@ -17,6 +28,9 @@ dependencies {
     // Minecraft 26.1+ uses Loom non-remapping mode: use standard Gradle configurations.
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    // Carried inside the jar, so players do not need to install GeckoLib themselves (MIT licence).
+    implementation "com.geckolib:geckolib-fabric-26.3:${project.geckolib_version}"
+    include "com.geckolib:geckolib-fabric-26.3:${project.geckolib_version}"
 }
 
 fabricApi {

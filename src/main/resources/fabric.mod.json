@@ -3,7 +3,7 @@
   "id": "modernization_world",
   "version": "${version}",
   "name": "Modernization World",
-  "description": "Analog redstone computing, electric circuits, oil and semiconductors, firearms, diesel cars built from blocks, self-driving rail transport, 220 V factories and moving structures in one mod.",
+  "description": "Analog redstone computing, electric circuits, oil and petrochemistry, firearms, diesel cars built from blocks, self-driving rail transport, 220 V factories, moving structures, a redcoat raid and the BOSS Mode bosses in one mod.",
   "license": "All Rights Reserved",
   "contact": {
     "sources": "https://github.com/plertube2bd/analogAlu"
@@ -13,25 +13,33 @@
     "main": [
       "com.example.analogalu.AnalogAlu",
       "com.example.redstonetransportation.RedstoneTransportation",
-      "com.example.modernizationworld.ModernizationWorld"
+      "com.example.modernizationworld.ModernizationWorld",
+      "com.bossmode.BossMode"
     ],
     "client": [
       "com.example.analogalu.WaferEditorClient",
-      "com.example.redstonetransportation.client.RedstoneTransportationClient"
+      "com.example.redstonetransportation.client.RedstoneTransportationClient",
+      "com.bossmode.client.BossModeClient"
     ]
   },
   "mixins": [
     "analog_alu.mixins.json",
-    "redstone_transportation.mixins.json"
+    "redstone_transportation.mixins.json",
+    {
+      "config": "boss_mode.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "provides": [
     "analog_alu",
-    "redstone_transportation"
+    "redstone_transportation",
+    "boss_mode"
   ],
   "depends": {
     "fabricloader": ">=0.19.3",
     "minecraft": ">=26.3 <26.4",
     "java": ">=25",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "geckolib": ">=5.5.7"
   }
 }

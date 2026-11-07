@@ -283,5 +283,11 @@
   "message.redstone_transportation.fuel_tank_full": "The tank is full (%s diesel)",
   "message.redstone_transportation.car_fuel": "Fuel: %s diesel · %s km/h",
   "message.redstone_transportation.structure_no_fuel_tank": "Needs a Fuel Tank. Ships and airships run on the diesel in it.",
-  "message.redstone_transportation.no_fuel": "Out of fuel. Right-click with diesel to fill up."
+  "message.redstone_transportation.no_fuel": "Out of fuel. Right-click with diesel to fill up.",
+  "block.redstone_transportation.ship_motor": "Ship Motor",
+  "block.redstone_transportation.airship_motor": "Airship Motor",
+  "tooltip.redstone_transportation.ship_motor": "Each one on a ship adds 25% to its top speed (up to 4: twice as fast)",
+  "tooltip.redstone_transportation.ship_motor.detail1": "Each also burns 25% more diesel · No effect on airships",
+  "tooltip.redstone_transportation.airship_motor": "Each one on an airship adds 25% to its speed and climb (up to 4: twice as fast)",
+  "tooltip.redstone_transportation.airship_motor.detail1": "Each also burns 25% more diesel · No effect on ships"
 }

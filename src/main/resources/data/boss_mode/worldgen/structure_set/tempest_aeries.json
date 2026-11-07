@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 734612987,
+    "separation": 8,
+    "spacing": 28,
+    "exclusion_zone": {
+      "chunk_count": 5,
+      "other_set": "boss_mode:shard_shrines"
+    }
+  },
+  "structures": [
+    {
+      "structure": "boss_mode:tempest_aerie",
+      "weight": 1
+    }
+  ]
+}

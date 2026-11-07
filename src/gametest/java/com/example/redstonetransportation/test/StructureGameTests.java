@@ -913,4 +913,67 @@ public final class StructureGameTests {
         helper.assertValueEqual(assembled(helper, second).blocks().size(), twoSize, "blocks in the second");
         helper.succeed();
     }
+
+    // ---- Motors ---------------------------------------------------------------------------------
+
+    private static MovingStructureEntity motorShip(GameTestHelper helper, int z, Block motor, int motors) {
+        BlockPos helm = new BlockPos(3, 3, z);
+        plate(helper, 2, z - 1, 4, z + 1, 2, Blocks.OAK_PLANKS);
+        core(helper, helm, ModContent.SHIP_HELM, Direction.EAST);
+        BlockPos[] spots = {helm.offset(-1, 0, -1), helm.offset(-1, 0, 1), helm.offset(1, 0, -1), helm.offset(1, 0, 1), helm.west()};
+        for (int i = 0; i < motors; i++) helper.setBlock(spots[i], motor);
+        return assembled(helper, helm);
+    }
+
+    /**
+     * Ship motors make a ship faster, a quarter more each up to four (five count as four), and burn more
+     * diesel; airship motors on a ship do nothing.
+     */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 80)
+    public void shipMotorsMakeAShipFaster(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        water(helper, 1);
+        MovingStructureEntity plain = motorShip(helper, 5, Blocks.AIR, 0);
+        MovingStructureEntity wrongKind = motorShip(helper, 15, ModContent.AIRSHIP_MOTOR, 4);
+        MovingStructureEntity motored = motorShip(helper, 25, ModContent.SHIP_MOTOR, 5);
+        helper.assertValueEqual(plain.motors(), 0, "motors on the plain ship");
+        helper.assertValueEqual(wrongKind.motors(), 0, "airship motors counted on a ship");
+        helper.assertValueEqual(motored.motors(), MovingStructureEntity.MAX_MOTORS, "ship motors counted");
+        helper.assertTrue(Math.abs(motored.motorBoost() - 2.0D) < 1.0E-9D, "four motors give " + motored.motorBoost() + " times the speed");
+        int[] fuelBefore = {plain.fuel(), wrongKind.fuel(), motored.fuel()};
+        for (MovingStructureEntity ship : java.util.List.of(plain, wrongKind, motored)) driver(helper, ship, FORWARD);
+        double[] at40 = new double[3];
+        helper.runAtTickTime(40, () -> {
+            at40[0] = plain.getX();
+            at40[1] = wrongKind.getX();
+            at40[2] = motored.getX();
+        });
+        helper.runAtTickTime(50, () -> {
+            double plainRun = plain.getX() - at40[0];
+            double wrongRun = wrongKind.getX() - at40[1];
+            double motoredRun = motored.getX() - at40[2];
+            helper.assertTrue(motoredRun > plainRun * 1.5D, "with motors " + motoredRun + " blocks in 10 ticks, without " + plainRun);
+            helper.assertTrue(Math.abs(wrongRun - plainRun) < 0.05D, "airship motors changed a ship's speed: " + wrongRun + " vs " + plainRun);
+            int plainUsed = fuelBefore[0] - plain.fuel();
+            int motoredUsed = fuelBefore[2] - motored.fuel();
+            helper.assertTrue(motoredUsed > plainUsed * 1.8D, "with motors it burned " + motoredUsed + ", without " + plainUsed);
+            helper.succeed();
+        });
+    }
+
+    /** Airship motors count on an airship; ship motors on it do nothing. */
+    @GameTest(structure = TestWorld.ARENA, maxTicks = 20)
+    public void airshipMotorsCountOnAnAirship(GameTestHelper helper) {
+        TestWorld.floor(helper, Blocks.STONE);
+        BlockPos helm = new BlockPos(10, 4, 10);
+        core(helper, helm, ModContent.AIRSHIP_HELM, Direction.EAST);
+        helper.setBlock(helm.above(), ModContent.LIFT_BALLOON);
+        helper.setBlock(helm.north(), ModContent.AIRSHIP_MOTOR);
+        helper.setBlock(helm.south(), ModContent.AIRSHIP_MOTOR);
+        helper.setBlock(helm.east(), ModContent.SHIP_MOTOR);
+        MovingStructureEntity airship = assembled(helper, helm);
+        helper.assertValueEqual(airship.motors(), 2, "motors counted on the airship");
+        helper.assertTrue(Math.abs(airship.motorBoost() - 1.5D) < 1.0E-9D, "two motors give " + airship.motorBoost());
+        helper.succeed();
+    }
 }

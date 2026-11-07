@@ -289,6 +289,12 @@ GUN_HELD = {
     "shotgun": {"scale": 0.6, "first": [-1.0, 1.5, -3.0], "third_scale": 0.62, "third": [0, 5.0, 0.3]},
 }
 AIM_TURN = 94
+# Aiming: moved from the right-hand spot to the middle of the view and up to the eye (pixels, before the turn).
+GUN_AIM = {
+    "revolver": [-8.6, 4.2, 2.0],
+    "musket": [-8.6, 4.6, -1.0],
+    "shotgun": [-8.6, 4.4, 0.0],
+}
 
 
 def held_display(name: str) -> dict:
@@ -312,12 +318,26 @@ def write_3d_guns() -> None:
             "elements": GUN_ELEMENTS[name],
             "display": held_display(name),
         })
+        # Aiming (right-click held): the gun comes up to the middle of the view, barrel straight ahead.
+        aim = GUN_AIM[name]
+        write_json(ASSETS / "models" / "item" / f"{name}_aim.json", {
+            "parent": f"{NS}:item/{name}_3d",
+            "display": {
+                "firstperson_righthand": {"rotation": [0, 90, 0], "translation": aim, "scale": [GUN_HELD[name]["scale"]] * 3},
+                "firstperson_lefthand": {"rotation": [0, -90, 0], "translation": aim, "scale": [GUN_HELD[name]["scale"]] * 3},
+            },
+        })
         # The inventory keeps the crisp flat icon; everywhere else the gun is solid.
         write_json(ASSETS / "items" / f"{name}.json", {"model": {
             "type": "minecraft:select",
             "property": "minecraft:display_context",
             "cases": [{"when": ["gui", "fixed"], "model": {"type": "minecraft:model", "model": f"{NS}:item/{name}"}}],
-            "fallback": {"type": "minecraft:model", "model": f"{NS}:item/{name}_3d"},
+            "fallback": {
+                "type": "minecraft:condition",
+                "property": "minecraft:using_item",
+                "on_true": {"type": "minecraft:model", "model": f"{NS}:item/{name}_aim"},
+                "on_false": {"type": "minecraft:model", "model": f"{NS}:item/{name}_3d"},
+            },
         }})
 
 

@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "crystal": "boss_mode:block/tempest_altar_crystal_lit",
+    "particle": "boss_mode:block/tempest_altar_crystal_lit"
+  },
+  "elements": [
+    {
+      "from": [
+        9.3,
+        14,
+        13.3
+      ],
+      "to": [
+        10.7,
+        18.0,
+        14.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          10,
+          14,
+          14
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "light_emission": 15
+    }
+  ]
+}

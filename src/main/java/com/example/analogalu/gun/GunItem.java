@@ -16,6 +16,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
@@ -23,8 +25,10 @@ import net.minecraft.world.level.Level;
 import java.util.function.Consumer;
 
 /**
- * A gun. Right-click fires; R (sent as {@link GunActionPayload}) cocks a revolver or starts a reload.
- * Everything happens on the server and the state lives on the stack, so it survives being put away.
+ * A gun. Left-click fires, holding right-click aims down the sights (the view zooms in, and a shotgun's
+ * pellets spread less), and R cocks a revolver or starts a reload; left-click and R reach the server as a
+ * {@link GunActionPayload}. Everything happens on the server and the state lives on the stack.
+ *
  */
 public final class GunItem extends Item {
     private static final String KEY = "message.analog_alu.gun.";
@@ -52,10 +56,32 @@ public final class GunItem extends Item {
         return stack.getOrDefault(ModGuns.RELOAD_UNTIL, 0L) > 0L;
     }
 
+    /** Right-click: raise the gun to the eye and keep it there while the button is held. */
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (!(level instanceof ServerLevel server)) return InteractionResult.CONSUME;
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+        player.startUsingItem(hand);
+        return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.SPYGLASS;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
+        return 72_000;
+    }
+
+    /** True while the player holds right-click with this gun raised. */
+    public static boolean isAiming(LivingEntity user, ItemStack stack) {
+        return user.isUsingItem() && user.getUseItem() == stack;
+    }
+
+    /** Left-click: fire, if the gun is ready to. */
+    public InteractionResult fire(ServerPlayer player, ItemStack stack) {
+        ServerLevel server = player.level();
         if (player.getCooldowns().isOnCooldown(stack)) return InteractionResult.FAIL;
         if (isReloading(stack)) {
             tell(player, "reloading");
@@ -80,7 +106,7 @@ public final class GunItem extends Item {
             player.sendOverlayMessage(Component.translatable(KEY + "no_ammo", Component.translatable(type.ammo().getDescriptionId())));
             return InteractionResult.FAIL;
         }
-        GunFiring.fire(server, player, type);
+        GunFiring.fire(server, player, type, isAiming(player, stack));
         player.getCooldowns().addCooldown(stack, type.shotCooldown());
         showLoad(player, stack);
         return InteractionResult.CONSUME;

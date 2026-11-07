@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IEI",
+    "CPC",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "E": "redstone_transportation:car_engine",
+    "P": "minecraft:piston",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "redstone_transportation:ship_motor",
+    "count": 1
+  }
+}

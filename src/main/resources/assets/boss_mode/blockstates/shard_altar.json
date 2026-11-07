@@ -1,0 +1,121 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "boss_mode:block/shard_altar_base"
+      }
+    },
+    {
+      "when": {
+        "charge": "0"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_core_dormant"
+      }
+    },
+    {
+      "when": {
+        "charge": "1|2|3|4|5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_core_active"
+      }
+    },
+    {
+      "when": {
+        "charge": "1|2|3|4|5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_1"
+      }
+    },
+    {
+      "when": {
+        "charge": "2|3|4|5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_2"
+      }
+    },
+    {
+      "when": {
+        "charge": "3|4|5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_3"
+      }
+    },
+    {
+      "when": {
+        "charge": "4|5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_4"
+      }
+    },
+    {
+      "when": {
+        "charge": "5|6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_5"
+      }
+    },
+    {
+      "when": {
+        "charge": "6|7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_6"
+      }
+    },
+    {
+      "when": {
+        "charge": "7|8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_7"
+      }
+    },
+    {
+      "when": {
+        "charge": "8|9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_8"
+      }
+    },
+    {
+      "when": {
+        "charge": "9|10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_9"
+      }
+    },
+    {
+      "when": {
+        "charge": "10|11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_10"
+      }
+    },
+    {
+      "when": {
+        "charge": "11|12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_11"
+      }
+    },
+    {
+      "when": {
+        "charge": "12"
+      },
+      "apply": {
+        "model": "boss_mode:block/shard_altar_nub_12"
+      }
+    }
+  ]
+}

@@ -13,7 +13,9 @@
   "client": [
     "HudHoverInfoMixin",
     "OilFogMixin",
-    "AsphaltFovMixin"
+    "AsphaltFovMixin",
+    "GunAttackMixin",
+    "GunAimFovMixin"
   ],
   "injectors": {
     "defaultRequire": 1

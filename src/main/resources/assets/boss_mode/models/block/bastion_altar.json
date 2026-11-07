@@ -1,0 +1,625 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "side": "boss_mode:block/bastion_altar_side",
+    "stone": "boss_mode:block/bastion_altar_stone",
+    "rim": "boss_mode:block/bastion_altar_rim",
+    "side_lit": "boss_mode:block/bastion_altar_side_lit",
+    "pool": "boss_mode:block/bastion_altar_pool_lit",
+    "crystal": "boss_mode:block/bastion_altar_crystal_lit",
+    "particle": "boss_mode:block/bastion_altar_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#stone"
+        },
+        "down": {
+          "texture": "#stone",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        3,
+        2
+      ],
+      "to": [
+        14,
+        5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        11,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#stone"
+        },
+        "down": {
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        13,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#rim"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        13,
+        13
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#rim"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        13,
+        3
+      ],
+      "to": [
+        3,
+        14,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#rim"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        13,
+        3
+      ],
+      "to": [
+        15,
+        14,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#rim"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        5,
+        4
+      ],
+      "to": [
+        12,
+        11,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side_lit"
+        },
+        "south": {
+          "texture": "#side_lit"
+        },
+        "east": {
+          "texture": "#side_lit"
+        },
+        "west": {
+          "texture": "#side_lit"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        13.5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side_lit"
+        },
+        "south": {
+          "texture": "#side_lit"
+        },
+        "east": {
+          "texture": "#side_lit"
+        },
+        "west": {
+          "texture": "#side_lit"
+        },
+        "up": {
+          "texture": "#pool"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        6.5,
+        13.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        23,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          13.5,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        4.5,
+        13.5,
+        4.5
+      ],
+      "to": [
+        6.0,
+        17,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          5.25,
+          13.5,
+          5.25
+        ],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        10.0,
+        13.5,
+        4.5
+      ],
+      "to": [
+        11.5,
+        16,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.75,
+          13.5,
+          5.25
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        10.0,
+        13.5,
+        10.0
+      ],
+      "to": [
+        11.5,
+        18,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.75,
+          13.5,
+          10.75
+        ],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        4.5,
+        13.5,
+        10.0
+      ],
+      "to": [
+        6.0,
+        15.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          5.25,
+          13.5,
+          10.75
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "light_emission": 15
+    }
+  ]
+}

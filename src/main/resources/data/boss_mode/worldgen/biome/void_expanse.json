@@ -1,0 +1,41 @@
+{
+  "attributes": {
+    "minecraft:visual/fog_color": "#1a0710",
+    "minecraft:visual/sky_color": "#2a0a1c",
+    "minecraft:visual/water_fog_color": "#12040a",
+    "minecraft:visual/ambient_particles": {
+      "argument": [
+        {
+          "particle": {
+            "type": "minecraft:crimson_spore"
+          },
+          "probability": 0.012
+        }
+      ],
+      "modifier": "append"
+    }
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#3a1a28",
+    "foliage_color": "#3a1420",
+    "grass_color": "#3a1828",
+    "water_color": "#3a0a1e"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "has_precipitation": false,
+  "temperature": 0.8
+}

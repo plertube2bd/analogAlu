@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1206994213,
+    "separation": 12,
+    "spacing": 36,
+    "exclusion_zone": {
+      "chunk_count": 6,
+      "other_set": "boss_mode:shard_shrines"
+    }
+  },
+  "structures": [
+    {
+      "structure": "boss_mode:void_sanctum",
+      "weight": 1
+    }
+  ]
+}

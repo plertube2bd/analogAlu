@@ -32,12 +32,13 @@ EXISTING_BLOCKS = [
 ]
 CORES = ["elevator_core", "ship_helm", "airship_helm", "steering_wheel"]
 CAR_PARTS = ["car_wheel", "car_seat", "car_engine", "fuel_tank"]
+VESSEL_MOTORS = ["ship_motor", "airship_motor"]
 FURNACE_KINDS = ["upgraded_furnace", "upgraded_blast_furnace", "upgraded_smoker"]
 FURNACE_TIERS = [1, 2, 3]
 FURNACES = [f"{kind}_{tier}" for kind in FURNACE_KINDS for tier in FURNACE_TIERS]
 # Not a factory machine, but it wears the same arrow and status colours.
 LEVELER = "land_leveler"
-NEW_BLOCKS = MACHINES + CAR_PARTS + [LEVELER, "factory_controller", "conveyor_belt", "drive_rail"] + CORES + [
+NEW_BLOCKS = MACHINES + CAR_PARTS + VESSEL_MOTORS + [LEVELER, "factory_controller", "conveyor_belt", "drive_rail"] + CORES + [
     "lift_balloon", "elevator_call", "route_beacon"] + FURNACES
 
 
@@ -1021,6 +1022,50 @@ def tank_top() -> Canvas:
     return canvas
 
 
+def motor_side(blade, hub, blades: int) -> Canvas:
+    """A motor housing seen from the side, with its propeller: brass screw for a ship, wooden blades for an airship."""
+    canvas = plate()
+    canvas.rect(1, 1, 14, 14, (44, 48, 56))
+    canvas.frame(1, 1, 14, 14, OUTLINE)
+    if blades == 3:
+        for x, y in ((7, 2), (8, 2), (7, 3), (8, 3), (7, 4), (8, 4), (8, 5),
+                     (3, 10), (4, 10), (4, 11), (5, 9), (5, 10), (6, 9),
+                     (11, 10), (12, 10), (11, 11), (10, 9), (10, 10), (9, 9)):
+            canvas.set(x, y, blade)
+    else:
+        for y in range(2, 14):
+            canvas.set(7, y, blade)
+            canvas.set(8, y, blade)
+        for y in (2, 13):
+            canvas.set(7, y, OUTLINE)
+            canvas.set(8, y, OUTLINE)
+    canvas.rect(6, 6, 9, 9, hub)
+    canvas.frame(6, 6, 9, 9, OUTLINE)
+    return canvas
+
+
+def motor_top() -> Canvas:
+    canvas = plate()
+    for y in range(3, 13, 2):
+        canvas.rect(3, y, 12, y, (40, 42, 48))
+    canvas.rect(6, 1, 9, 2, (200, 90, 40))
+    return canvas
+
+
+def write_vessel_motors() -> None:
+    out = ASSETS / "textures" / "block"
+    motor_side((214, 172, 78), (164, 124, 48), 3).save(out / "ship_motor_side.png")
+    motor_side((150, 102, 58), (90, 96, 106), 2).save(out / "airship_motor_side.png")
+    motor_top().save(out / "vessel_motor_top.png")
+    for name in VESSEL_MOTORS:
+        write_json(ASSETS / "models" / "block" / f"{name}.json", {
+            "parent": "minecraft:block/cube_column",
+            "textures": {"end": texture_id("vessel_motor_top"), "side": texture_id(f"{name}_side")},
+        })
+        write_json(ASSETS / "blockstates" / f"{name}.json", {"variants": {"": {"model": model_id(name)}}})
+        write_item_definition(name, model_id(name))
+
+
 def write_car_parts() -> None:
     out = ASSETS / "textures" / "block"
     wheel_face().save(out / "car_wheel_side.png")
@@ -1478,6 +1523,8 @@ def write_recipes() -> None:
     shaped("structure_marker", ["  C", " S ", "S  "], {"C": "minecraft:copper_ingot", "S": "minecraft:stick"}, 1)
     shaped("route_beacon", ["IGI", "RMR", "III"], {"G": "minecraft:compass"}, 1)
     shaped("steering_wheel", ["LIL", "IRI", "LIL"], {"L": "minecraft:leather"}, 1)
+    shaped("ship_motor", ["IEI", "CPC", " I "], {"E": f"{NS}:car_engine", "P": "minecraft:piston", "C": "minecraft:copper_ingot"}, 1)
+    shaped("airship_motor", ["IEI", "SPS", " I "], {"E": f"{NS}:car_engine", "P": "minecraft:piston", "S": "minecraft:stick"}, 1)
     shaped("car_wheel", ["BBB", "BIB", "BBB"], {"B": "minecraft:black_wool"}, 4)
     shaped("car_seat", ["L  ", "LLL", "I I"], {"L": "minecraft:leather"}, 1)
     shaped("car_engine", ["IPI", "PFP", "III"], {"P": "minecraft:piston", "F": "minecraft:furnace"}, 1)
@@ -1948,6 +1995,7 @@ def main() -> None:
         write_structure_core(core)
     write_balloon()
     write_car_parts()
+    write_vessel_motors()
     write_elevator_call()
     write_route_beacon()
     for furnace in FURNACES:

@@ -67,7 +67,13 @@ public final class GunGameTests {
         return player.getMainHandItem();
     }
 
+    /** Left-click. */
     private static void fire(GameTestHelper helper, ServerPlayer player) {
+        ((GunItem) gun(player).getItem()).fire(player, gun(player));
+    }
+
+    /** Right-click, held down. */
+    private static void aim(GameTestHelper helper, ServerPlayer player) {
         gun(player).getItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
     }
 
@@ -84,6 +90,48 @@ public final class GunGameTests {
     private static void assertLoss(GameTestHelper helper, LivingEntity mob, double expected, String what) {
         double loss = mob.getMaxHealth() - mob.getHealth();
         helper.assertTrue(Math.abs(loss - expected) < 0.01D, what + ": lost " + loss + ", expected " + expected);
+    }
+
+    /** Right-click raises the gun to aim: it does not fire, and a shot fired while aiming lands as usual. */
+    @GameTest(structure = RANGE, maxTicks = 40)
+    public void rightClickAimsAndLeftClickFires(GameTestHelper helper) {
+        ServerPlayer player = shooter(helper, ModGuns.REVOLVER, 6);
+        LivingEntity golem = target(helper, EntityTypes.IRON_GOLEM, 12, 100.0D);
+        pressR(player);
+        aim(helper, player);
+        helper.assertTrue(player.isUsingItem() && GunItem.isAiming(player, gun(player)), "right-click did not raise the gun to aim");
+        assertLoss(helper, golem, 0.0D, "aiming");
+        helper.assertValueEqual(GunItem.rounds(gun(player)), 6, "rounds after aiming");
+        fire(helper, player);
+        assertLoss(helper, golem, 25.0D, "a shot while aiming");
+        helper.assertValueEqual(GunItem.rounds(gun(player)), 5, "rounds after the shot");
+        player.stopUsingItem();
+        helper.assertFalse(GunItem.isAiming(player, gun(player)), "still aiming after letting go");
+        helper.succeed();
+    }
+
+    /** Aimed, the shotgun's cone is narrower, so more of the forty pellets find a target at its edge of range. */
+    @GameTest(structure = RANGE, maxTicks = 40)
+    public void aimingTightensTheShotgun(GameTestHelper helper) {
+        ServerPlayer player = shooter(helper, ModGuns.SHOTGUN, 2);
+        LivingEntity golem = target(helper, EntityTypes.IRON_GOLEM, 15, 1000.0D);
+        double hip = 0.0D;
+        double aimed = 0.0D;
+        for (int round = 0; round < 6; round++) {
+            gun(player).set(ModGuns.ROUNDS, 2);
+            waitOut(player);
+            float before = golem.getHealth();
+            fire(helper, player);
+            hip += before - golem.getHealth();
+            aim(helper, player);
+            waitOut(player);
+            before = golem.getHealth();
+            fire(helper, player);
+            aimed += before - golem.getHealth();
+            player.stopUsingItem();
+        }
+        helper.assertTrue(aimed > hip, "aimed pellets did " + aimed + ", hip-fired " + hip);
+        helper.succeed();
     }
 
     @GameTest(structure = RANGE, maxTicks = 40)

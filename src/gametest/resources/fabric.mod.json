@@ -25,7 +25,8 @@
     ],
     "fabric-client-gametest": [
       "com.example.redstonetransportation.test.ScreenshotClientTest",
-      "com.example.redstonetransportation.test.DedicatedServerClientTest"
+      "com.example.redstonetransportation.test.DedicatedServerClientTest",
+      "com.bossmode.test.ShardDragonClientGameTest"
     ]
   },
   "depends": {

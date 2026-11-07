@@ -44,6 +44,13 @@
     "analog_alu:waterproof_semiconductor_block",
     "analog_alu:wind_generator",
     "analog_alu:xor_gate",
+    "analog_alu:asphalt_block",
+    "analog_alu:chemical_reactor",
+    "analog_alu:chlorine_generator",
+    "boss_mode:shard_altar",
+    "boss_mode:void_altar",
+    "boss_mode:tempest_altar",
+    "boss_mode:bastion_altar",
     "redstone_transportation:vehicle_controller",
     "redstone_transportation:alu_train_controller",
     "redstone_transportation:redstone_motor",
@@ -63,6 +70,8 @@
     "redstone_transportation:car_seat",
     "redstone_transportation:car_engine",
     "redstone_transportation:fuel_tank",
+    "redstone_transportation:ship_motor",
+    "redstone_transportation:airship_motor",
     "redstone_transportation:land_leveler",
     "redstone_transportation:factory_controller",
     "redstone_transportation:conveyor_belt",
@@ -82,9 +91,6 @@
     "redstone_transportation:upgraded_blast_furnace_3",
     "redstone_transportation:upgraded_smoker_1",
     "redstone_transportation:upgraded_smoker_2",
-    "redstone_transportation:upgraded_smoker_3",
-    "analog_alu:asphalt_block",
-    "analog_alu:chemical_reactor",
-    "analog_alu:chlorine_generator"
+    "redstone_transportation:upgraded_smoker_3"
   ]
 }

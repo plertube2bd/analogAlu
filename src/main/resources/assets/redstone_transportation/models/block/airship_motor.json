@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "redstone_transportation:block/vessel_motor_top",
+    "side": "redstone_transportation:block/airship_motor_side"
+  }
+}

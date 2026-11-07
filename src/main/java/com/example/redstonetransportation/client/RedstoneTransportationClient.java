@@ -40,6 +40,8 @@ public final class RedstoneTransportationClient implements ClientModInitializer 
         lines.put(ModContent.CAR_SEAT_ITEM, 1);
         lines.put(ModContent.CAR_ENGINE_ITEM, 1);
         lines.put(ModContent.FUEL_TANK_ITEM, 1);
+        lines.put(ModContent.SHIP_MOTOR_ITEM, 1);
+        lines.put(ModContent.AIRSHIP_MOTOR_ITEM, 1);
         lines.put(ModContent.STRUCTURE_MARKER_ITEM, 2);
         lines.put(ModContent.ROUTE_BEACON_ITEM, 2);
         ModContent.UPGRADED_FURNACE_ITEMS.forEach(item -> lines.put(item, 1));

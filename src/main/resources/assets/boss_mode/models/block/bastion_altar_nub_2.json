@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "crystal": "boss_mode:block/bastion_altar_crystal_lit",
+    "particle": "boss_mode:block/bastion_altar_crystal_lit"
+  },
+  "elements": [
+    {
+      "from": [
+        5.3,
+        14,
+        1.3
+      ],
+      "to": [
+        6.7,
+        18.0,
+        2.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#crystal",
+          "uv": [
+            5,
+            0,
+            8,
+            3
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          6,
+          14,
+          2
+        ],
+        "axis": "y",
+        "angle": -22.5
+      },
+      "light_emission": 15
+    }
+  ]
+}

@@ -62,6 +62,12 @@ public final class MovingStructureEntity extends Entity {
     private static final double SHIP_SPEED = 0.4D;
     private static final double AIRSHIP_SPEED = 0.5D;
     private static final double AIRSHIP_CLIMB = 0.2D;
+    /** Each ship motor on a ship, or airship motor on an airship, adds this much of the top speed... */
+    public static final double MOTOR_BOOST = 0.25D;
+    /** ...for up to this many, which makes it twice as fast. */
+    public static final int MAX_MOTORS = 4;
+    /** And each one burns this much more diesel. */
+    private static final double MOTOR_FUEL = 0.25D;
     /** About 43 km/h flat out. */
     private static final double CAR_SPEED = 0.6D;
     private static final double CAR_ACCELERATION = 0.02D;
@@ -129,6 +135,10 @@ public final class MovingStructureEntity extends Entity {
     private double speed;
     private double climb;
     private double fall;
+    /** Diesel owed in fractions of a tick, from motors that each burn a quarter more. */
+    private double fuelOwed;
+    private @Nullable StructureBlocks motorsCountedIn;
+    private int motorCount;
     private float turn;
     private double targetY = Double.NaN;
     /** Height of this elevator's call blocks above its core, taken from the floor it was built on. */
@@ -217,8 +227,8 @@ public final class MovingStructureEntity extends Entity {
         }
         switch (kind()) {
             case ELEVATOR -> tickElevator(level);
-            case SHIP -> tickVessel(level, SHIP_SPEED, 0.0D);
-            case AIRSHIP -> tickVessel(level, AIRSHIP_SPEED, AIRSHIP_CLIMB);
+            case SHIP -> tickVessel(level, SHIP_SPEED * motorBoost(), 0.0D);
+            case AIRSHIP -> tickVessel(level, AIRSHIP_SPEED * motorBoost(), AIRSHIP_CLIMB * motorBoost());
             case CAR -> tickCar(level);
         }
     }
@@ -287,6 +297,29 @@ public final class MovingStructureEntity extends Entity {
         if (tickCount % 20 == 0 && getFirstPassenger() instanceof ServerPlayer driver) {
             driver.sendOverlayMessage(Component.translatable("message.redstone_transportation.no_fuel"));
         }
+    }
+
+    /** Motors of the right kind aboard that count: ship motors on a ship, airship motors on an airship. */
+    public int motors() {
+        StructureBlocks blocks = blocks();
+        if (blocks != motorsCountedIn) {
+            net.minecraft.world.level.block.Block motor = kind() == StructureKind.SHIP ? com.example.redstonetransportation.content.ModContent.SHIP_MOTOR
+                    : kind() == StructureKind.AIRSHIP ? com.example.redstonetransportation.content.ModContent.AIRSHIP_MOTOR : null;
+            int count = 0;
+            if (motor != null) {
+                for (StructureBlocks.Cell cell : blocks.cells()) {
+                    if (cell.state().is(motor)) count++;
+                }
+            }
+            motorCount = Math.min(count, MAX_MOTORS);
+            motorsCountedIn = blocks;
+        }
+        return motorCount;
+    }
+
+    /** How many times its plain top speed a ship or airship goes, with its motors. */
+    public double motorBoost() {
+        return 1.0D + MOTOR_BOOST * motors();
     }
 
     /** The fuel tanks aboard (a car, ship or airship), loaded for use. */
@@ -366,7 +399,12 @@ public final class MovingStructureEntity extends Entity {
         blocked = false;
         reportFuel(fuelled);
         if (!isMoving()) return;
-        if (Math.abs(speed) > IDLING || Math.abs(climb) > IDLING || Math.abs(turn) > STOPPED_TURN) burnFuel(1);
+        if (Math.abs(speed) > IDLING || Math.abs(climb) > IDLING || Math.abs(turn) > STOPPED_TURN) {
+            fuelOwed += 1.0D + MOTOR_FUEL * motors();
+            int whole = (int) fuelOwed;
+            fuelOwed -= whole;
+            burnFuel(whole);
+        }
 
         Vec3 position = position();
         if (climb != 0.0D) {

@@ -113,6 +113,9 @@ public final class ModContent {
     public static final Block CAR_SEAT = registerBlock("car_seat", new CarSeatBlock(baseProperties("car_seat").noOcclusion()));
     public static final Block CAR_ENGINE = registerBlock("car_engine", new Block(baseProperties("car_engine")));
     public static final Block FUEL_TANK = registerBlock("fuel_tank", new FuelTankBlock(baseProperties("fuel_tank")));
+    /** Each one aboard a ship (or airship) adds a quarter to its top speed, up to four; see MovingStructureEntity. */
+    public static final Block SHIP_MOTOR = registerBlock("ship_motor", new Block(baseProperties("ship_motor")));
+    public static final Block AIRSHIP_MOTOR = registerBlock("airship_motor", new Block(baseProperties("airship_motor")));
     public static final BlockEntityType<FuelTankBlockEntity> FUEL_TANK_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             id("fuel_tank"),
@@ -183,6 +186,8 @@ public final class ModContent {
     public static final Item CAR_SEAT_ITEM = blockItem("car_seat", CAR_SEAT);
     public static final Item CAR_ENGINE_ITEM = blockItem("car_engine", CAR_ENGINE);
     public static final Item FUEL_TANK_ITEM = blockItem("fuel_tank", FUEL_TANK);
+    public static final Item SHIP_MOTOR_ITEM = blockItem("ship_motor", SHIP_MOTOR);
+    public static final Item AIRSHIP_MOTOR_ITEM = blockItem("airship_motor", AIRSHIP_MOTOR);
     public static final Item ROUTE_BEACON_ITEM = blockItem("route_beacon", ROUTE_BEACON);
     public static final List<Item> UPGRADED_FURNACE_ITEMS = UPGRADED_FURNACES.stream()
             .map(block -> blockItem(BuiltInRegistries.BLOCK.getKey(block).getPath(), block))

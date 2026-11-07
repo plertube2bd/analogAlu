@@ -1,0 +1,1356 @@
+{
+  "entity.shard_dragon.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/growl1",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl2",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/ravager/idle1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/ravager/idle2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/hit1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/enderdragon/hit2",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:block/amethyst/break1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst/break2",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.death": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/end",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.shard_dragon.spawn": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.spawn",
+    "sounds": [
+      {
+        "name": "minecraft:mob/wither/spawn",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.roar": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.roar",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/roar_1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/warden/roar_3",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl3",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.bite": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.bite",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/bite1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/ravager/bite2",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/ravager/bite3",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.shard_dragon.tail": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.tail",
+    "sounds": [
+      {
+        "name": "minecraft:entity/player/attack/sweep1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep2",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep3",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.slam": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.slam",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:random/explode3",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:item/trident/thunder1",
+        "pitch": 1.4,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.volley": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.volley",
+    "sounds": [
+      {
+        "name": "minecraft:mob/wither/shoot",
+        "pitch": 1.1
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate1",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.shard_dragon.tempest": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.tempest",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/wings1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity/wind_charge/wind_burst1",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.charge": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.charge",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/celebrate1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/ravager/celebrate2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.summon": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.summon",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_attack1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_attack2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.impact": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.impact",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode2",
+        "pitch": 0.9,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:random/explode4",
+        "pitch": 0.9,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block/amethyst/break3",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.spikes": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.spikes",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/fangs",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break4",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.beam_charge": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.beam_charge",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_charge1",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:block/beacon/power1",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.beam": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.beam",
+    "sounds": [
+      {
+        "name": "minecraft:mob/guardian/attack_loop",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block/beacon/activate",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.void_roar": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.void_roar",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/roar_2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/warden/roar_4",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_dragon.cataclysm_charge": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.cataclysm_charge",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_charge2",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge3",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.cataclysm": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.cataclysm",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_boom1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_boom2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_dragon.deflect": {
+    "subtitle": "subtitles.boss_mode.entity.shard_dragon.deflect",
+    "sounds": [
+      {
+        "name": "minecraft:item/shield/block1",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:item/shield/block2",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:item/shield/block3",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.wyrm_shard.impact": {
+    "subtitle": "subtitles.boss_mode.entity.wyrm_shard.impact",
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst_cluster/break1"
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break2"
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break3"
+      }
+    ]
+  },
+  "entity.shard_hound.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.shard_hound.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/idle1",
+        "pitch": 1.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/idle2",
+        "pitch": 1.7,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.shard_hound.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.shard_hound.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/hurt1",
+        "pitch": 1.8,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/ravager/hurt2",
+        "pitch": 1.8,
+        "volume": 0.7
+      }
+    ]
+  },
+  "entity.shard_hound.death": {
+    "subtitle": "subtitles.boss_mode.entity.shard_hound.death",
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/break1",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:block/amethyst/break2",
+        "pitch": 1.2
+      }
+    ]
+  },
+  "entity.shard_spitter.spit": {
+    "subtitle": "subtitles.boss_mode.entity.shard_spitter.spit",
+    "sounds": [
+      {
+        "name": "minecraft:mob/llama/spit1",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:mob/llama/spit2",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.volatile_hound.fuse": {
+    "subtitle": "subtitles.boss_mode.entity.volatile_hound.fuse",
+    "sounds": [
+      {
+        "name": "minecraft:random/fuse",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.shard_warlord.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/idle1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/idle2",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_warlord.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/wither_skeleton/hurt1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/wither_skeleton/hurt2",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.shard_warlord.death": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/death1",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.shard_warlord.swing": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.swing",
+    "sounds": [
+      {
+        "name": "minecraft:entity/player/attack/sweep4",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep5",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.shard_warlord.cast": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.cast",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/cast1",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/cast2",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.shard_warlord.warcry": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.warcry",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/celebrate1",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_attack1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.shard_warlord.blink": {
+    "subtitle": "subtitles.boss_mode.entity.shard_warlord.blink",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/portal",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:mob/endermen/portal2",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.void_sovereign.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/ambient_1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/ambient_4",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/ambient_7",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/guardian/elder_idle1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/hurt_1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/warden/hurt_2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/wither/hurt1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/wither/hurt3",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.death": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/death_1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/wither/death",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.spawn": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.spawn",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/emerge",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/wither/spawn",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.roar": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.roar",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/roar_1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/warden/roar_2",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/roar2",
+        "pitch": 0.45
+      }
+    ]
+  },
+  "entity.void_sovereign.claw": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.claw",
+    "sounds": [
+      {
+        "name": "minecraft:entity/player/attack/sweep1",
+        "pitch": 0.4
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep4",
+        "pitch": 0.4
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_1",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.void_sovereign.lash": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.lash",
+    "sounds": [
+      {
+        "name": "minecraft:item/trident/riptide1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:item/trident/riptide2",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep6",
+        "pitch": 0.35
+      }
+    ]
+  },
+  "entity.void_sovereign.pound": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.pound",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode1",
+        "pitch": 0.45
+      },
+      {
+        "name": "minecraft:random/explode3",
+        "pitch": 0.45
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.rift": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.rift",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/fangs",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:block/sculk_shrieker/shriek1",
+        "pitch": 0.6,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.void_sovereign.grasp": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.grasp",
+    "sounds": [
+      {
+        "name": "minecraft:mob/guardian/attack_loop",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/warden/dig",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.void_sovereign.black_hole": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.black_hole",
+    "sounds": [
+      {
+        "name": "minecraft:portal/portal",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:portal/trigger",
+        "pitch": 0.4
+      },
+      {
+        "name": "minecraft:block/beacon/ambient",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.black_hole_collapse": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.black_hole_collapse",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode2",
+        "pitch": 0.4
+      },
+      {
+        "name": "minecraft:block/end_portal/endportal",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.step": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.step",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/portal",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/endermen/portal2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.eclipse": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.eclipse",
+    "sounds": [
+      {
+        "name": "minecraft:mob/wither/spawn",
+        "pitch": 0.4
+      },
+      {
+        "name": "minecraft:block/sculk_shrieker/shriek2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.meteor": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.meteor",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode2",
+        "pitch": 0.7,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:random/explode4",
+        "pitch": 0.7,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:item/trident/thunder1",
+        "pitch": 1.2,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.drain": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.drain",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/heartbeat_1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/warden/heartbeat_3",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/moan3",
+        "pitch": 0.4,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.summon": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.summon",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_summon",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/cast1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.shield": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.shield",
+    "sounds": [
+      {
+        "name": "minecraft:block/beacon/activate",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:block/respawn_anchor/set_spawn1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.void_orb.cast": {
+    "subtitle": "subtitles.boss_mode.entity.void_orb.cast",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/cast2",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/wither/shoot",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.void_orb.burst": {
+    "subtitle": "subtitles.boss_mode.entity.void_orb.burst",
+    "sounds": [
+      {
+        "name": "minecraft:mob/breeze/deflect1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block/sculk/break3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:random/explode4",
+        "pitch": 1.3,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.tempest_wyvern.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/phantom/idle1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/phantom/idle2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/breeze/idle1",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.tempest_wyvern.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/phantom/hurt1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/phantom/hurt2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/breeze/hurt1",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.tempest_wyvern.death": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/phantom/death1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/phantom/death2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.tempest_wyvern.spawn": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.spawn",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/growl3",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:ambient/weather/thunder1",
+        "pitch": 1.0,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.tempest_wyvern.roar": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.roar",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/growl1",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl2",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:mob/ravager/roar1",
+        "pitch": 1.2
+      }
+    ]
+  },
+  "entity.tempest_wyvern.strike": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.strike",
+    "sounds": [
+      {
+        "name": "minecraft:entity/player/attack/sweep1",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep2",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:mob/phantom/bite1",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.tempest_wyvern.flap": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.flap",
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/wings1",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings3",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings5",
+        "pitch": 1.2
+      }
+    ]
+  },
+  "entity.tempest_wyvern.gust": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.gust",
+    "sounds": [
+      {
+        "name": "minecraft:entity/wind_charge/wind_burst1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity/wind_charge/wind_burst2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity/wind_charge/wind_burst3",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.tempest_wyvern.breath": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.breath",
+    "sounds": [
+      {
+        "name": "minecraft:item/trident/riptide1",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:random/fizz",
+        "pitch": 0.6,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.tempest_wyvern.thunder": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.thunder",
+    "sounds": [
+      {
+        "name": "minecraft:ambient/weather/thunder1",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:ambient/weather/thunder2",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:item/trident/thunder1",
+        "pitch": 1.0
+      },
+      {
+        "name": "minecraft:item/trident/thunder2",
+        "pitch": 1.0
+      }
+    ]
+  },
+  "entity.tempest_wyvern.dive": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.dive",
+    "sounds": [
+      {
+        "name": "minecraft:mob/phantom/swoop1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/phantom/swoop2",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.tempest_wyvern.cyclone": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.cyclone",
+    "sounds": [
+      {
+        "name": "minecraft:mob/breeze/whirl",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/breeze/slide1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/breeze/slide3",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.tempest_wyvern.feathers": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.feathers",
+    "sounds": [
+      {
+        "name": "minecraft:mob/phantom/flap1",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:random/bow",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.tempest_wyvern.static": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.static",
+    "sounds": [
+      {
+        "name": "minecraft:random/fizz",
+        "pitch": 1.6,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block/copper_bulb/toggle",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.tempest_wyvern.summon": {
+    "subtitle": "subtitles.boss_mode.entity.tempest_wyvern.summon",
+    "sounds": [
+      {
+        "name": "minecraft:mob/breeze/charge1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_summon",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "entity.bastion_behemoth.ambient": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/idle1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/idle2",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/idle3",
+        "pitch": 0.55
+      }
+    ]
+  },
+  "entity.bastion_behemoth.hurt": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/hurt1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/hurt2",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.bastion_behemoth.death": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/death1",
+        "pitch": 0.45
+      },
+      {
+        "name": "minecraft:mob/ravager/death2",
+        "pitch": 0.45
+      }
+    ]
+  },
+  "entity.bastion_behemoth.spawn": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.spawn",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/emerge",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:random/explode1",
+        "pitch": 0.5,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.bastion_behemoth.roar": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.roar",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/roar1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/roar2",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/ravager/roar3",
+        "pitch": 0.55
+      }
+    ]
+  },
+  "entity.bastion_behemoth.step": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.step",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/step1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/step2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/step3",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.bastion_behemoth.maul": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.maul",
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/bite1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/bite2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_1",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "entity.bastion_behemoth.quake": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.quake",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:random/explode3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_2",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.bastion_behemoth.throw": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.throw",
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/throw",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/ravager/stun1",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.bastion_behemoth.roll": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.roll",
+    "sounds": [
+      {
+        "name": "minecraft:minecart/base",
+        "pitch": 0.5,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:block/grindstone/grindstone1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.bastion_behemoth.fortify": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.fortify",
+    "sounds": [
+      {
+        "name": "minecraft:random/anvil_land",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:block/respawn_anchor/charge1",
+        "pitch": 0.5
+      }
+    ]
+  },
+  "entity.bastion_behemoth.clang": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.clang",
+    "sounds": [
+      {
+        "name": "minecraft:random/anvil_land",
+        "pitch": 1.4,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit2",
+        "pitch": 0.8
+      }
+    ]
+  },
+  "entity.bastion_behemoth.spikes": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.spikes",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/fangs",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:block/amethyst/shimmer",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.bastion_behemoth.magma": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.magma",
+    "sounds": [
+      {
+        "name": "minecraft:liquid/lavapop",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/fireball4",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:random/explode2",
+        "pitch": 0.6,
+        "volume": 0.7
+      }
+    ]
+  },
+  "entity.bastion_behemoth.summon": {
+    "subtitle": "subtitles.boss_mode.entity.bastion_behemoth.summon",
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/prepare_summon",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/roar4",
+        "pitch": 0.8,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.boulder.impact": {
+    "subtitle": "subtitles.boss_mode.entity.boulder.impact",
+    "sounds": [
+      {
+        "name": "minecraft:random/explode1",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:random/explode2",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:random/explode4",
+        "pitch": 0.8,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.void_sovereign.counter": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.counter",
+    "sounds": [
+      {
+        "name": "minecraft:item/trident/riptide2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity/player/attack/sweep3",
+        "pitch": 0.45
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_1",
+        "pitch": 1.1,
+        "volume": 0.7
+      }
+    ]
+  },
+  "entity.void_sovereign.gravity": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.gravity",
+    "sounds": [
+      {
+        "name": "minecraft:block/beacon/deactivate",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:portal/portal",
+        "pitch": 0.4,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.carapace": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.carapace",
+    "sounds": [
+      {
+        "name": "minecraft:block/respawn_anchor/set_spawn1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:random/anvil_land",
+        "pitch": 0.5,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.sweep": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.sweep",
+    "sounds": [
+      {
+        "name": "minecraft:item/trident/riptide3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_boom1",
+        "pitch": 1.5,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.void_sovereign.chains": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.chains",
+    "sounds": [
+      {
+        "name": "minecraft:block/chain/break1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:block/chain/break3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/warden/heartbeat_2",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.void_sovereign.oblivion": {
+    "subtitle": "subtitles.boss_mode.entity.void_sovereign.oblivion",
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_charge1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/wither/spawn",
+        "pitch": 0.3,
+        "volume": 0.7
+      }
+    ]
+  }
+}
